@@ -19,16 +19,29 @@ Hackathon project involving the combination of different data sources into an ap
 
 ### Teams
 - Team 1
-
+  - Esther Suh
+  - Perry Tran
+  - Sarah Han
+  - Tien Pham (Torrie)
+  - Mia Tran
   
 - Team 2
-
+  - Steve Benedict
+  - Gerald Blackmon
+  - Jonathan Gallo
+  - Randy Dang
 
 - Team 3
-
+  - Rachel Pan
+  - Kyle Pamintuan
+  - Hyun Kim (Hank)
+  - David Ahn
 
 - Team 4
-
+  - Michael Salvati
+  - Jaytrin Apinchapong
+  - George Trendafilov
+  - Chase Caine
 
 ### Deadline: 
 - 7:00pm Thursday, September 6th, 2018
