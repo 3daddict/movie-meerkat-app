@@ -1,4 +1,4 @@
-document.ready(initializeApp)
+$(document).ready(initializeApp)
 
 /****************************************************************************************************
 * initializeApp
@@ -35,3 +35,25 @@ function newYorkTimesAjaxSuccessful(){
 function newYorkTimesAjaxError(){
 
 }
+
+
+/****************************************************************************************************
+* initializeApp
+* @param  {} settings
+* @param  {} .done(function(response))
+* @returns: {response} 
+* calls the the movie database API*/
+
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+    "method": "GET",
+    "headers": {},
+    "data": "{}",
+    "movie_id": "{}"
+  }
+  
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+  });
