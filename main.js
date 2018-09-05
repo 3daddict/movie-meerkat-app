@@ -13,7 +13,7 @@ var movieListings = [];
 
 //has ajax paramaters
 //@calls ajax new york times
-//@params called query value is movie title
+
 function newYorkTimesAjax (){
     var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
     url += '?' + $.param({
@@ -86,9 +86,6 @@ function movieListingsOnDOM(){
         var movieRating = movieListings[0].results[i].vote_average;
 
         var addMovieRow = $('<div>').addClass('movieRow');
-        $('.movieRow').on('click', function(){
-          location.href = "movie.html"
-        })
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
