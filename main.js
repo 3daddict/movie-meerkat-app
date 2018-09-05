@@ -1,10 +1,5 @@
 document.ready(initializeApp)
 
-/****************************************************************************************************
-* initializeApp
-* @params {undefined} none
-* @returns: {undefined} none
-* initializes the application, including adding click handlers and pulling in any data from the server, in later versions*/
 function initializeApp(){
 
     
