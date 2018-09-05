@@ -1,14 +1,10 @@
 $(document).ready(initializeApp)
 
-/****************************************************************************************************
-* initializeApp
-* @params {undefined} none
-* @returns: {undefined} none
-* initializes the application, including adding click handlers and pulling in any data from the server, in later versions*/
 function initializeApp(){
     getYelpData();
     newYorkTimesAjax();
     movieListingsOnDOM(); //appends movies to the dom
+    addressCoordinates();
 }
 
 //Global Variables
@@ -148,3 +144,19 @@ function failedYelpCall(){
     console.log('Yelp call Failed');
 }
 
+
+function addresaddedsCoordinates(){
+    var ajaxParams = {
+        url: "https://api.opencagedata.com/geocode/v1/json",
+        data: {
+            key: "52645efc693e4815825c94314f6d5f77",
+            q: "columbus, Ohio"
+        },
+        success: successfullAddressCoordinates
+        
+    }  
+  $.ajax(ajaxParams);
+}
+function successfullAddressCoordinates(responseCoordinates){
+    console.log('responseCoordinates', responseCoordinates);
+}
