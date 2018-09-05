@@ -148,7 +148,7 @@ function failedYelpCall(){
 }
 
 
-function addressCoordinates(){
+function addresaddedsCoordinates(){
     var ajaxParams = {
         url: "https://api.opencagedata.com/geocode/v1/json",
         data: {
