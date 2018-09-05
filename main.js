@@ -6,6 +6,7 @@ $(document).ready(initializeApp)
 * @returns: {undefined} none
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions*/
 function initializeApp(){
+    getYelpData();
     newYorkTimesAjax();
     
 }
@@ -76,5 +77,49 @@ var settings = {
   });
 
     
+
+
+
+
+/****************************************************************************************************
+ * Yelp AJAX Call
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
+
+function getYelpData() {
+
+    var yelpAjaxConfig = {
+        dataType: 'json',
+        url: 'http://yelp.ongandy.com/businesses',
+        success: successfulYelpCall,
+        error: failedYelpCall,
+        latitude: 33.6846,
+        longitude: -117.8265,
+        term: 'movie theater'
+    }
+
+    $.ajax(yelpAjaxConfig);
+}
+
+/****************************************************************************************************
+ * successfulYelpCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during success of Yelp AJAX Call*/
+
+function successfulYelpCall(){
+    console.log('Yelp call ran successfully');
+}
+
+
+/****************************************************************************************************
+ * FailedYelpCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during failure of Yelp AJAX Call*/
+
+function failedYelpCall(){
+    console.log('Yelp call Failed');
 }
 
