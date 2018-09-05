@@ -8,10 +8,11 @@ $(document).ready(initializeApp)
 function initializeApp(){
     getYelpData();
     newYorkTimesAjax();
-    
+    movieListingsOnDOM(); //appends movies to the dom
 }
 
-
+//Global Variables
+var movieListings = [];
 
 
 //has ajax paramaters
@@ -42,8 +43,8 @@ function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
     var items = responseData.results
     var summary = items.map(items => $('<div>').text(items.summary_short));
-    var linkToReview = items.map(items => $('<a>').text(items.link.url).attr('href', items.link.url));
-    $('body').append(summary, linkToReview);
+    //var linkToReview = items.map(items => $('<a>').text(items.link.url).attr('href', items.link.url));
+    //$('body').append(summary, linkToReview);
 }
 
 
@@ -56,7 +57,7 @@ function newYorkTimesAjaxError(){
 
 
 
-// * initializeApp
+// * TMDB Ajax Function
 // * @param  {} settings
 // * @param  {} .done(function(response))
 // * @returns: {response} 
@@ -73,10 +74,34 @@ var settings = {
   }
   
   $.ajax(settings).done(function (response) {
-    console.log(response);
+    //console.log(response);
+    movieListings.push(response);
   });
 
+// * movieListingsOnDOM Function
+// * @param  {} none 
+// * @returns: {} none 
+// * appends movieListings to the DOM*/
+function movieListingsOnDOM(){
     
+    for(var i = 0; i < movieListings[0].results.length; i++){
+        var movieTitle = movieListings[0].results[i].title;
+        var moviePoster = movieListings[0].results[i].poster_path;
+        var movieRating = movieListings[0].results[i].vote_average;
+
+        var addMovieRow = $('<div>').addClass('movieRow');
+        var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
+        var addMovieContainer = $('<div>').addClass('movieCardInfo');
+        var addMovieTitle = $('<p>').addClass('movieTitle ');
+        addMovieTitle.append(movieTitle);
+        var addMovieRating = $('<p>').addClass('movieRating');
+        addMovieRating.append(movieRating);
+        addMovieContainer.append(addMovieTitle, addMovieRating);
+
+        $(".movie-container").append(addMovieRow);
+        addMovieRow.append(addMoviePoster, addMovieContainer);
+    }
+}
 
 
 
