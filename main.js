@@ -14,21 +14,10 @@ var movieListings = [];
 
 //has ajax paramaters
 //@calls ajax new york times
-<<<<<<< HEAD
-
-function newYorkTimesAjax (){
-    var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
-    url += '?' + $.param({
-      'api-key': "8f55164da30c48c9ba4dc79d9fce1827"
-    });
-    $.ajax({
-      url: url,
-=======
 //@params called query value is movie title
 function newYorkTimesAjax (movieTitle){
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
->>>>>>> 39f7d75b5a59b399af3f145b83f901e1a978a4c9
       method: 'GET',
       data: {
         'api-key': "8f55164da30c48c9ba4dc79d9fce1827",
@@ -96,12 +85,7 @@ function movieListingsOnDOM(){
         var movieTitle = movieListings[0].results[i].title;
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
-<<<<<<< HEAD
-
-        var addMovieRow = $('<div>').addClass('movieRow');
-=======
         var addMovieRow = $('<div>').addClass('movieRow').attr('data-title', movieTitle);
->>>>>>> 39f7d75b5a59b399af3f145b83f901e1a978a4c9
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
