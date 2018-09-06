@@ -459,7 +459,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.reviewTitle').text("Read the review")
   $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
   $('.backButton').on('click', function(){
-      $('#searchBarContainer').remove();
+      $('#searchBarContainer').css('display', 'none');
       $('.movie-wrapper').empty();
       $('#map').css('display', 'none');
       initializeApp();
