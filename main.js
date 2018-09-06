@@ -7,8 +7,17 @@ function initializeApp(){
     newYorkTimesAjax();
     // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
-}
 
+$(".movieRow").hover(function(){
+    $(".movieEffects").hover(function(){
+        $(this).addClass('darkPoster');
+        $(this).next().removeClass('movieCardHide');
+        }, function(){
+            $(this).removeClass('darkPoster');
+            $(this).next().addClass('movieCardHide');
+    });
+});
+}
 /****************************************************************************************************
  * clickHandler
  * @params {undefined} none
@@ -161,8 +170,8 @@ function movieListingsOnDOM(){
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
         var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
-        var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
-        var addMovieContainer = $('<div>').addClass('movieCardInfo');
+        var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
+        var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
         addMovieTitle.append(movieTitle);
         var addMovieRating = $('<p>').addClass('movieRating');

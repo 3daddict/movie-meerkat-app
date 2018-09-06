@@ -20,20 +20,22 @@ nav {
     position: relative;
     margin: 5px;
 }
-/* make a true false class in js later
-.movieRow:hover {
-    background: rgba(0,6,12,0.8);
-    transition: 0.3s opacity;
-    opacity: 0;
-} */
+.darkPoster{
+    background-color:#000;
+    opacity:0.2;
+    
+}
+.movieCardHide {
+    visibility: hidden;
 
+}
 .movieCardInfo {
     position: absolute;
     color: white;
-    z-index: 1;
     width: 100%;
     top: 5px;
     left: 5px;
+    z-index: -1;
 }
 
  /* Always set the map height explicitly to define the size of the div
