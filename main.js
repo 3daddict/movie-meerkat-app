@@ -1,7 +1,11 @@
 $(document).ready(initializeApp)
 
 function initializeApp(){
+<<<<<<< HEAD
     console.log('Initialized App');
+=======
+    getYelpData();
+>>>>>>> 62e41c7037849a4708656e1380f6f17bf55e61ee
     movieListingsOnDOM(); //appends movies to the dom
 <<<<<<< HEAD
     newYorkTimesAjax();
@@ -29,25 +33,15 @@ function clickHandler(){
 
 //Global Variables
 var movieListings = [];
+var summary;
+var linkToReview;
 
 
-//has ajax paramaters
-//@calls ajax new york times
-<<<<<<< HEAD
-
-function newYorkTimesAjax (){
-    var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
-    url += '?' + $.param({
-      'api-key': "8f55164da30c48c9ba4dc79d9fce1827"
-    });
-    $.ajax({
-      url: url,
-=======
-//@params called query value is movie title
+// * @calls ajax new york times
+// * @params called query value is movie title
 function newYorkTimesAjax (movieTitle){
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
->>>>>>> 39f7d75b5a59b399af3f145b83f901e1a978a4c9
       method: 'GET',
       data: {
         'api-key': "8f55164da30c48c9ba4dc79d9fce1827",
@@ -62,22 +56,19 @@ function newYorkTimesAjax (movieTitle){
     $.ajax( newYorkTimesParams );
 }
 
-//what to do if ajax fires successfully
-//finds the synopsis of the movie and appends it to the trailer
-//finds the link to the whole review and appends it as well
 
+// * @params responseData
+// * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    var linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    var summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url)
-    $('body').append(summary, linkToReview);
-  
+    linkToReview = $('<div>').text(responseData.results[0].summary_short);
+    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
 
-//what to do if it ajax gets error from server
-//instead of appending synospsis and link to review apeends tecx that says they are unavailable at this time
+
+// * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
 }
@@ -155,12 +146,7 @@ function movieListingsOnDOM(){
         var movieTitle = movieListings[0].results[i].title;
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
-<<<<<<< HEAD
-
-        var addMovieRow = $('<div>').addClass('movieRow');
-=======
         var addMovieRow = $('<div>').addClass('movieRow').attr('data-title', movieTitle);
->>>>>>> 39f7d75b5a59b399af3f145b83f901e1a978a4c9
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -259,8 +245,51 @@ function successfullAddressCoordinates(responseCoordinates){
 
 
 function clickHandlerToOpenNewPage (){
+  console.log($(this));
+  var someOfThis = $(this);
   console.log($(this).attr('data-title'))
-  $('body').empty();
+  $('.movie-container').empty();
   newYorkTimesAjax($(this).attr('data-title'))
+  dynamicallyCreateMovieInfoPage($(this));
 }
+<<<<<<< HEAD
 >>>>>>> dev
+=======
+
+function dynamicallyCreateMovieInfoPage(someOfThis){
+  var myFuntion = setTimeout(function(){
+  console.log('summary:', summary, 'linktoreview:', linkToReview)
+  console.log(someOfThis)
+  var wrapper = $('<div>').addClass('movie-wrapper row justify-content-center');
+  var section1 = $('<section>').addClass('movie-stats col-md-2 text-center');
+  var poster = $('<img>').attr('src', someOfThis[0].firstElementChild.currentSrc)
+  var movieReviewsDiv = $('<div>').addClass("movieReviews");
+  var p1 = $('<p>');
+  var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
+  var span1 = $('<span>').addClass("movieRatingData").text(0);
+  var mapDiv = $('<div>').addClass("map-section")
+  var iFrameContainer = $('<div>').addClass("iframe-container");
+  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
+    'width': '450',
+    'height': '450',
+  });
+  var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
+  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTrailer = $('<div>').addClass("movieTrailer")
+  var movieTrailerImage = $('<img>').attr('src', "http://blog.gowebagency.co.uk/wp-content/uploads/2016/10/youtube-image.png").css('width', '100%')
+  var h5Summary = $('<h5>').text("Summary")
+  var pSummary = $('<p>').addClass("movieSummary")
+  var h5NYT = $('<h5>').text("Read the review")
+  $(movieTrailer).append(movieTrailerImage);
+  $(pSummary).append(summary);
+  $(h5NYT).append(linkToReview);
+  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
+  $(iFrameContainer).append(iframe);
+  $(mapDiv).append(iFrameContainer);
+  $(p1).append(i1, span1);
+  $(movieReviewsDiv).append(p1);
+  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(wrapper).append(section1, section2);
+  $('body').append(wrapper);
+}, 2000)}
+>>>>>>> 62e41c7037849a4708656e1380f6f17bf55e61ee
