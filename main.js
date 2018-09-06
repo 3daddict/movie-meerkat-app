@@ -40,6 +40,7 @@ var linkToReview;
 var addTrailerRow;
 var lat;
 var lng;
+var yelpResult;
 
 
 
@@ -151,7 +152,6 @@ function movieListingsOnDOM(){
     }
 }
 
-
 /****************************************************************************************************
  * getYelpData
  * @params {undefined} none
@@ -178,7 +178,6 @@ function getYelpData() {
         success: successfulYelpCall,
         error: failedYelpCall,
     }
-
     $.ajax(yelpAjaxConfig);
 }
 
@@ -197,13 +196,27 @@ function successfulYelpCall(response){
     console.log('Distance :',((response.businesses[0]['distance'])*0.00062137).toFixed(2), ' mi');
     console.log('Street: ',response.businesses[0]['location']['display_address'][0]);
     console.log('City, State, Zip: ',response.businesses[0]['location']['display_address'][1]);
-
     console.log('Phone: ',response.businesses[0]['phone']);
     console.log('Rating :',response.businesses[0]['rating']);
     console.log('Review :',response.businesses[0]['review_count']);
-
-    // console.log('Theater NAme: ' + response['businessess'].name);
+    yelpResult = response.businesses;
 }
+
+/****************************************************************************************************
+ * createMapMarkers
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during success of Yelp AJAX Call to pass Yelp object into function to create map markers*/
+
+function createMapMarkers(results){
+    var listings = results.businesses;
+    for (var i = 0; i < listings.length; i++) {
+        var coords = listings[i].coordinates;
+        var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+});}}
 
 /****************************************************************************************************
  * FailedYelpCall
@@ -336,57 +349,63 @@ function initMap() {
     var uluru = {lat: -25.363, lng: 131.044};
     var sydney = {lat: -33.8688, lng: 151.2093};
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 4,
-      center: uluru
+        zoom: 4,
+        center: uluru
     });
-  
-    var contentString = '<div id="content">'+
-        '<div id="siteNotice">'+
-        '</div>'+
-        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-        '<div id="bodyContent">'+
+
+    var contentString = '<div id="content">' +
+        '<div id="siteNotice">' +
+        '</div>' +
+        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+        '<div id="bodyContent">' +
         '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-        'sandstone rock formation in the southern part of the '+
-        'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-        'south west of the nearest large town, Alice Springs; 450&#160;km '+
-        '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-        'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-        'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-        'Aboriginal people of the area. It has many springs, waterholes, '+
-        'rock caves and ancient paintings. Uluru is listed as a World '+
-        'Heritage Site.</p>'+
-        '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-        'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-        '(last visited June 22, 2009).</p>'+
-        '</div>'+
+        'sandstone rock formation in the southern part of the ' +
+        'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
+        'south west of the nearest large town, Alice Springs; 450&#160;km ' +
+        '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
+        'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
+        'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
+        'Aboriginal people of the area. It has many springs, waterholes, ' +
+        'rock caves and ancient paintings. Uluru is listed as a World ' +
+        'Heritage Site.</p>' +
+        '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+        'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+        '(last visited June 22, 2009).</p>' +
+        '</div>' +
         '</div>';
-  
+
     var infowindow = new google.maps.InfoWindow({
-      content: contentString
+        content: contentString
     });
-  
+
     var marker = new google.maps.Marker({
-      position: uluru,
-      map: map,
-      title: 'Uluru (Ayers Rock)'
+        position: uluru,
+        map: map,
+        title: 'Uluru (Ayers Rock)'
     });
-    
+
     var marker2 = new google.maps.Marker({
-      position: sydney,
-      map: map,
-      title: 'Sydney'
+        position: sydney,
+        map: map,
+        title: 'Sydney'
     });
-    
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
+
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
     });
-    
-     marker2.addListener('click', function() {
-      infowindow.open(map, marker2);
+
+    marker2.addListener('click', function () {
+        infowindow.open(map, marker2);
     });
-    
-    
-  }
+
+    for(var i = 0; i < yelpResult.length; i++){
+        var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
+        var newMarker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: yelpResult['name']
+        });
+}}
 
 
 function clickHandlerToOpenNewPage (){
