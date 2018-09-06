@@ -7,6 +7,7 @@ function initializeApp(){
     // newYorkTimesAjax();
     // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
+    addressCoordinates();
 }
 
 /****************************************************************************************************
@@ -30,6 +31,8 @@ var movieListings = [];
 var summary;
 var linkToReview;
 var addTrailerRow;
+var lat;
+var lng;
 
 
 
@@ -248,6 +251,7 @@ function addressCoordinates(){
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
             q: $('.searchBar').val()
+            // q: 'Columbus, Ohio'
         },
         success: successfullAddressCoordinates
     }  
@@ -255,9 +259,9 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
-    var lat = responseCoordinates.results[0].geometry.lat;
-    var lng = responseCoordinates.results[0].geometry.lng;
-    // initMap(lat,lng);
+     lat = responseCoordinates.results[0].geometry.lat;
+     lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
     
 }
 
@@ -278,6 +282,7 @@ function successfullAddressCoordinates(responseCoordinates){
 //     // The marker, positioned at location
 //     var marker = new google.maps.Marker({position: movieTheaters, map: map});
 //   }
+
 
 var map;
       function initMap(lat,lng) {
@@ -306,6 +311,7 @@ var map;
             map: map
           });
         }
+      
       }
 
 
@@ -317,6 +323,7 @@ function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   findMovieID($(this).attr('data-id'));
+
   if($(this).attr('data-title') === "Ocean's Eight"){
       $(this).attr('data-title', "Ocean's 8");
   }
@@ -326,7 +333,9 @@ function clickHandlerToOpenNewPage (){
   }else{
     newYorkTimesAjaxError();
   }
+
   dynamicallyCreateMovieInfoPage($(this));
+  addressCoordinates();
 
 }
 
@@ -378,20 +387,17 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var movieReviewsDiv = $('<div>').addClass("movieReviews");
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
-  var span1 = $('<span>').addClass("movieRatingData").text(' ' + someOfThis.attr('movie-rating') + ' / 10');
-  var mapDiv = $('<div>').addClass("map-section")
-  var iFrameContainer = $('<div>').addClass("iframe-container");
-  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
-    'width': '450',
-    'height': '450',
-    // 'border':0,
-  });
+
+  var span1 = $('<span>').addClass("movieRatingData").text(0);
+  $('#map').css('display', 'inline-block');
+
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
   var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
   $(movieTrailer).append(addTrailerRow);
   var h5Summary = $('<h4>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
+
   var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
   var h5NYT = $('<h4>').text("Read the review")
   var NYTP = $('<p>').addClass("nytReview");
@@ -404,11 +410,11 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $(pSummary).append(summary);
   $(NYTP).append(linkToReview);
   $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
-  $(iFrameContainer).append(iframe);
-  $(mapDiv).append(iFrameContainer);
+
   $(p1).append(i1, span1);
   $(movieReviewsDiv).append(p1);
-  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(section1).append(poster, movieReviewsDiv)
   $(wrapper).append(section1, section2);
-  $('body').append(wrapper);
+  $('.movie-container').append(wrapper);
 }, 2000)}
+
