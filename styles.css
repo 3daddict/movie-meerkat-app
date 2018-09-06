@@ -41,6 +41,7 @@ nav {
       #map {
         height: 50%;
         width: 50%;
+        display: none;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {

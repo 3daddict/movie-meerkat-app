@@ -7,6 +7,7 @@ function initializeApp(){
     newYorkTimesAjax();
     // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
+    addressCoordinates();
 }
 
 /****************************************************************************************************
@@ -30,6 +31,8 @@ var movieListings = [];
 var summary;
 var linkToReview;
 var addTrailerRow;
+var lat;
+var lng;
 
 
 
@@ -246,6 +249,7 @@ function addressCoordinates(){
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
             q: $('.searchBar').val()
+            // q: 'Columbus, Ohio'
         },
         success: successfullAddressCoordinates
     }  
@@ -253,9 +257,9 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
-    var lat = responseCoordinates.results[0].geometry.lat;
-    var lng = responseCoordinates.results[0].geometry.lng;
-    // initMap(lat,lng);
+     lat = responseCoordinates.results[0].geometry.lat;
+     lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
     
 }
 
@@ -276,6 +280,7 @@ function successfullAddressCoordinates(responseCoordinates){
 //     // The marker, positioned at location
 //     var marker = new google.maps.Marker({position: movieTheaters, map: map});
 //   }
+
 
 var map;
       function initMap(lat,lng) {
@@ -304,6 +309,7 @@ var map;
             map: map
           });
         }
+      
       }
 
 
@@ -315,8 +321,9 @@ function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   findMovieID($(this).attr('data-id'));
-  newYorkTimesAjax($(this).attr('data-title'))
+  newYorkTimesAjax($(this).attr('data-title'));
   dynamicallyCreateMovieInfoPage($(this));
+  addressCoordinates();
 
 }
 
@@ -369,12 +376,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
   var span1 = $('<span>').addClass("movieRatingData").text(0);
-  var mapDiv = $('<div>').addClass("map-section")
-  var iFrameContainer = $('<div>').addClass("iframe-container");
-  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
-    'width': '450',
-    'height': '450',
-  });
+  $('#map').css('display', 'inline-block');
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
   var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
   var movieTrailer = $('<div>').addClass("movieTrailer")
@@ -385,11 +387,10 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $(pSummary).append(linkToReview);
   $(h5NYT).append(summary);
   $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
-  $(iFrameContainer).append(iframe);
-  $(mapDiv).append(iFrameContainer);
   $(p1).append(i1, span1);
   $(movieReviewsDiv).append(p1);
-  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(section1).append(poster, movieReviewsDiv)
   $(wrapper).append(section1, section2);
-  $('body').append(wrapper);
+  $('.movie-container').append(wrapper);
 }, 2000)}
+
