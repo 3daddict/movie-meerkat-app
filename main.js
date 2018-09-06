@@ -29,6 +29,7 @@ function clickHandler(){
 var movieListings = [];
 var summary;
 var linkToReview;
+var addTrailerRow;
 
 
 
@@ -313,6 +314,7 @@ function clickHandlerToOpenNewPage (){
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
+  findMovieID($(this).attr('data-id'));
   newYorkTimesAjax($(this).attr('data-title'))
   dynamicallyCreateMovieInfoPage($(this));
 
@@ -348,10 +350,10 @@ var settings = {
 function dynamicYoutubeVideo(movieTrailerID) {
     console.log('It should be on the DOM')
 
-    var addTrailerRow = $('<iframe>');
+    addTrailerRow = $('<iframe>');
     addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
     $(".movieTrailer").empty();
-    $(".movieTrailer").append(addTrailerRow);
+   //$(".movieTrailer").append(addTrailerRow);
     
 {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/wVTIJBNBYoM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
 }
@@ -376,13 +378,12 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
   var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
   var movieTrailer = $('<div>').addClass("movieTrailer")
-  var movieTrailerImage = $('<img>').attr('src', "http://blog.gowebagency.co.uk/wp-content/uploads/2016/10/youtube-image.png").css('width', '100%')
+  $(movieTrailer).append(addTrailerRow);
   var h5Summary = $('<h5>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
   var h5NYT = $('<h5>').text("Read the review")
-  $(movieTrailer).append(movieTrailerImage);
-  $(pSummary).append(summary);
-  $(h5NYT).append(linkToReview);
+  $(pSummary).append(linkToReview);
+  $(h5NYT).append(summary);
   $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
   $(iFrameContainer).append(iframe);
   $(mapDiv).append(iFrameContainer);
