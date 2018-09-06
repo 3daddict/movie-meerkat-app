@@ -1,20 +1,41 @@
 $(document).ready(initializeApp)
 
 function initializeApp(){
+    console.log('Initialized App');
     getYelpData();
-    newYorkTimesAjax();
     movieListingsOnDOM(); //appends movies to the dom
-    addressCoordinates();
+    newYorkTimesAjax();
+    // loadSearchBar(); //appends searchBar to dom
+    clickHandler(); //runs click handler
+}
+
+/****************************************************************************************************
+ * clickHandler
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Attaches click handler to run different functions when clicking on their respective buttons*/
+
+function clickHandler(){
+    $('#submitButton').click(getYelpData);
+    // addressCoordinates();
     $('.movieRow').on('click', clickHandlerToOpenNewPage)
 }
 
+
+
+
+
 //Global Variables
 var movieListings = [];
+var summary;
+var linkToReview;
+
 
 
 //has ajax paramaters
 //@calls ajax new york times
 //@params called query value is movie title
+
 function newYorkTimesAjax (movieTitle){
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
@@ -32,22 +53,19 @@ function newYorkTimesAjax (movieTitle){
     $.ajax( newYorkTimesParams );
 }
 
-//what to do if ajax fires successfully
-//finds the synopsis of the movie and appends it to the trailer
-//finds the link to the whole review and appends it as well
 
+// * @params responseData
+// * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    var linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    var summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url)
-    $('body').append(summary, linkToReview);
-  
+    linkToReview = $('<div>').text(responseData.results[0].summary_short);
+    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
 
-//what to do if it ajax gets error from server
-//instead of appending synospsis and link to review apeends tecx that says they are unavailable at this time
+
+// * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
 }
@@ -59,6 +77,36 @@ function newYorkTimesAjaxError(){
 // * @param  {} .done(function(response))
 // * @returns: {response} 
 // * calls the the movie database API*/
+
+/****************************************************************************************************
+ * gettmdbData
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
+
+
+// var tmdbAjaxConfig = {
+//     async: true,
+//     crossDomain: true,
+//     method: "get",
+//     url: "https://api.themoviedb.org/3/movie/now_playing",
+//     data: {
+//         page: '1',
+//         language:'en-US',
+//         api_key:'487eb0704123bb2cd56c706660e4bb4d'
+//     },
+//     success: successfulTmdbCall,
+    // error:
+    // "headers": {},
+    // "data": "{}",
+    // "movie_id": "{}",
+
+//   };
+  
+//   $.ajax(settings).done(function (response) {
+//     console.log('pictures successful', response);
+//     movieListings.push(response);
+//   });
 
 var settings = {
     "async": true,
@@ -75,6 +123,31 @@ var settings = {
     movieListings.push(response);
   });
 
+/****************************************************************************************************
+ * successfulTmdbCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during success of tmdb AJAX Call*/
+
+function successfulTmdbCall(response){
+    console.log('Successful tmdb Call');
+    movieListing.push(response);
+}
+
+/****************************************************************************************************
+ * failedTmdbCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during fauilure of tmdb AJAX Call*/
+
+function failedTmdbCall(){
+
+    
+
+}
+
+
+
 // * movieListingsOnDOM Function
 // * @param  {} none 
 // * @returns: {} none 
@@ -86,7 +159,7 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr('data-title', movieTitle).attr('data-id', themoviedb);
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -99,25 +172,45 @@ function movieListingsOnDOM(){
     }
 }
 
-
-
-
 /****************************************************************************************************
- * Yelp AJAX Call
+ * loadSearchBar
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Uses DOM creation to load the searchBar*/
+
+function loadSearchBar(){
+    console.log('load search bar running');
+    var searchBarContainer = $('<div>').attr('id','searchBarContainer');
+    var searchBar = $('<input>').attr({'type':'text', 'value':'Address','id':'searchBar'});
+    var submitButton = $('<input>').attr({'id':'submitButton','type':'submit'});
+    searchBarContainer.append(searchBar, submitButton);
+    $('body').append(searchBarContainer);
+}
+/****************************************************************************************************
+ * getYelpData
  * @params {undefined} none
  * @returns: {undefined} none
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
 function getYelpData() {
-
+    var location = $('#searchBar').val();
     var yelpAjaxConfig = {
         dataType: 'json',
         url: 'http://yelp.ongandy.com/businesses',
+        method: 'post',
+        data: {
+            api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
+            location: location,
+            term: 'movie theater',
+            sort_by: 'distance'
+        },
+        // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
+        // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
+        // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
+        // location: location,
+        // term: 'movie theater',
         success: successfulYelpCall,
         error: failedYelpCall,
-        latitude: 33.6846,
-        longitude: -117.8265,
-        term: 'movie theater'
     }
 
     $.ajax(yelpAjaxConfig);
@@ -129,10 +222,11 @@ function getYelpData() {
  * @returns: {undefined} none
  * Function runs during success of Yelp AJAX Call*/
 
-function successfulYelpCall(){
+function successfulYelpCall(response){
     console.log('Yelp call ran successfully');
+    console.log(response);
+    // console.log('Theater NAme: ' + response['businessess'].name);
 }
-
 
 /****************************************************************************************************
  * FailedYelpCall
@@ -150,7 +244,7 @@ function addressCoordinates(){
         url: "https://api.opencagedata.com/geocode/v1/json",
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
-            q: "columbus, Ohio",
+            q: $('.searchBar').val()
         },
         success: successfullAddressCoordinates
     }  
@@ -158,15 +252,70 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
+    var lat = responseCoordinates.results[0].geometry.lat;
+    var lng = responseCoordinates.results[0].geometry.lng;
+    // initMap(lat,lng);
+    
 }
+
+//  var map;
+// function initMap(lat,lng) {
+//   map = new google.maps.Map(document.getElementById('map'), {
+//     center: {lat: lat , lng: lng},
+//     zoom: 8
+//   });
+//   $('#map').append(map);
+// }
+// function initMap(lat,lng) {
+//     // The location
+//     var movieTheaters = {lat: lat, lng: lng};
+//     // The map, centered at location
+//     var map = new google.maps.Map(
+//         document.getElementById('map'), {zoom: 8, center: movieTheaters});
+//     // The marker, positioned at location
+//     var marker = new google.maps.Marker({position: movieTheaters, map: map});
+//   }
+
+var map;
+      function initMap(lat,lng) {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: new google.maps.LatLng(lat,lng),
+        //   mapTypeId: 'terrain',
+        });
+
+        // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var coords = results.features[i].geometry.coordinates;
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+          });
+        }
+      }
+
 
 
 function clickHandlerToOpenNewPage (){
-  console.log($(this).attr('data-title'));
-  //$('body').empty();
-  newYorkTimesAjax($(this).attr('data-title'));
-  findMovieID($(this).attr('data-id'));
-  
+
+  console.log($(this));
+  var someOfThis = $(this);
+  console.log($(this).attr('data-title'))
+  $('.movie-container').empty();
+  newYorkTimesAjax($(this).attr('data-title'))
+  dynamicallyCreateMovieInfoPage($(this));
+
 }
 
 /****************************************************************************************************
@@ -206,3 +355,40 @@ function dynamicYoutubeVideo(movieTrailerID) {
     
 {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/wVTIJBNBYoM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
 }
+
+function dynamicallyCreateMovieInfoPage(someOfThis){
+  var myFuntion = setTimeout(function(){
+  console.log('summary:', summary, 'linktoreview:', linkToReview)
+  console.log(someOfThis)
+  var wrapper = $('<div>').addClass('movie-wrapper row justify-content-center');
+  var section1 = $('<section>').addClass('movie-stats col-md-2 text-center');
+  var poster = $('<img>').attr('src', someOfThis[0].firstElementChild.currentSrc)
+  var movieReviewsDiv = $('<div>').addClass("movieReviews");
+  var p1 = $('<p>');
+  var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
+  var span1 = $('<span>').addClass("movieRatingData").text(0);
+  var mapDiv = $('<div>').addClass("map-section")
+  var iFrameContainer = $('<div>').addClass("iframe-container");
+  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
+    'width': '450',
+    'height': '450',
+  });
+  var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
+  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTrailer = $('<div>').addClass("movieTrailer")
+  var movieTrailerImage = $('<img>').attr('src', "http://blog.gowebagency.co.uk/wp-content/uploads/2016/10/youtube-image.png").css('width', '100%')
+  var h5Summary = $('<h5>').text("Summary")
+  var pSummary = $('<p>').addClass("movieSummary")
+  var h5NYT = $('<h5>').text("Read the review")
+  $(movieTrailer).append(movieTrailerImage);
+  $(pSummary).append(summary);
+  $(h5NYT).append(linkToReview);
+  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
+  $(iFrameContainer).append(iframe);
+  $(mapDiv).append(iFrameContainer);
+  $(p1).append(i1, span1);
+  $(movieReviewsDiv).append(p1);
+  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(wrapper).append(section1, section2);
+  $('body').append(wrapper);
+}, 2000)}
