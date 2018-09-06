@@ -8,6 +8,16 @@ function initializeApp(){
     addressCoordinates();
 }
 
+$(".movieRow").hover(function(){
+    $(".movieEffects").hover(function(){
+        $(this).addClass('darkPoster');
+        $(this).next().removeClass('movieCardHide');
+        }, function(){
+            $(this).removeClass('darkPoster');
+            $(this).next().addClass('movieCardHide');
+    });
+});
+}
 /****************************************************************************************************
  * clickHandler
  * @params {undefined} none
@@ -127,13 +137,15 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movie-rating': movieRating});
-        var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
-        var addMovieContainer = $('<div>').addClass('movieCardInfo');
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
+        var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
+        var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
+
         var addMovieTitle = $('<p>').addClass('movieTitle ');
         addMovieTitle.append(movieTitle);
+        var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
         var addMovieRating = $('<p>').addClass('movieRating');
-        addMovieRating.append(movieRating);
+        addMovieRating.append(addReviewStar, " ", movieRating);
         addMovieContainer.append(addMovieTitle, addMovieRating);
         $(".movie-container").append(addMovieRow);
         addMovieRow.append(addMoviePoster, addMovieContainer);
