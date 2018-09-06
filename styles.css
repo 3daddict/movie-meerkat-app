@@ -59,3 +59,8 @@ nav {
     width: 100%;
     padding: 10px;
 }
+
+.youtubePlayer{
+    height: 50vh;
+   min-width: 100%;
+}
