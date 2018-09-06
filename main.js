@@ -4,7 +4,7 @@ function initializeApp(){
     console.log('Initialized App');
     getYelpData();
     movieListingsOnDOM(); //appends movies to the dom
-    newYorkTimesAjax();
+    // newYorkTimesAjax();
     // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
 }
@@ -59,8 +59,8 @@ function newYorkTimesAjax (movieTitle){
 // * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
+    summary = $('<div>').text(responseData.results[0].summary_short);
+    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
@@ -69,6 +69,8 @@ function newYorkTimesAjaxSuccessful(responseData){
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
+  linkToReview = $('<div>').text('Link not available for this movie');
+  summary = $('<a>').text('Summary not available for this movie');
 }
 
 
@@ -315,7 +317,15 @@ function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   findMovieID($(this).attr('data-id'));
+  if($(this).attr('data-title') === "Ocean's Eight"){
+      $(this).attr('data-title', "Ocean's 8");
+  }
+  debugger;
+  if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
   newYorkTimesAjax($(this).attr('data-title'))
+  }else{
+    newYorkTimesAjaxError();
+  }
   dynamicallyCreateMovieInfoPage($(this));
 
 }
@@ -391,8 +401,8 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
       initializeApp();
   })
   $(nytContainerDiv).append(h5NYT, NYTP);
-  $(pSummary).append(linkToReview);
-  $(NYTP).append(summary);
+  $(pSummary).append(summary);
+  $(NYTP).append(linkToReview);
   $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
   $(iFrameContainer).append(iframe);
   $(mapDiv).append(iFrameContainer);
