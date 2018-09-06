@@ -5,7 +5,7 @@ function initializeApp(){
     movieListingsOnDOM(); //appends movies to the dom
     clickHandler(); //runs click handler
     addressCoordinates();
-}
+
 
 $(".movieRow").hover(function(){
     $(".movieEffects").hover(function(){
