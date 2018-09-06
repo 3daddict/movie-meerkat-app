@@ -5,7 +5,7 @@ function initializeApp(){
     getYelpData();
     movieListingsOnDOM(); //appends movies to the dom
     newYorkTimesAjax();
-    loadSearchBar(); //appends searchBar to dom
+    // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
 }
 
@@ -17,7 +17,7 @@ function initializeApp(){
 
 function clickHandler(){
     $('#submitButton').click(getYelpData);
-    addressCoordinates();
+    // addressCoordinates();
     $('.movieRow').on('click', clickHandlerToOpenNewPage)
 }
 
@@ -82,23 +82,38 @@ function newYorkTimesAjaxError(){
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
 
-var tmdbAjaxConfig = {
-    async: true,
-    crossDomain: true,
-    method: "get",
-    url: "https://api.themoviedb.org/3/movie/now_playing",
-    data: {
-        page: '1',
-        language:'en-US',
-        api_key:'487eb0704123bb2cd56c706660e4bb4d'
-    },
-    success: successfulTmdbCall,
+// var tmdbAjaxConfig = {
+//     async: true,
+//     crossDomain: true,
+//     method: "get",
+//     url: "https://api.themoviedb.org/3/movie/now_playing",
+//     data: {
+//         page: '1',
+//         language:'en-US',
+//         api_key:'487eb0704123bb2cd56c706660e4bb4d'
+//     },
+//     success: successfulTmdbCall,
     // error:
     // "headers": {},
     // "data": "{}",
     // "movie_id": "{}",
 
-  };
+//   };
+  
+//   $.ajax(settings).done(function (response) {
+//     console.log('pictures successful', response);
+//     movieListings.push(response);
+//   });
+
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+    "method": "GET",
+    "headers": {},
+    "data": "{}",
+    "movie_id": "{}"
+  }
   
   $.ajax(settings).done(function (response) {
     //console.log(response);
@@ -235,7 +250,7 @@ function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
     var lat = responseCoordinates.results[0].geometry.lat;
     var lng = responseCoordinates.results[0].geometry.lng;
-    initMap(lat,lng);
+    // initMap(lat,lng);
     
 }
 
