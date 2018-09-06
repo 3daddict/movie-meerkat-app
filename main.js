@@ -31,8 +31,11 @@ var summary;
 var linkToReview;
 
 
-// * @calls ajax new york times
-// * @params called query value is movie title
+
+//has ajax paramaters
+//@calls ajax new york times
+//@params called query value is movie title
+
 function newYorkTimesAjax (movieTitle){
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
@@ -155,7 +158,8 @@ function movieListingsOnDOM(){
         var movieTitle = movieListings[0].results[i].title;
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
-        var addMovieRow = $('<div>').addClass('movieRow').attr('data-title', movieTitle);
+        var themoviedb = movieListings[0].results[i].id;
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -304,14 +308,53 @@ var map;
 
 
 function clickHandlerToOpenNewPage (){
+
   console.log($(this));
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   newYorkTimesAjax($(this).attr('data-title'))
   dynamicallyCreateMovieInfoPage($(this));
+
 }
 
+/****************************************************************************************************
+ * YouTubeApi
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during failure of Yelp AJAX Call*/
+function findMovieID(tmdbID){
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.themoviedb.org/3/movie/" + tmdbID + "/videos?language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+    "method": "GET",
+    "headers": {},
+    "data": "{}"
+  }
+  
+  $.ajax(settings).done(function (response) {
+    console.log('Origninsal API Data: ' + response.results[0].key);
+    dynamicYoutubeVideo(response.results[0].key);
+  });
+}
+
+/****************************************************************************************************
+ * 
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during failure of Yelp AJAX Call*/
+
+function dynamicYoutubeVideo(movieTrailerID) {
+    console.log('It should be on the DOM')
+
+    var addTrailerRow = $('<iframe>');
+    addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
+    $(".movieTrailer").empty();
+    $(".movieTrailer").append(addTrailerRow);
+    
+{/* <iframe width="560" height="315" src="https://www.youtube.com/embed/wVTIJBNBYoM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
+}
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
   var myFuntion = setTimeout(function(){
