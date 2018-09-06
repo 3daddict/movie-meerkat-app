@@ -9,6 +9,12 @@ nav {
 #searchBar {
     min-width: 250px;
 }
+.navbar-brand {
+    font-size: 2.5em;
+}
+.logo {
+    max-width: 35px;
+}
 .movieRow {
     display: inline-block;
     position: relative;
