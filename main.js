@@ -3,7 +3,6 @@ $(document).ready(initializeApp)
 function initializeApp(){
     console.log('Initialized App');
     movieListingsOnDOM(); //appends movies to the dom
-    loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
     addressCoordinates();
 }
@@ -304,7 +303,6 @@ function clickHandlerToOpenNewPage (){
   if($(this).attr('data-title') === "Ocean's Eight"){
       $(this).attr('data-title', "Ocean's 8");
   }
-  debugger;
   if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
   newYorkTimesAjax($(this).attr('data-title'))
   }else{
@@ -379,8 +377,11 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var h5NYT = $('<h4>').text("Read the review")
   var NYTP = $('<p>').addClass("nytReview");
   var button = $('<button>').text('Back').addClass('btn btn-danger');
+  loadSearchBar(); //appends searchBar to dom
   $(button).on('click', function(){
+      $('#searchBarContainer').remove();
       $('.movie-wrapper').remove();
+      $('#map').css('display', 'none');
       initializeApp();
   })
   $(nytContainerDiv).append(h5NYT, NYTP);
