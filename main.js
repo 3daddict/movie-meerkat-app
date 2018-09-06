@@ -2,11 +2,11 @@ $(document).ready(initializeApp)
 
 function initializeApp(){
     console.log('Initialized App');
-    getYelpData();
     movieListingsOnDOM(); //appends movies to the dom
-    newYorkTimesAjax();
-    // loadSearchBar(); //appends searchBar to dom
+    loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
+    addressCoordinates();
+}
 
 $(".movieRow").hover(function(){
     $(".movieEffects").hover(function(){
@@ -39,6 +39,8 @@ var movieListings = [];
 var summary;
 var linkToReview;
 var addTrailerRow;
+var lat;
+var lng;
 
 
 
@@ -68,8 +70,8 @@ function newYorkTimesAjax (movieTitle){
 // * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
+    summary = $('<div>').text(responseData.results[0].summary_short);
+    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
@@ -78,45 +80,11 @@ function newYorkTimesAjaxSuccessful(responseData){
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
+  linkToReview = $('<div>').text('Link not available for this movie');
+  summary = $('<a>').text('Summary not available for this movie');
 }
 
 
-
-// * TMDB Ajax Function
-// * @param  {} settings
-// * @param  {} .done(function(response))
-// * @returns: {response} 
-// * calls the the movie database API*/
-
-/****************************************************************************************************
- * gettmdbData
- * @params {undefined} none
- * @returns: {undefined} none
- * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
-
-
-// var tmdbAjaxConfig = {
-//     async: true,
-//     crossDomain: true,
-//     method: "get",
-//     url: "https://api.themoviedb.org/3/movie/now_playing",
-//     data: {
-//         page: '1',
-//         language:'en-US',
-//         api_key:'487eb0704123bb2cd56c706660e4bb4d'
-//     },
-//     success: successfulTmdbCall,
-    // error:
-    // "headers": {},
-    // "data": "{}",
-    // "movie_id": "{}",
-
-//   };
-  
-//   $.ajax(settings).done(function (response) {
-//     console.log('pictures successful', response);
-//     movieListings.push(response);
-//   });
 
 var settings = {
     "async": true,
@@ -172,6 +140,7 @@ function movieListingsOnDOM(){
         var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
         var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
+
         var addMovieTitle = $('<p>').addClass('movieTitle ');
         addMovieTitle.append(movieTitle);
         var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
@@ -195,7 +164,7 @@ function loadSearchBar(){
     var searchBar = $('<input>').attr({'type':'text', 'value':'Address','id':'searchBar'});
     var submitButton = $('<input>').attr({'id':'submitButton','type':'submit'});
     searchBarContainer.append(searchBar, submitButton);
-    $('body').append(searchBarContainer);
+    $('nav.navbar div').append(searchBarContainer);
 }
 /****************************************************************************************************
  * getYelpData
@@ -218,8 +187,8 @@ function getYelpData() {
         // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
         // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
         // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
-        // location: location,
-        // term: 'movie theater',
+        location: location,
+        term: 'movie theater',
         success: successfulYelpCall,
         error: failedYelpCall,
     }
@@ -235,7 +204,18 @@ function getYelpData() {
 
 function successfulYelpCall(response){
     console.log('Yelp call ran successfully');
-    console.log(response);
+    console.log('Theater Name: ',response.businesses[0]['name']);
+    console.log('Coordinates: ',response.businesses[0]['coordinates']);
+    console.log('Latitude: ',response.businesses[0]['coordinates']['latitude']);
+    console.log('Longitude: ',response.businesses[0]['coordinates']['longitude']);
+    console.log('Distance :',((response.businesses[0]['distance'])*0.00062137).toFixed(2), ' mi');
+    console.log('Street: ',response.businesses[0]['location']['display_address'][0]);
+    console.log('City, State, Zip: ',response.businesses[0]['location']['display_address'][1]);
+
+    console.log('Phone: ',response.businesses[0]['phone']);
+    console.log('Rating :',response.businesses[0]['rating']);
+    console.log('Review :',response.businesses[0]['review_count']);
+
     // console.log('Theater NAme: ' + response['businessess'].name);
 }
 
@@ -249,6 +229,26 @@ function failedYelpCall(){
     console.log('Yelp call Failed');
 }
 
+/****************************************************************************************************
+ * createYelpListings
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Puts Yelp data in a listings page*/
+
+// function createYelpListings(){
+//
+//     for(var i = 0; i < )
+//
+//
+//
+//     $('<div>').append()
+//
+//
+//
+//
+// }
+
+
 
 function addressCoordinates(){
     var ajaxParams = {
@@ -256,6 +256,7 @@ function addressCoordinates(){
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
             q: $('.searchBar').val()
+            // q: 'Columbus, Ohio'
         },
         success: successfullAddressCoordinates
     }  
@@ -263,29 +264,14 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
-    var lat = responseCoordinates.results[0].geometry.lat;
-    var lng = responseCoordinates.results[0].geometry.lng;
-    // initMap(lat,lng);
+     lat = responseCoordinates.results[0].geometry.lat;
+     lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
     
 }
 
-//  var map;
-// function initMap(lat,lng) {
-//   map = new google.maps.Map(document.getElementById('map'), {
-//     center: {lat: lat , lng: lng},
-//     zoom: 8
-//   });
-//   $('#map').append(map);
-// }
-// function initMap(lat,lng) {
-//     // The location
-//     var movieTheaters = {lat: lat, lng: lng};
-//     // The map, centered at location
-//     var map = new google.maps.Map(
-//         document.getElementById('map'), {zoom: 8, center: movieTheaters});
-//     // The marker, positioned at location
-//     var marker = new google.maps.Marker({position: movieTheaters, map: map});
-//   }
+
+
 
 var map;
       function initMap(lat,lng) {
@@ -314,6 +300,7 @@ var map;
             map: map
           });
         }
+      
       }
 
 
@@ -325,8 +312,19 @@ function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   findMovieID($(this).attr('data-id'));
+
+  if($(this).attr('data-title') === "Ocean's Eight"){
+      $(this).attr('data-title', "Ocean's 8");
+  }
+  debugger;
+  if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
   newYorkTimesAjax($(this).attr('data-title'))
+  }else{
+    newYorkTimesAjaxError();
+  }
+
   dynamicallyCreateMovieInfoPage($(this));
+  addressCoordinates();
 
 }
 
@@ -378,28 +376,34 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var movieReviewsDiv = $('<div>').addClass("movieReviews");
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
+
   var span1 = $('<span>').addClass("movieRatingData").text(0);
-  var mapDiv = $('<div>').addClass("map-section")
-  var iFrameContainer = $('<div>').addClass("iframe-container");
-  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
-    'width': '450',
-    'height': '450',
-  });
+  $('#map').css('display', 'inline-block');
+
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
   $(movieTrailer).append(addTrailerRow);
-  var h5Summary = $('<h5>').text("Summary")
+  var h5Summary = $('<h4>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
-  var h5NYT = $('<h5>').text("Read the review")
-  $(pSummary).append(linkToReview);
-  $(h5NYT).append(summary);
-  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
-  $(iFrameContainer).append(iframe);
-  $(mapDiv).append(iFrameContainer);
+
+  var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
+  var h5NYT = $('<h4>').text("Read the review")
+  var NYTP = $('<p>').addClass("nytReview");
+  var button = $('<button>').text('Back').addClass('btn btn-danger');
+  $(button).on('click', function(){
+      $('.movie-wrapper').remove();
+      initializeApp();
+  })
+  $(nytContainerDiv).append(h5NYT, NYTP);
+  $(pSummary).append(summary);
+  $(NYTP).append(linkToReview);
+  $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
+
   $(p1).append(i1, span1);
   $(movieReviewsDiv).append(p1);
-  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(section1).append(poster, movieReviewsDiv)
   $(wrapper).append(section1, section2);
-  $('body').append(wrapper);
+  $('.movie-container').append(wrapper);
 }, 2000)}
+

@@ -13,10 +13,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck&callback=initMap"
-    async defer></script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-    </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck&callback=initMap">
+        </script>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
@@ -26,33 +25,22 @@
 
 <body>
 
-<section class="movie-container">
+<input type="text" class="searchBar" value="9200 Irvine Center Drive, Irvine California">
 
-</section>
-<!-- <input type="text" class="searchBar" value="9200 Irvine Center Drive, Irvine California"> -->
 
-<!-- <div id="map"></div> -->
-    <!-- <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-    </script> -->
 
     <nav class="navbar navbar-dark bg-darkjustify-content-between">
-        <img src="movie-meerkat.png" alt="movie logo" class="logo"> <a class="navbar-brand">Movie<span style="color: red;">Meerkat</span></a>
-        <form class="form-inline ml-auto mr-auto ">
-            <input class="form-control mr-sm-2" id="searchBar" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        <a class="navbar-brand">Movie<span style="color: red;">Meerkat</span></a>
+        <div class="form-inline ml-auto mr-auto ">
+            <input class="form-control mr-sm-2" id="a" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-primary my-2 my-sm-0" id="a">Search</button>
+        </div>
+
     </nav>
     <section class="movie-container">
 
     </section>
-    <!-- <div class="movieTrailer"></div> -->
+    <div id="map"></div>
 </body>
 
 </html>
