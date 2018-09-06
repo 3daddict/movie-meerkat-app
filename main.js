@@ -136,7 +136,7 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movieRating': movieRating});
         var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
 
@@ -151,20 +151,7 @@ function movieListingsOnDOM(){
     }
 }
 
-/****************************************************************************************************
- * loadSearchBar
- * @params {undefined} none
- * @returns: {undefined} none
- * Uses DOM creation to load the searchBar*/
 
-function loadSearchBar(){
-    console.log('load search bar running');
-    var searchBarContainer = $('<div>').attr('id','searchBarContainer');
-    var searchBar = $('<input>').attr({'type':'text', 'value':'Address','id':'searchBar'});
-    var submitButton = $('<input>').attr({'id':'submitButton','type':'submit'});
-    searchBarContainer.append(searchBar, submitButton);
-    $('nav.navbar div').append(searchBarContainer);
-}
 /****************************************************************************************************
  * getYelpData
  * @params {undefined} none
@@ -407,7 +394,7 @@ function clickHandlerToOpenNewPage (){
   console.log($(this));
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
-  $('.movie-container').empty();
+  $('.movieRow').remove();
   findMovieID($(this).attr('data-id'));
 
   if($(this).attr('data-title') === "Ocean's Eight"){
@@ -454,56 +441,32 @@ var settings = {
 
 function dynamicYoutubeVideo(movieTrailerID) {
     console.log('It should be on the DOM')
-
     addTrailerRow = $('<iframe>');
     addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
     $(".movieTrailer").empty();
-   //$(".movieTrailer").append(addTrailerRow);
-    
-{/* <iframe width="560" height="315" src="https://www.youtube.com/embed/wVTIJBNBYoM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
 }
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
   var myFuntion = setTimeout(function(){
-  console.log('summary:', summary, 'linktoreview:', linkToReview)
-  console.log(someOfThis)
-  var wrapper = $('<div>').addClass('movie-wrapper row justify-content-center');
-  var section1 = $('<section>').addClass('movie-stats col-md-2 text-center');
-  var poster = $('<img>').attr('src', someOfThis[0].firstElementChild.currentSrc)
-  var movieReviewsDiv = $('<div>').addClass("movieReviews");
-  var p1 = $('<p>');
-  var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
-
-  var span1 = $('<span>').addClass("movieRatingData").text(0);
+  $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
+  $('.starIcon').addClass("fas fa-star");
+  $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
   $('#map').css('display', 'inline-block');
-
-  var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
-  var movieTrailer = $('<div>').addClass("movieTrailer")
-  $(movieTrailer).append(addTrailerRow);
-  var h5Summary = $('<h4>').text("Summary")
-  var pSummary = $('<p>').addClass("movieSummary")
-
-  var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
-  var h5NYT = $('<h4>').text("Read the review")
-  var NYTP = $('<p>').addClass("nytReview");
-  var button = $('<button>').text('Back').addClass('btn btn-danger');
-  loadSearchBar(); //appends searchBar to dom
-  $(button).on('click', function(){
+  $('.searchBarContainer').css('display', 'inline-block');
+  $('.movieTitle').text(someOfThis.attr('data-title'))
+  $('.movieTrailer').append(addTrailerRow);
+  $('.summary').text("Summary")
+  $('.reviewTitle').text("Read the review")
+  $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
+  $('.backButton').on('click', function(){
       $('#searchBarContainer').remove();
-      $('.movie-wrapper').remove();
+      $('.movie-wrapper').empty();
       $('#map').css('display', 'none');
       initializeApp();
   })
-  $(nytContainerDiv).append(h5NYT, NYTP);
-  $(pSummary).append(summary);
-  $(NYTP).append(linkToReview);
-  $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
-
-  $(p1).append(i1, span1);
-  $(movieReviewsDiv).append(p1);
-  $(section1).append(poster, movieReviewsDiv)
-  $(wrapper).append(section1, section2);
-  $('.movie-container').append(wrapper);
+  $('.movieSummary').append(summary);
+  $('.nytReview').append(linkToReview);
+  $('.movie-trailer-container').append( button, mapID);
+  $('.movie-stats').append( movieReviewsDiv);
 }, 2000)}
 

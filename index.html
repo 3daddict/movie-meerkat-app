@@ -32,10 +32,40 @@
           </a>
 
     </nav>
-    <section class="movie-container">
+    <section class="movie-container text-center">
+            <div class="movie-wrapper row justify-content-center">
+                    <section class="movie-stats col-md-2 text-center">
+                        <img class="poster">
+                        <div class="movieReviews">
+                            <p class="movieRatingContainer">
+                                <i class="starIcon" style="color: yellow;"></i>
+                                <span class="movieRatingData"></span>
+                            </p>
+                        </div>
+                        <h4 class="summary"></h4>
+                        <p class="movieSummary"></p>
+                        <button class="backButton btn btn-danger"></button>  
+                        <div class="searchBarContainer">
+                            <input type="text" value ='9200 Irvine Center Drive, Irvine California 92618' id="searchBar">
+                            <input type="submit" id="submitButton">
+                        </div> 
+                    </section>
+                    <section class="movie-trailer-container col-md-9">
+                            <h1 class="movieTitle"></h1>
+                            <div class="movieTrailer"></div>
+                            <div class="nytReviewContainer">
+                                <h4 class="reviewTitle"></h4> 
+                                <p class="nytReview"></p> 
+                            </div>
+                            <div id="map"></div>
+                            
+                    </section>
+
+            </div>
 
     </section>
-    <div id="map"></div>
+   
+    
 </body>
 
 </html>
