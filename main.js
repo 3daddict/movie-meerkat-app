@@ -174,8 +174,9 @@ function movieListingsOnDOM(){
         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
         addMovieTitle.append(movieTitle);
+        var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
         var addMovieRating = $('<p>').addClass('movieRating');
-        addMovieRating.append(movieRating);
+        addMovieRating.append(addReviewStar, " ", movieRating);
         addMovieContainer.append(addMovieTitle, addMovieRating);
         $(".movie-container").append(addMovieRow);
         addMovieRow.append(addMoviePoster, addMovieContainer);
