@@ -148,12 +148,12 @@ function failedYelpCall(){
 }
 
 
-function addresaddedsCoordinates(){
+function addressCoordinates(){
     var ajaxParams = {
         url: "https://api.opencagedata.com/geocode/v1/json",
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
-            q: "columbus, Ohio"
+            q: $('.searchBar').val()
         },
         success: successfullAddressCoordinates
         
@@ -162,4 +162,56 @@ function addresaddedsCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
+    var lat = responseCoordinates.results[0].geometry.lat;
+    var lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
+    
 }
+
+//  var map;
+// function initMap(lat,lng) {
+//   map = new google.maps.Map(document.getElementById('map'), {
+//     center: {lat: lat , lng: lng},
+//     zoom: 8
+//   });
+//   $('#map').append(map);
+// }
+// function initMap(lat,lng) {
+//     // The location
+//     var movieTheaters = {lat: lat, lng: lng};
+//     // The map, centered at location
+//     var map = new google.maps.Map(
+//         document.getElementById('map'), {zoom: 8, center: movieTheaters});
+//     // The marker, positioned at location
+//     var marker = new google.maps.Marker({position: movieTheaters, map: map});
+//   }
+
+var map;
+      function initMap(lat,lng) {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: new google.maps.LatLng(lat,lng),
+        //   mapTypeId: 'terrain',
+        });
+
+        // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var coords = results.features[i].geometry.coordinates;
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+          });
+        }
+      }
+
