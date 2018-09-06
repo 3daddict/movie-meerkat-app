@@ -1,13 +1,9 @@
 $(document).ready(initializeApp)
 
 function initializeApp(){
-<<<<<<< HEAD
     console.log('Initialized App');
-=======
     getYelpData();
->>>>>>> 62e41c7037849a4708656e1380f6f17bf55e61ee
     movieListingsOnDOM(); //appends movies to the dom
-<<<<<<< HEAD
     newYorkTimesAjax();
     loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
@@ -21,10 +17,8 @@ function initializeApp(){
 
 function clickHandler(){
     $('#submitButton').click(getYelpData);
-=======
     addressCoordinates();
     $('.movieRow').on('click', clickHandlerToOpenNewPage)
->>>>>>> dev
 }
 
 
@@ -99,7 +93,7 @@ var tmdbAjaxConfig = {
         api_key:'487eb0704123bb2cd56c706660e4bb4d'
     },
     success: successfulTmdbCall,
-    error:
+    // error:
     // "headers": {},
     // "data": "{}",
     // "movie_id": "{}",
@@ -224,8 +218,6 @@ function successfulYelpCall(response){
 function failedYelpCall(){
     console.log('Yelp call Failed');
 }
-<<<<<<< HEAD
-=======
 
 
 function addressCoordinates(){
@@ -233,7 +225,7 @@ function addressCoordinates(){
         url: "https://api.opencagedata.com/geocode/v1/json",
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
-            q: "columbus, Ohio",
+            q: $('.searchBar').val()
         },
         success: successfullAddressCoordinates
     }  
@@ -241,7 +233,59 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
+    var lat = responseCoordinates.results[0].geometry.lat;
+    var lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
+    
 }
+
+//  var map;
+// function initMap(lat,lng) {
+//   map = new google.maps.Map(document.getElementById('map'), {
+//     center: {lat: lat , lng: lng},
+//     zoom: 8
+//   });
+//   $('#map').append(map);
+// }
+// function initMap(lat,lng) {
+//     // The location
+//     var movieTheaters = {lat: lat, lng: lng};
+//     // The map, centered at location
+//     var map = new google.maps.Map(
+//         document.getElementById('map'), {zoom: 8, center: movieTheaters});
+//     // The marker, positioned at location
+//     var marker = new google.maps.Marker({position: movieTheaters, map: map});
+//   }
+
+var map;
+      function initMap(lat,lng) {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: new google.maps.LatLng(lat,lng),
+        //   mapTypeId: 'terrain',
+        });
+
+        // Create a <script> tag and set the USGS URL as the source.
+        var script = document.createElement('script');
+        // This example uses a local copy of the GeoJSON stored at
+        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var coords = results.features[i].geometry.coordinates;
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+          });
+        }
+      }
+
 
 
 function clickHandlerToOpenNewPage (){
@@ -252,9 +296,7 @@ function clickHandlerToOpenNewPage (){
   newYorkTimesAjax($(this).attr('data-title'))
   dynamicallyCreateMovieInfoPage($(this));
 }
-<<<<<<< HEAD
->>>>>>> dev
-=======
+
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
   var myFuntion = setTimeout(function(){
@@ -292,4 +334,3 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $(wrapper).append(section1, section2);
   $('body').append(wrapper);
 }, 2000)}
->>>>>>> 62e41c7037849a4708656e1380f6f17bf55e61ee
