@@ -479,13 +479,23 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
   $('.backButton').on('click', function(){
       $('#searchBarContainer').css('display', 'none');
-      $('.movie-wrapper').empty();
+      $('.poster').removeAttr('src');
+      $('.starIcon').removeClass("fas fa-star");
+      $('.movieRatingData').empty();
+      $('.movieTitle').empty();
+      $('.movieTrailer').empty();
+      $('.summary').empty();
+      $('.reviewTitle').empty();
+      $('.movieSummary').empty();
+      $('.nytReview').empty();
+      $('.searchBarContainer').css('display', 'none');
+      $('.backButton').css('display','none');
       $('#map').css('display', 'none');
       initializeApp();
   })
   $('.movieSummary').append(summary);
   $('.nytReview').append(linkToReview);
-  $('.movie-trailer-container').append( button, mapID);
-  $('.movie-stats').append( movieReviewsDiv);
+//   $('.movie-trailer-container').append( button, mapID);
+//   $('.movie-stats').append( movieReviewsDiv);
 }, 2000)}
 
