@@ -6,10 +6,26 @@ $(document).ready(initializeApp)
 * @returns: {undefined} none
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions*/
 function initializeApp(){
-    getYelpData();
-    newYorkTimesAjax();
+    console.log('Initialized App');
     movieListingsOnDOM(); //appends movies to the dom
+    newYorkTimesAjax();
+    loadSearchBar(); //appends searchBar to dom
+    clickHandler(); //runs click handler
 }
+
+/****************************************************************************************************
+ * clickHandler
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Attaches click handler to run different functions when clicking on their respective buttons*/
+
+function clickHandler(){
+    $('#submitButton').click(getYelpData);
+}
+
+
+
+
 
 //Global Variables
 var movieListings = [];
@@ -63,20 +79,60 @@ function newYorkTimesAjaxError(){
 // * @returns: {response} 
 // * calls the the movie database API*/
 
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
-    "method": "GET",
-    "headers": {},
-    "data": "{}",
-    "movie_id": "{}"
-  }
+/****************************************************************************************************
+ * gettmdbData
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
+
+
+var tmdbAjaxConfig = {
+    async: true,
+    crossDomain: true,
+    method: "get",
+    url: "https://api.themoviedb.org/3/movie/now_playing",
+    data: {
+        page: '1',
+        language:'en-US',
+        api_key:'487eb0704123bb2cd56c706660e4bb4d'
+    },
+    success: successfulTmdbCall,
+    error:
+    // "headers": {},
+    // "data": "{}",
+    // "movie_id": "{}",
+
+  };
   
   $.ajax(settings).done(function (response) {
     //console.log(response);
     movieListings.push(response);
   });
+
+/****************************************************************************************************
+ * successfulTmdbCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during success of tmdb AJAX Call*/
+
+function successfulTmdbCall(response){
+    console.log('Successful tmdb Call');
+    movieListing.push(response);
+}
+
+/****************************************************************************************************
+ * failedTmdbCall
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs during fauilure of tmdb AJAX Call*/
+
+function failedTmdbCall(){
+
+    
+
+}
+
+
 
 // * movieListingsOnDOM Function
 // * @param  {} none 
@@ -106,25 +162,45 @@ function movieListingsOnDOM(){
     }
 }
 
-
-
-
 /****************************************************************************************************
- * Yelp AJAX Call
+ * loadSearchBar
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Uses DOM creation to load the searchBar*/
+
+function loadSearchBar(){
+    console.log('load search bar running');
+    var searchBarContainer = $('<div>').attr('id','searchBarContainer');
+    var searchBar = $('<input>').attr({'type':'text', 'value':'Address','id':'searchBar'});
+    var submitButton = $('<input>').attr({'id':'submitButton','type':'submit'});
+    searchBarContainer.append(searchBar, submitButton);
+    $('body').append(searchBarContainer);
+}
+/****************************************************************************************************
+ * getYelpData
  * @params {undefined} none
  * @returns: {undefined} none
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
 function getYelpData() {
-
+    var location = $('#searchBar').val();
     var yelpAjaxConfig = {
         dataType: 'json',
         url: 'http://yelp.ongandy.com/businesses',
+        method: 'post',
+        data: {
+            api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
+            location: location,
+            term: 'movie theater',
+            sort_by: 'distance'
+        },
+        // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
+        // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
+        // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
+        // location: location,
+        // term: 'movie theater',
         success: successfulYelpCall,
         error: failedYelpCall,
-        latitude: 33.6846,
-        longitude: -117.8265,
-        term: 'movie theater'
     }
 
     $.ajax(yelpAjaxConfig);
@@ -136,10 +212,11 @@ function getYelpData() {
  * @returns: {undefined} none
  * Function runs during success of Yelp AJAX Call*/
 
-function successfulYelpCall(){
+function successfulYelpCall(response){
     console.log('Yelp call ran successfully');
+    console.log(response);
+    // console.log('Theater NAme: ' + response['businessess'].name);
 }
-
 
 /****************************************************************************************************
  * FailedYelpCall
@@ -149,9 +226,4 @@ function successfulYelpCall(){
 
 function failedYelpCall(){
     console.log('Yelp call Failed');
-}
-
-
-function clickHandlerToOpenNewPage(){
-  
 }
