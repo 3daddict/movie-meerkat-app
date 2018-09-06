@@ -2,10 +2,9 @@ $(document).ready(initializeApp)
 
 function initializeApp(){
     console.log('Initialized App');
-    getYelpData();
     movieListingsOnDOM(); //appends movies to the dom
     newYorkTimesAjax();
-    // loadSearchBar(); //appends searchBar to dom
+    loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
 }
 
@@ -184,7 +183,7 @@ function loadSearchBar(){
     var searchBar = $('<input>').attr({'type':'text', 'value':'Address','id':'searchBar'});
     var submitButton = $('<input>').attr({'id':'submitButton','type':'submit'});
     searchBarContainer.append(searchBar, submitButton);
-    $('body').append(searchBarContainer);
+    $('nav.navbar div').append(searchBarContainer);
 }
 /****************************************************************************************************
  * getYelpData
@@ -207,8 +206,8 @@ function getYelpData() {
         // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
         // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
         // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
-        // location: location,
-        // term: 'movie theater',
+        location: location,
+        term: 'movie theater',
         success: successfulYelpCall,
         error: failedYelpCall,
     }
@@ -224,7 +223,18 @@ function getYelpData() {
 
 function successfulYelpCall(response){
     console.log('Yelp call ran successfully');
-    console.log(response);
+    console.log('Theater Name: ',response.businesses[0]['name']);
+    console.log('Coordinates: ',response.businesses[0]['coordinates']);
+    console.log('Latitude: ',response.businesses[0]['coordinates']['latitude']);
+    console.log('Longitude: ',response.businesses[0]['coordinates']['longitude']);
+    console.log('Distance :',((response.businesses[0]['distance'])*0.00062137).toFixed(2), ' mi');
+    console.log('Street: ',response.businesses[0]['location']['display_address'][0]);
+    console.log('City, State, Zip: ',response.businesses[0]['location']['display_address'][1]);
+
+    console.log('Phone: ',response.businesses[0]['phone']);
+    console.log('Rating :',response.businesses[0]['rating']);
+    console.log('Review :',response.businesses[0]['review_count']);
+
     // console.log('Theater NAme: ' + response['businessess'].name);
 }
 
@@ -237,6 +247,26 @@ function successfulYelpCall(response){
 function failedYelpCall(){
     console.log('Yelp call Failed');
 }
+
+/****************************************************************************************************
+ * createYelpListings
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Puts Yelp data in a listings page*/
+
+// function createYelpListings(){
+//
+//     for(var i = 0; i < )
+//
+//
+//
+//     $('<div>').append()
+//
+//
+//
+//
+// }
+
 
 
 function addressCoordinates(){
