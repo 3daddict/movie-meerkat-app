@@ -9,6 +9,12 @@ nav {
 #searchBar {
     min-width: 250px;
 }
+.navbar-brand {
+    font-size: 2.5em;
+}
+.logo {
+    max-width: 35px;
+}
 .movieRow {
     display: inline-block;
     position: relative;
@@ -35,6 +41,7 @@ nav {
       #map {
         height: 50%;
         width: 50%;
+        display: none;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -52,4 +59,9 @@ nav {
 .map-section img{
     width: 100%;
     padding: 10px;
+}
+
+.youtubePlayer{
+    height: 50vh;
+   min-width: 100%;
 }

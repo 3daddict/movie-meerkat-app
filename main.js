@@ -3,9 +3,9 @@ $(document).ready(initializeApp)
 function initializeApp(){
     console.log('Initialized App');
     movieListingsOnDOM(); //appends movies to the dom
-    newYorkTimesAjax();
     loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
+    addressCoordinates();
 }
 
 /****************************************************************************************************
@@ -28,6 +28,9 @@ function clickHandler(){
 var movieListings = [];
 var summary;
 var linkToReview;
+var addTrailerRow;
+var lat;
+var lng;
 
 
 
@@ -57,8 +60,8 @@ function newYorkTimesAjax (movieTitle){
 // * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
+    summary = $('<div>').text(responseData.results[0].summary_short);
+    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
@@ -67,45 +70,11 @@ function newYorkTimesAjaxSuccessful(responseData){
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
+  linkToReview = $('<div>').text('Link not available for this movie');
+  summary = $('<a>').text('Summary not available for this movie');
 }
 
 
-
-// * TMDB Ajax Function
-// * @param  {} settings
-// * @param  {} .done(function(response))
-// * @returns: {response} 
-// * calls the the movie database API*/
-
-/****************************************************************************************************
- * gettmdbData
- * @params {undefined} none
- * @returns: {undefined} none
- * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
-
-
-// var tmdbAjaxConfig = {
-//     async: true,
-//     crossDomain: true,
-//     method: "get",
-//     url: "https://api.themoviedb.org/3/movie/now_playing",
-//     data: {
-//         page: '1',
-//         language:'en-US',
-//         api_key:'487eb0704123bb2cd56c706660e4bb4d'
-//     },
-//     success: successfulTmdbCall,
-    // error:
-    // "headers": {},
-    // "data": "{}",
-    // "movie_id": "{}",
-
-//   };
-  
-//   $.ajax(settings).done(function (response) {
-//     console.log('pictures successful', response);
-//     movieListings.push(response);
-//   });
 
 var settings = {
     "async": true,
@@ -158,7 +127,7 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movie-rating': movieRating});
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -275,6 +244,7 @@ function addressCoordinates(){
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
             q: $('.searchBar').val()
+            // q: 'Columbus, Ohio'
         },
         success: successfullAddressCoordinates
     }  
@@ -282,29 +252,14 @@ function addressCoordinates(){
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
-    var lat = responseCoordinates.results[0].geometry.lat;
-    var lng = responseCoordinates.results[0].geometry.lng;
-    // initMap(lat,lng);
+     lat = responseCoordinates.results[0].geometry.lat;
+     lng = responseCoordinates.results[0].geometry.lng;
+    initMap(lat,lng);
     
 }
 
-//  var map;
-// function initMap(lat,lng) {
-//   map = new google.maps.Map(document.getElementById('map'), {
-//     center: {lat: lat , lng: lng},
-//     zoom: 8
-//   });
-//   $('#map').append(map);
-// }
-// function initMap(lat,lng) {
-//     // The location
-//     var movieTheaters = {lat: lat, lng: lng};
-//     // The map, centered at location
-//     var map = new google.maps.Map(
-//         document.getElementById('map'), {zoom: 8, center: movieTheaters});
-//     // The marker, positioned at location
-//     var marker = new google.maps.Marker({position: movieTheaters, map: map});
-//   }
+
+
 
 var map;
       function initMap(lat,lng) {
@@ -333,6 +288,7 @@ var map;
             map: map
           });
         }
+      
       }
 
 
@@ -343,8 +299,20 @@ function clickHandlerToOpenNewPage (){
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
+  findMovieID($(this).attr('data-id'));
+
+  if($(this).attr('data-title') === "Ocean's Eight"){
+      $(this).attr('data-title', "Ocean's 8");
+  }
+  debugger;
+  if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
   newYorkTimesAjax($(this).attr('data-title'))
+  }else{
+    newYorkTimesAjaxError();
+  }
+
   dynamicallyCreateMovieInfoPage($(this));
+  addressCoordinates();
 
 }
 
@@ -378,10 +346,10 @@ var settings = {
 function dynamicYoutubeVideo(movieTrailerID) {
     console.log('It should be on the DOM')
 
-    var addTrailerRow = $('<iframe>');
+    addTrailerRow = $('<iframe>');
     addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
     $(".movieTrailer").empty();
-    $(".movieTrailer").append(addTrailerRow);
+   //$(".movieTrailer").append(addTrailerRow);
     
 {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/wVTIJBNBYoM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
 }
@@ -396,29 +364,34 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var movieReviewsDiv = $('<div>').addClass("movieReviews");
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
+
   var span1 = $('<span>').addClass("movieRatingData").text(0);
-  var mapDiv = $('<div>').addClass("map-section")
-  var iFrameContainer = $('<div>').addClass("iframe-container");
-  var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
-    'width': '450',
-    'height': '450',
-  });
+  $('#map').css('display', 'inline-block');
+
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
-  var movieTrailerImage = $('<img>').attr('src', "http://blog.gowebagency.co.uk/wp-content/uploads/2016/10/youtube-image.png").css('width', '100%')
-  var h5Summary = $('<h5>').text("Summary")
+  $(movieTrailer).append(addTrailerRow);
+  var h5Summary = $('<h4>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
-  var h5NYT = $('<h5>').text("Read the review")
-  $(movieTrailer).append(movieTrailerImage);
+
+  var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
+  var h5NYT = $('<h4>').text("Read the review")
+  var NYTP = $('<p>').addClass("nytReview");
+  var button = $('<button>').text('Back').addClass('btn btn-danger');
+  $(button).on('click', function(){
+      $('.movie-wrapper').remove();
+      initializeApp();
+  })
+  $(nytContainerDiv).append(h5NYT, NYTP);
   $(pSummary).append(summary);
-  $(h5NYT).append(linkToReview);
-  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
-  $(iFrameContainer).append(iframe);
-  $(mapDiv).append(iFrameContainer);
+  $(NYTP).append(linkToReview);
+  $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
+
   $(p1).append(i1, span1);
   $(movieReviewsDiv).append(p1);
-  $(section1).append(poster, movieReviewsDiv, mapDiv)
+  $(section1).append(poster, movieReviewsDiv)
   $(wrapper).append(section1, section2);
-  $('body').append(wrapper);
+  $('.movie-container').append(wrapper);
 }, 2000)}
+
