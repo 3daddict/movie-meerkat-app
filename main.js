@@ -374,17 +374,26 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
     'width': '450',
     'height': '450',
+    // 'border':0,
   });
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTitle = $('<h2>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
   $(movieTrailer).append(addTrailerRow);
   var h5Summary = $('<h5>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
+  var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
   var h5NYT = $('<h5>').text("Read the review")
+  var NYTP = $('<p>').addClass("nytReview");
+  var button = $('<button>').text('Back').addClass('btn btn-danger');
+  $(button).on('click', function(){
+      $('.movie-wrapper').remove();
+      initializeApp();
+  })
+  $(nytContainerDiv).append(h5NYT, NYTP);
   $(pSummary).append(linkToReview);
-  $(h5NYT).append(summary);
-  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
+  $(NYTP).append(summary);
+  $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
   $(iFrameContainer).append(iframe);
   $(mapDiv).append(iFrameContainer);
   $(p1).append(i1, span1);
