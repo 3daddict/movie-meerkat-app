@@ -1,6 +1,7 @@
 body {
     background-color: #1d1b24;
     color: white;
+    font-family: 'Open Sans', sans-serif;
 }
 nav {
     margin-top: 20px;
@@ -11,29 +12,39 @@ nav {
 }
 .navbar-brand {
     font-size: 2.5em;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    margin-right: 6px;
 }
 .logo {
     max-width: 35px;
+    margin-left: 20px;
+    margin-top: 0;
+    padding-bottom: 6px;
+
 }
 .movieRow {
     display: inline-block;
     position: relative;
     margin: 5px;
 }
-/* make a true false class in js later
-.movieRow:hover {
-    background: rgba(0,6,12,0.8);
-    transition: 0.3s opacity;
-    opacity: 0;
-} */
+.darkPoster{
+    background-color:#000;
+    opacity:0.2;
+    transform: scale(1.1);
+       
+}
+.movieCardHide {
+    visibility: hidden;
 
+}
 .movieCardInfo {
     position: absolute;
     color: white;
-    z-index: 1;
     width: 100%;
     top: 5px;
     left: 5px;
+    z-index: -1;
 }
 
  /* Always set the map height explicitly to define the size of the div
@@ -61,7 +72,19 @@ nav {
     padding: 10px;
 }
 
+.movieTitle {
+    font-size: 1.5em;
+}
+
+.movieRating {
+    display: inline;
+    background: #000;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
 .youtubePlayer{
     height: 50vh;
    min-width: 100%;
+
 }
