@@ -5,10 +5,46 @@ body {
 }
 nav {
     margin-top: 20px;
-    margin-bottom: 20px;
 }
 #searchBar {
-    min-width: 250px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+#submitButton {
+    width: 100%;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: 400;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+#submitButton:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    text-decoration: none;
 }
 .navbar-brand {
     font-size: 2.5em;
@@ -27,6 +63,9 @@ nav {
     display: inline-block;
     position: relative;
     margin: 5px;
+}
+.poster {
+    margin: 35px 10px 5px 10px;
 }
 .darkPoster{
     background-color:#000;
@@ -60,9 +99,7 @@ nav {
         margin: 0;
         padding: 0;
       }
-.movie-stats img{
-    margin: 10px;
-}
+
 .movie-map{
     padding-left: 0;
     
@@ -91,7 +128,16 @@ nav {
 
 .backButton{
     display: none;
+    width: 100%;
+    margin-bottom: 30px;
 }
 .searchBarContainer{
     display: none;
+}
+
+.movieSummary{
+    margin: 5px 0px 15px 15px;
+}
+.col-md-2 {
+    padding-left: 30px;
 }
