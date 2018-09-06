@@ -4,7 +4,7 @@ function initializeApp(){
     console.log('Initialized App');
     getYelpData();
     movieListingsOnDOM(); //appends movies to the dom
-    newYorkTimesAjax();
+    // newYorkTimesAjax();
     // loadSearchBar(); //appends searchBar to dom
     clickHandler(); //runs click handler
     addressCoordinates();
@@ -62,8 +62,8 @@ function newYorkTimesAjax (movieTitle){
 // * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
-    linkToReview = $('<div>').text(responseData.results[0].summary_short);
-    summary = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
+    summary = $('<div>').text(responseData.results[0].summary_short);
+    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
 }
 
 
@@ -72,6 +72,8 @@ function newYorkTimesAjaxSuccessful(responseData){
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
+  linkToReview = $('<div>').text('Link not available for this movie');
+  summary = $('<a>').text('Summary not available for this movie');
 }
 
 
@@ -163,7 +165,7 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movie-rating': movieRating});
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -321,7 +323,17 @@ function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movie-container').empty();
   findMovieID($(this).attr('data-id'));
-  newYorkTimesAjax($(this).attr('data-title'));
+
+  if($(this).attr('data-title') === "Ocean's Eight"){
+      $(this).attr('data-title', "Ocean's 8");
+  }
+  debugger;
+  if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
+  newYorkTimesAjax($(this).attr('data-title'))
+  }else{
+    newYorkTimesAjaxError();
+  }
+
   dynamicallyCreateMovieInfoPage($(this));
   addressCoordinates();
 
@@ -375,18 +387,30 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var movieReviewsDiv = $('<div>').addClass("movieReviews");
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
+
   var span1 = $('<span>').addClass("movieRatingData").text(0);
   $('#map').css('display', 'inline-block');
+
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h2>').addClass("movieTitle").text("Mission: Impossible - Fallout")
+  var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
   $(movieTrailer).append(addTrailerRow);
-  var h5Summary = $('<h5>').text("Summary")
+  var h5Summary = $('<h4>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
-  var h5NYT = $('<h5>').text("Read the review")
-  $(pSummary).append(linkToReview);
-  $(h5NYT).append(summary);
-  $(section2).append(movieTitle, movieTrailer,h5Summary, pSummary, h5NYT);
+
+  var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
+  var h5NYT = $('<h4>').text("Read the review")
+  var NYTP = $('<p>').addClass("nytReview");
+  var button = $('<button>').text('Back').addClass('btn btn-danger');
+  $(button).on('click', function(){
+      $('.movie-wrapper').remove();
+      initializeApp();
+  })
+  $(nytContainerDiv).append(h5NYT, NYTP);
+  $(pSummary).append(summary);
+  $(NYTP).append(linkToReview);
+  $(section2).append(movieTitle, movieTrailer ,h5Summary, pSummary, nytContainerDiv, button);
+
   $(p1).append(i1, span1);
   $(movieReviewsDiv).append(p1);
   $(section1).append(poster, movieReviewsDiv)
