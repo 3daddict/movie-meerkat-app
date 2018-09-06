@@ -160,7 +160,7 @@ function movieListingsOnDOM(){
         var moviePoster = movieListings[0].results[i].poster_path;
         var movieRating = movieListings[0].results[i].vote_average;
         var themoviedb = movieListings[0].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb});
+        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movie-rating': movieRating});
         var addMoviePoster = $('<img>').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo');
         var addMovieTitle = $('<p>').addClass('movieTitle ');
@@ -368,7 +368,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   var movieReviewsDiv = $('<div>').addClass("movieReviews");
   var p1 = $('<p>');
   var i1 = $('<i>').addClass("fas fa-star").css('color', 'yellow');
-  var span1 = $('<span>').addClass("movieRatingData").text(0);
+  var span1 = $('<span>').addClass("movieRatingData").text(' ' + someOfThis.attr('movie-rating') + ' / 10');
   var mapDiv = $('<div>').addClass("map-section")
   var iFrameContainer = $('<div>').addClass("iframe-container");
   var iframe = $('<iframe>').attr('src', 'https://www.google.com/maps/embed/v1/place?q=Irvine%2C%20CA%2C%20USA&key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck').css({
@@ -377,13 +377,13 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     // 'border':0,
   });
   var section2 = $('<section>').addClass("movie-trailer-container col-md-9")
-  var movieTitle = $('<h2>').addClass("movieTitle").text(someOfThis.attr('data-title'))
+  var movieTitle = $('<h1>').addClass("movieTitle").text(someOfThis.attr('data-title'))
   var movieTrailer = $('<div>').addClass("movieTrailer")
   $(movieTrailer).append(addTrailerRow);
-  var h5Summary = $('<h5>').text("Summary")
+  var h5Summary = $('<h4>').text("Summary")
   var pSummary = $('<p>').addClass("movieSummary")
   var nytContainerDiv = $('<div>').addClass("nytReviewContainer");
-  var h5NYT = $('<h5>').text("Read the review")
+  var h5NYT = $('<h4>').text("Read the review")
   var NYTP = $('<p>').addClass("nytReview");
   var button = $('<button>').text('Back').addClass('btn btn-danger');
   $(button).on('click', function(){
