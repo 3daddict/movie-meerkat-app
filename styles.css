@@ -135,9 +135,13 @@ nav {
     display: none;
 }
 
+.starIcon {
+    color: yellow;
+
 .movieSummary{
     margin: 5px 0px 15px 15px;
 }
 .col-md-2 {
     padding-left: 30px;
+
 }
