@@ -72,7 +72,7 @@ function newYorkTimesAjax (movieTitle){
 function newYorkTimesAjaxSuccessful(responseData){
     console.log("responseData:", responseData);
     summary = $('<div>').text(responseData.results[0].summary_short);
-    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url);
+    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
 }
 
 
