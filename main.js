@@ -282,37 +282,60 @@ function initMap() {
         center: learningFuze
     });
 
-    var contentString = '<div id="content">' +
-        '<div id="siteNotice">' +
-        '</div>' +
-        '<h1 id="firstHeading" class="firstHeading">Theater Name</h1>' +
-        '<div id="bodyContent">' +
-        '</div>' +
-        '</div>';
+    // var contentString = '<div id="content">' +
+    //     '<div id="siteNotice">' +
+    //     '</div>' +
+    //     '<h1 id="firstHeading" class="firstHeading">Theater Name</h1>' +
+    //     '<div id="bodyContent">' +
+    //     '</div>' +
+    //     '</div>';
 
-    var infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        maxWidth: 250,
-        maxHeight: 100
-    });
+    // var infowindow = new google.maps.InfoWindow({
+    //     content: contentString,
+    //     maxWidth: 250,
+    //     maxHeight: 100
+    // });
 
-    var marker = new google.maps.Marker({
-        position: learningFuze,
-        map: map,
-        title: 'LearningFuze'
-    });
+    // var marker = new google.maps.Marker({
+    //     position: learningFuze,
+    //     map: map,
+    //     title: 'LearningFuze'
+    // });
 
-    marker.addListener('click', function () {
-        infowindow.open(map, marker);
-    });
+    // marker.addListener('click', function () {
+    //     infowindow.open(map, marker);
+    // });
 
     for(var i = 0; i < 10; i++){
         var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
         var newMarker = new google.maps.Marker({
             position: position,
             map: map,
-            title: yelpResult['name']
+            title: yelpResult['name'], 
         });
+        var contentString = '<div id="content">' +
+        '<div id="siteNotice">' +
+        '</div>' +
+        '<h1 id="firstHeading" class="firstHeading">' + yelpResult[i]['name'] + '</h1>' +
+        '<div id="bodyContent">' +
+        '</div>' +
+        '</div>';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            maxWidth: 250,
+            maxHeight: 100
+        });
+        // var marker = new google.maps.Marker({
+        //     position: learningFuze,
+        //     map: map,
+        //     title: yelpResult['name']
+        // });
+
+        (function(marker, infowindow) {
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+            });
+        })(newMarker, infowindow);
 }}
 
 
