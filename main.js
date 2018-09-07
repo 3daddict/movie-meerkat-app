@@ -41,6 +41,7 @@ var addTrailerRow;
 var lat;
 var lng;
 var yelpResult;
+var moviePagesLoaded = 4;
 
 
 
@@ -85,22 +86,24 @@ function newYorkTimesAjaxError(){
 }
 
 
+for(var i = 1; i < moviePagesLoaded+1; i++){
+
 
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+    "url": "https://api.themoviedb.org/3/movie/now_playing?page=" + i + "&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
     "method": "GET",
     "headers": {},
     "data": "{}",
     "movie_id": "{}"
   }
-  
+
   $.ajax(settings).done(function (response) {
-    //console.log(response);
+    console.log('Response: ' + response);
     movieListings.push(response);
   });
-
+}
 /****************************************************************************************************
  * successfulTmdbCall
  * @params {undefined} none
@@ -131,12 +134,12 @@ function failedTmdbCall(){
 // * @returns: {} none 
 // * appends movieListings to the DOM*/
 function movieListingsOnDOM(){
-    
-    for(var i = 0; i < movieListings[0].results.length; i++){
-        var movieTitle = movieListings[0].results[i].title;
-        var moviePoster = movieListings[0].results[i].poster_path;
-        var movieRating = movieListings[0].results[i].vote_average;
-        var themoviedb = movieListings[0].results[i].id;
+    for(var j = 0; j < moviePagesLoaded; j++){
+    for(var i = 0; i < movieListings[j].results.length; i++){
+        var movieTitle = movieListings[j].results[i].title;
+        var moviePoster = movieListings[j].results[i].poster_path;
+        var movieRating = movieListings[j].results[i].vote_average;
+        var themoviedb = movieListings[j].results[i].id;
         var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movieRating': movieRating});
         var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
@@ -150,6 +153,7 @@ function movieListingsOnDOM(){
         $(".movie-container").append(addMovieRow);
         addMovieRow.append(addMoviePoster, addMovieContainer);
     }
+}
 }
 
 /****************************************************************************************************
