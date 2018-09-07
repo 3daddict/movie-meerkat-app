@@ -1,21 +1,9 @@
 $(document).ready(initializeApp)
 
 function initializeApp(){
-    console.log('Initialized App');
-    movieListingsOnDOM(); //appends movies to the dom
     clickHandler(); //runs click handler
+    populateMovies();
     addressCoordinates();
-
-
-$(".movieRow").hover(function(){
-    $(".movieEffects").hover(function(){
-        $(this).addClass('darkPoster');
-        $(this).next().removeClass('movieCardHide');
-        }, function(){
-            $(this).removeClass('darkPoster');
-            $(this).next().addClass('movieCardHide');
-    });
-});
 }
 /****************************************************************************************************
  * clickHandler
@@ -24,10 +12,44 @@ $(".movieRow").hover(function(){
  * Attaches click handler to run different functions when clicking on their respective buttons*/
 
 function clickHandler(){
-    $('#submitButton').click(getYelpData);
-    // addressCoordinates();
-    $('.movieRow').on('click', clickHandlerToOpenNewPage)
+    $('#submitButton').on('click', getYelpData);
+    $('.backButton').on('click', backButton)
 }
+function backButton(){
+    $('#searchBarContainer').css('display', 'none');
+    $('.poster').removeAttr('src');
+    $('.starIcon').removeClass("fas fa-star");
+    $('.searchNearby').empty();
+    $('.mapOfTheaters').empty();
+    $('.movieRatingData').empty();
+    $('.movieTitle').empty();
+    $('.movieTrailer').empty();
+    $('.summary').empty();
+    $('.reviewTitle').empty();
+    $('.movieSummary').empty();
+    $('.nytReview').empty();
+    $('.searchBarContainer').css('display', 'none');
+    $('.backButton').css('display','none');
+    $('#map').css('display', 'none');
+    populateMovies();
+}
+    
+
+function populateMovies(){
+    movieListingsOnDOM(); //appends movies to the dom
+    $('.movieRow').on('click', clickHandlerToOpenNewPage)
+    $(".movieRow").hover(function(){
+        $(".movieEffects").hover(function(){
+            $(this).addClass('darkPoster');
+            $(this).next().removeClass('movieCardHide');
+            }, function(){
+                $(this).removeClass('darkPoster');
+                $(this).next().addClass('movieCardHide');
+        });
+    });
+}
+
+
 
 
 
@@ -385,23 +407,5 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
   $('.movieSummary').append(summary);
   $('.nytReview').append(linkToReview);
-  $('.backButton').on('click', function(){
-      $('#searchBarContainer').css('display', 'none');
-      $('.poster').removeAttr('src');
-      $('.starIcon').removeClass("fas fa-star");
-      $('.searchNearby').empty();
-      $('.mapOfTheaters').empty();
-      $('.movieRatingData').empty();
-      $('.movieTitle').empty();
-      $('.movieTrailer').empty();
-      $('.summary').empty();
-      $('.reviewTitle').empty();
-      $('.movieSummary').empty();
-      $('.nytReview').empty();
-      $('.searchBarContainer').css('display', 'none');
-      $('.backButton').css('display','none');
-      $('#map').css('display', 'none');
-      initializeApp();
-  })
-}, 2000)}
+  }, 2000)}
 
