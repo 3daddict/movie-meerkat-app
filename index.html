@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MovieBuddy</title>
+    <title>MovieMeerKat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck&callback=initMap">
+        </script>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
     <script src="main.js"></script>
@@ -19,16 +24,51 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-darkjustify-content-between">
-        <a class="navbar-brand">Movie<span style="color: red;">Buddy</span></a>
-        <form class="form-inline ml-auto mr-auto ">
-            <input class="form-control mr-sm-2" id="searchBar" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-        </form>
+
+    <nav class="navbar justify-content-start navbar-dark row">
+        <a class="navbar-brand" href="#">
+            <img src="movie-meerkat.png" alt="movie logo" class="logo">
+            <a class="navbar-brand">Movie<span style="color: red;">Meerkat</span></a>
+          </a>
+
     </nav>
-    <section class="movie-container">
+    <section class="movie-container text-center">
+            <div class="movie-wrapper row text-left">
+                    <section class="movie-stats col-md-3 text-center">
+                        <img class="poster">
+                        <div class="movieReviews">
+                            <p class="movieRatingContainer">
+                                <i class="starIcon"></i>
+                                <span class="movieRatingData"></span>
+                            </p>
+                        </div>
+                        <h4 class="summary"></h4>
+                        <p class="movieSummary"></p>
+                          
+                        <div class="searchBarContainer">
+                            <button class="backButton btn btn-danger"></button>
+                            <h5 class="searchNearby"></h5>
+                            <input type="text" value ='9200 Irvine Center Drive, Irvine California 92618' id="searchBar">
+                            <input type="submit" id="submitButton">
+                        </div> 
+                    </section>
+                    <section class="movie-trailer-container col-md-8">
+                            <h1 class="movieTitle"></h1>
+                            <div class="movieTrailer"></div>
+                            <div class="nytReviewContainer">
+                                <h4 class="reviewTitle"></h4> 
+                                <p class="nytReview"></p> 
+                            </div>
+                            <h5 class="mapOfTheaters"></h5>
+                            <div id="map"></div>
+                            
+                    </section>
+
+            </div>
 
     </section>
+   
+    
 </body>
 
 </html>
