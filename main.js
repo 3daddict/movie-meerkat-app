@@ -188,7 +188,7 @@ function getYelpData() {
     var location = $('#searchBar').val();
     var yelpAjaxConfig = {
         dataType: 'json',
-        url: 'http://yelp.ongandy.com/businesses',
+        url: 'https://yelp.ongandy.com/businesses',
         method: 'post',
         data: {
             api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
