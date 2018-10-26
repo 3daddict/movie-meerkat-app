@@ -35,8 +35,8 @@ function backButton(){
 }
     
 
-function populateMovies(){
-    movieListingsOnDOM(); //appends movies to the dom
+async function populateMovies(){
+    await movieListingsOnDOM(); //appends movies to the dom
     $('.movieRow').on('click', clickHandlerToOpenNewPage)
     $(".movieRow").hover(function(){
         $(".movieEffects").hover(function(){
@@ -375,7 +375,7 @@ async function clickHandlerToOpenNewPage (){
   $('.movieRow').remove();
   await findMovieID($(this).attr('data-id'));
   await newYorkTimesAjax($(this).attr('data-title'))
-  await dynamicallyCreateMovieInfoPage($(this));
+ / await dynamicallyCreateMovieInfoPage($(this));
   await addressCoordinates();
 
 }
