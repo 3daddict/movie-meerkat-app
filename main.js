@@ -374,17 +374,7 @@ async function clickHandlerToOpenNewPage (){
   console.log($(this).attr('data-title'))
   $('.movieRow').remove();
   await findMovieID($(this).attr('data-id'));
-
-  if($(this).attr('data-title') === "Ocean's Eight"){
-      $(this).attr('data-title', "Ocean's 8");
-  }
-
-  if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
   await newYorkTimesAjax($(this).attr('data-title'))
-  }else{
-    await newYorkTimesAjaxError();
-  }
-
   await dynamicallyCreateMovieInfoPage($(this));
   await addressCoordinates();
 
