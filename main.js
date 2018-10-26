@@ -70,8 +70,9 @@ var moviePagesLoaded = 4;
 //has ajax paramaters
 //@calls ajax new york times
 //@params called query value is movie title
-
-function newYorkTimesAjax (movieTitle){
+var titleOfMovie = null;
+async function newYorkTimesAjax (movieTitle){
+    titleOfMovie = movieTitle;
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
       method: 'GET',
@@ -85,16 +86,21 @@ function newYorkTimesAjax (movieTitle){
     
     
 
-    $.ajax( newYorkTimesParams );
+    await $.ajax( newYorkTimesParams );
 }
 
 
 // * @params responseData
 // * returns link and summary for movie
 function newYorkTimesAjaxSuccessful(responseData){
-    console.log("responseData:", responseData);
-    summary = $('<div>').text(responseData.results[0].summary_short);
-    linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
+    if(responseData.results[0] === undefined || titleOfMovie !== responseData.results[0].display_title){
+        console.log("responseData:", responseData);
+        newYorkTimesAjaxError()
+    }else{
+        console.log("responseData:", responseData);
+        summary = $('<div>').text(responseData.results[0].summary_short);
+        linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
+    }
 }
 
 
@@ -361,26 +367,26 @@ function initMap() {
 }}
 
 
-function clickHandlerToOpenNewPage (){
+async function clickHandlerToOpenNewPage (){
 
   console.log($(this));
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
   $('.movieRow').remove();
-  findMovieID($(this).attr('data-id'));
+  await findMovieID($(this).attr('data-id'));
 
   if($(this).attr('data-title') === "Ocean's Eight"){
       $(this).attr('data-title', "Ocean's 8");
   }
 
   if($(this).attr('data-title') !== "The Seven Deadly Sins: Prisoners of the Sky"){
-  newYorkTimesAjax($(this).attr('data-title'))
+  await newYorkTimesAjax($(this).attr('data-title'))
   }else{
-    newYorkTimesAjaxError();
+    await newYorkTimesAjaxError();
   }
 
-  dynamicallyCreateMovieInfoPage($(this));
-  addressCoordinates();
+  await dynamicallyCreateMovieInfoPage($(this));
+  await addressCoordinates();
 
 }
 
@@ -390,7 +396,7 @@ function clickHandlerToOpenNewPage (){
  * @returns: {undefined} none
  * Function runs during failure of Yelp AJAX Call*/
 function findMovieID(tmdbID){
-var settings = {
+var settings =  {
     "async": true,
     "crossDomain": true,
     "url": "https://api.themoviedb.org/3/movie/" + tmdbID + "/videos?language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
@@ -419,7 +425,6 @@ function dynamicYoutubeVideo(movieTrailerID) {
 }
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
-  var myFuntion = setTimeout(function(){
   $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
   $('.starIcon').addClass("fas fa-star");
   $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
@@ -434,5 +439,5 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
   $('.movieSummary').append(summary);
   $('.nytReview').append(linkToReview);
-  }, 2000)}
+}
 
