@@ -13,7 +13,12 @@ function initializeApp(){
 
 function clickHandler(){
     $('#submitButton').on('click', getYelpData);
-    $('.backButton').on('click', backButton)
+    $('.backButton').on('click', backButton);
+    $('#searchForm').on('submit', (e) => {
+        let searchText = $('#searchText').val();
+        getMovies(searchText);
+        e.preventDefault();
+    });
 }
 function backButton(){
     $('#searchBarContainer').css('display', 'none');
@@ -431,3 +436,36 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.nytReview').append(linkToReview);
 }
 
+/****************************************************************************************************
+ * Movie Search
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs when a user searches amovie title*/
+
+function getMovies(searchText){
+    $('.movie-container').empty;
+    axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
+    .then((response) => {
+        console.log('Search API', response);
+        
+        let movies = response.data.results;
+        let output = '';
+        $.each(movies, (index, movie) => {
+            console.log('running')
+            output += `
+            <div class="col-md-3">
+                    <div class="well text-center>
+                        <img src="${movieUrl}" >
+                        <h5>${movie.title}</h5>
+                        <a onclick="movieSelected('${movie.imdbID}') target="_blank" class="btn btn-primary" href="#">Movie Details</a>
+                    </div>
+                </div>
+            `
+            
+        });
+        $('.temp').html(output);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+};
