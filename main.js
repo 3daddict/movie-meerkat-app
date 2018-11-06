@@ -55,12 +55,6 @@ async function populateMovies(){
     });
 }
 
-
-
-
-
-
-
 //Global Variables
 var movieListings = [];
 var summary;
@@ -70,8 +64,6 @@ var lat;
 var lng;
 var yelpResult;
 var moviePagesLoaded = 4;
-
-
 
 //has ajax paramaters
 //@calls ajax new york times
@@ -89,12 +81,8 @@ async function newYorkTimesAjax (movieTitle){
       success: newYorkTimesAjaxSuccessful,
       error: newYorkTimesAjaxError,
     }
-    
-    
-
     await $.ajax( newYorkTimesParams );
 }
-
 
 // * @params responseData
 // * returns link and summary for movie
@@ -107,20 +95,11 @@ function newYorkTimesAjaxSuccessful(responseData){
     }
 }
 
-
-
-
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   linkToReview = $('<div>').text('Link not available for this movie');
   summary = $('<a>').text('Summary not available for this movie');
 }
-
-
-
-
-
-
 
 async function TmdbCall(response){
     var settings = {
@@ -157,19 +136,6 @@ function successfulTmdbCall(response){
     movieListings.push(response);
     // await movieListingsOnDOM();
 }
-/****************************************************************************************************
- * failedTmdbCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during fauilure of tmdb AJAX Call*/
-
-function failedTmdbCall(){
-
-    
-
-}
-
-
 
 // * movieListingsOnDOM Function
 // * @param  {} none 
@@ -254,34 +220,6 @@ function createMapMarkers(results){
             map: map
 });}}
 
-/****************************************************************************************************
- * FailedYelpCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during failure of Yelp AJAX Call*/
-
-
-/****************************************************************************************************
- * createYelpListings
- * @params {undefined} none
- * @returns: {undefined} none
- * Puts Yelp data in a listings page*/
-
-// function createYelpListings(){
-//
-//     for(var i = 0; i < )
-//
-//
-//
-//     $('<div>').append()
-//
-//
-//
-//
-// }
-
-
-
 async function addressCoordinates(){
     var ajaxParams = {
         url: "https://api.opencagedata.com/geocode/v1/json",
@@ -300,8 +238,6 @@ function successfullAddressCoordinates(responseCoordinates){
         lng = responseCoordinates.results[0].geometry.lng;
         initMap(lat,lng);
     }
-     
-    
 }
 
 var map;
@@ -453,15 +389,25 @@ function getMovies(searchText){
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
             }
             output += `
-            <div class="movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-                <img class="movieEffects" src="${movieUrl}">
-                <div class="movieCardInfo movieCardHide">
-                    <p class="movieTitle">${movie.title}</p>
-                    <p class="movieRating"><i class="fas fa-star" style="color: yellow;"></i>${movie.vote_average}</p>
+            <div class="col">
+                <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+                            </div>
+                            <div class="col">
+                                <div class="realease-date pull-right text-right"><span>${movie.release_date}</span></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <h6 class="movieTitle">${movie.title}</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
             `
-            
         });
         $(".movie-container").append(output);
     })
