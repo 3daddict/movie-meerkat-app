@@ -443,7 +443,8 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
  * Function runs when a user searches amovie title*/
 
 function getMovies(searchText){
-    $('.movie-container').empty;
+    // debugger;
+    $('.movie-container').empty();
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
     .then((response) => {
         console.log('Search API', response);
@@ -451,19 +452,26 @@ function getMovies(searchText){
         let movies = response.data.results;
         let output = '';
         $.each(movies, (index, movie) => {
+            let movieUrl = "";
+            //If no movie poster image use placeholder image
+            if (movie.poster_path === null) {
+                movieUrl = "./assets/img/noImage.png"
+            } else {
+                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
+            }
             console.log('running')
             output += `
-            <div class="col-md-3">
-                    <div class="well text-center>
-                        <img src="${movieUrl}" >
-                        <h5>${movie.title}</h5>
-                        <a onclick="movieSelected('${movie.imdbID}') target="_blank" class="btn btn-primary" href="#">Movie Details</a>
-                    </div>
+            <div class="movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                <img class="movieEffects" src="${movieUrl}">
+                <div class="movieCardInfo movieCardHide">
+                    <p class="movieTitle">${movie.title}</p>
+                    <p class="movieRating"><i class="fas fa-star" style="color: yellow;"></i>${movie.vote_average}</p>
                 </div>
+            </div>
             `
             
         });
-        $('.temp').html(output);
+        $(".movie-container").append(output);
     })
     .catch((err) => {
         console.log(err);
