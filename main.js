@@ -188,7 +188,7 @@ async function getYelpData() {
         location: location,
         term: 'movie theater',
         success: successfulYelpCall,
-        error: failedYelpCall,
+
     }
     await $.ajax(yelpAjaxConfig);
 }
@@ -384,10 +384,14 @@ function getMovies(searchText){
             let movieUrl = "";
             //If no movie poster image use placeholder image
             if (movie.poster_path === null) {
-                movieUrl = "./assets/img/noImage.png"
+                movieUrl = "./noImage.png"
             } else {
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
             }
+
+            //format the release date to year
+            let releaseYear = movie.release_date.slice(0, -6);
+
             output += `
             <div class="col">
                 <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
@@ -398,7 +402,7 @@ function getMovies(searchText){
                                 <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
                             </div>
                             <div class="col">
-                                <div class="realease-date pull-right text-right"><span>${movie.release_date}</span></div>
+                                <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
                             </div>
                         </div>
                         <div class="row justify-content-center mt-5">
