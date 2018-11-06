@@ -42,23 +42,8 @@ function backButton(){
 
 async function populateMovies(){
     await movieListingsOnDOM(); //appends movies to the dom
-    $('.movieRow').on('click', clickHandlerToOpenNewPage)
-    $(".movieRow").hover(function(){
-        $(".movieEffects").hover(function(){
-            $(this).addClass('darkPoster');
-            $(this).next().removeClass('movieCardHide');
-            }, function(){
-                $(this).removeClass('darkPoster');
-                $(this).next().addClass('movieCardHide');
-        });
-    });
+    $('.movieRow').on('click', clickHandlerToOpenNewPage);
 }
-
-
-
-
-
-
 
 //Global Variables
 var movieListings = [];
@@ -69,8 +54,6 @@ var lat;
 var lng;
 var yelpResult;
 var moviePagesLoaded = 4;
-
-
 
 //has ajax paramaters
 //@calls ajax new york times
@@ -88,12 +71,8 @@ async function newYorkTimesAjax (movieTitle){
       success: newYorkTimesAjaxSuccessful,
       error: newYorkTimesAjaxError,
     }
-    
-    
-
     await $.ajax( newYorkTimesParams );
 }
-
 
 // * @params responseData
 // * returns link and summary for movie
@@ -108,9 +87,6 @@ function newYorkTimesAjaxSuccessful(responseData){
     }
 }
 
-
-
-
 // * @returns appends text that says they are unavailable at this time
 function newYorkTimesAjaxError(){
   console.log('error NYT');
@@ -118,9 +94,7 @@ function newYorkTimesAjaxError(){
   summary = $('<a>').text('Summary not available for this movie');
 }
 
-
 for(var i = 1; i < moviePagesLoaded+1; i++){
-
 
 var settings = {
     "async": true,
@@ -147,20 +121,6 @@ function successfulTmdbCall(response){
     console.log('Successful tmdb Call');
     movieListing.push(response);
 }
-
-/****************************************************************************************************
- * failedTmdbCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during fauilure of tmdb AJAX Call*/
-
-function failedTmdbCall(){
-
-    
-
-}
-
-
 
 // * movieListingsOnDOM Function
 // * @param  {} none 
@@ -255,37 +215,6 @@ function createMapMarkers(results){
             position: latLng,
             map: map
 });}}
-
-/****************************************************************************************************
- * FailedYelpCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during failure of Yelp AJAX Call*/
-
-function failedYelpCall(){
-    console.log('Yelp call Failed');
-}
-
-/****************************************************************************************************
- * createYelpListings
- * @params {undefined} none
- * @returns: {undefined} none
- * Puts Yelp data in a listings page*/
-
-// function createYelpListings(){
-//
-//     for(var i = 0; i < )
-//
-//
-//
-//     $('<div>').append()
-//
-//
-//
-//
-// }
-
-
 
 function addressCoordinates(){
     var ajaxParams = {
@@ -461,15 +390,25 @@ function getMovies(searchText){
             }
             console.log('running')
             output += `
-            <div class="movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-                <img class="movieEffects" src="${movieUrl}">
-                <div class="movieCardInfo movieCardHide">
-                    <p class="movieTitle">${movie.title}</p>
-                    <p class="movieRating"><i class="fas fa-star" style="color: yellow;"></i>${movie.vote_average}</p>
+            <div class="col">
+                <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+                            </div>
+                            <div class="col">
+                                <div class="realease-date pull-right text-right"><span>${movie.release_date}</span></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <h6 class="movieTitle">${movie.title}</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
             `
-            
         });
         $(".movie-container").append(output);
     })

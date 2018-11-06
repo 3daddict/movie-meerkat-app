@@ -59,12 +59,55 @@ nav {
     padding-bottom: 6px;
 
 }
-.movieRow {
-    display: inline-block;
+
+.movie-container {
     position: relative;
-    margin: 5px;
-    cursor: pointer;
+    margin: 15px auto;
+    width: 190px;
+    border: none;
 }
+
+.movie-image {
+    position: relative;
+    border-radius: 6px;
+}
+
+.movie-content {
+    position: absolute;
+    height: 100%;
+    color: #EEE;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: .2s;
+}
+
+.movie-content:hover {
+    background: rgba(0,0,0, .65);
+    color: #EEE;
+    opacity: 1;
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.behind {
+    pointer-events:none;
+}
+
+#imdbBtn {
+  border: none;
+}
+
+.movie-info-container {
+  position: absolute;
+  bottom: 20px;
+}
+
+.movie-info-container .btn {
+  border: none;
+}
+
+
 .poster {
     margin: 35px 10px 5px 10px;
     cursor: pointer;
@@ -75,18 +118,6 @@ nav {
     transform: scale(1.1);
     cursor: pointer;
        
-}
-.movieCardHide {
-    visibility: hidden;
-
-}
-.movieCardInfo {
-    position: absolute;
-    color: white;
-    width: 100%;
-    top: 5px;
-    left: 5px;
-    z-index: -1;
 }
 
  /* Always set the map height explicitly to define the size of the div
