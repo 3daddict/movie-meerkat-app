@@ -13,7 +13,12 @@ function initializeApp(){
 
 function clickHandler(){
     $('#submitButton').on('click', getYelpData);
-    $('.backButton').on('click', backButton)
+    $('.backButton').on('click', backButton);
+    $('#searchForm').on('submit', (e) => {
+        let searchText = $('#searchText').val();
+        getMovies(searchText);
+        e.preventDefault();
+    });
 }
 function backButton(){
     $('#searchBarContainer').css('display', 'none');
@@ -431,3 +436,44 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
   $('.nytReview').append(linkToReview);
 }
 
+/****************************************************************************************************
+ * Movie Search
+ * @params {undefined} none
+ * @returns: {undefined} none
+ * Function runs when a user searches amovie title*/
+
+function getMovies(searchText){
+    // debugger;
+    $('.movie-container').empty();
+    axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
+    .then((response) => {
+        console.log('Search API', response);
+        
+        let movies = response.data.results;
+        let output = '';
+        $.each(movies, (index, movie) => {
+            let movieUrl = "";
+            //If no movie poster image use placeholder image
+            if (movie.poster_path === null) {
+                movieUrl = "./assets/img/noImage.png"
+            } else {
+                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
+            }
+            console.log('running')
+            output += `
+            <div class="movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                <img class="movieEffects" src="${movieUrl}">
+                <div class="movieCardInfo movieCardHide">
+                    <p class="movieTitle">${movie.title}</p>
+                    <p class="movieRating"><i class="fas fa-star" style="color: yellow;"></i>${movie.vote_average}</p>
+                </div>
+            </div>
+            `
+            
+        });
+        $(".movie-container").append(output);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+};
