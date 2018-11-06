@@ -3,7 +3,7 @@ $(document).ready(initializeApp)
 function initializeApp(){
     clickHandler(); //runs click handler
     populateMovies();
-    addressCoordinates();
+    // addressCoordinates();
 }
 /****************************************************************************************************
  * clickHandler
@@ -195,7 +195,7 @@ function movieListingsOnDOM(){
  * @returns: {undefined} none
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
-function getYelpData() {
+async function getYelpData() {
     var location = $('#searchBar').val();
     var yelpAjaxConfig = {
         dataType: 'json',
@@ -215,7 +215,7 @@ function getYelpData() {
         success: successfulYelpCall,
         error: failedYelpCall,
     }
-    $.ajax(yelpAjaxConfig);
+    await $.ajax(yelpAjaxConfig);
 }
 
 /****************************************************************************************************
@@ -287,7 +287,7 @@ function failedYelpCall(){
 
 
 
-function addressCoordinates(){
+async function addressCoordinates(){
     var ajaxParams = {
         url: "https://api.opencagedata.com/geocode/v1/json",
         data: {
@@ -297,13 +297,16 @@ function addressCoordinates(){
         },
         success: successfullAddressCoordinates
     }  
-    $.ajax(ajaxParams)
+    await $.ajax(ajaxParams)
 }
 function successfullAddressCoordinates(responseCoordinates){
     console.log('responseCoordinates', responseCoordinates);
-     lat = responseCoordinates.results[0].geometry.lat;
-     lng = responseCoordinates.results[0].geometry.lng;
-    initMap(lat,lng);
+    if(responseCoordinates.resluts !== undefined){
+        lat = responseCoordinates.results[0].geometry.lat;
+        lng = responseCoordinates.results[0].geometry.lng;
+        initMap(lat,lng);
+    }
+     
     
 }
 
@@ -338,49 +341,50 @@ function initMap() {
     // marker.addListener('click', function () {
     //     infowindow.open(map, marker);
     // });
-
-    for(var i = 0; i < 10; i++){
-        var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
-        var newMarker = new google.maps.Marker({
-            position: position,
-            map: map,
-            title: yelpResult['name'], 
-        });
-        var contentString = '<div id="content">' +
-        '<div id="siteNotice">' +
-        '</div>' +
-        '<h1 id="firstHeading" class="firstHeading">' + yelpResult[i]['name'] + '</h1>' +
-        '<div id="bodyContent">' +
-        '</div>' +
-        '</div>';
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 250,
-            maxHeight: 100
-        });
-        // var marker = new google.maps.Marker({
-        //     position: learningFuze,
-        //     map: map,
-        //     title: yelpResult['name']
-        // });
-
-        (function(marker, infowindow) {
-            marker.addListener('click', function () {
-                infowindow.open(map, marker);
+    if(yelpResult !== undefined){
+        for(var i = 0; i < 10; i++){
+            var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
+            var newMarker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: yelpResult['name'], 
             });
-        })(newMarker, infowindow);
+            var contentString = '<div id="content">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<h1 id="firstHeading" class="firstHeading">' + yelpResult[i]['name'] + '</h1>' +
+            '<div id="bodyContent">' +
+            '</div>' +
+            '</div>';
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString,
+                maxWidth: 250,
+                maxHeight: 100
+            });
+            // var marker = new google.maps.Marker({
+            //     position: learningFuze,
+            //     map: map,
+            //     title: yelpResult['name']
+            // });
+    
+            (function(marker, infowindow) {
+                marker.addListener('click', function () {
+                    infowindow.open(map, marker);
+                });
+            })(newMarker, infowindow);
+    }
+    
 }}
 
 
 async function clickHandlerToOpenNewPage (){
-
   console.log($(this));
   var someOfThis = $(this);
   console.log($(this).attr('data-title'))
   $('.movieRow').remove();
   await findMovieID($(this).attr('data-id'));
   await newYorkTimesAjax($(this).attr('data-title'))
- / await dynamicallyCreateMovieInfoPage($(this));
+  await dynamicallyCreateMovieInfoPage($(this));
   await addressCoordinates();
 
 }
