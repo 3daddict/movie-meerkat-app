@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
         <script async defer
@@ -32,10 +33,28 @@
           </a>
 
     </nav>
-    <section class="movie-container text-center">
+
+    <div class="container">
+            <form id="searchForm">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search for a movie title" id="searchText" autocomplete="off" />
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit" id="searchButton">Find Movie</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    <section class="container">
+        <div class="row movie-container text-center">
+            
+        </div>
+    </section>
+
+    <section class="container">
             <div class="movie-wrapper row text-left">
-                    <section class="movie-stats col-md-3 text-center">
-                        <img class="poster">
+                    <section class="movie-stats col-md-4 text-center">
+                        <img class="img-fluid poster">
                         <div class="movieReviews">
                             <p class="movieRatingContainer">
                                 <i class="starIcon"></i>
@@ -44,9 +63,10 @@
                         </div>
                         <h4 class="summary"></h4>
                         <p class="movieSummary"></p>
-                          
-                        <div class="searchBarContainer">
-                            <button class="backButton btn btn-danger"></button>
+                        <div class="back-container container">
+                            <button class="backButton btn btn-outline-danger text-center"></button>
+                        </div>
+                        <div class="searchBarContainer container d-sm-none d-md-block">
                             <h5 class="searchNearby"></h5>
                             <input type="text" value ='9200 Irvine Center Drive, Irvine California 92618' id="searchBar">
                             <input type="submit" id="submitButton">
@@ -59,13 +79,19 @@
                                 <h4 class="reviewTitle"></h4> 
                                 <p class="nytReview"></p> 
                             </div>
+                            <div class="row justify-content-center m-5 d-none d-sm-block d-md-none">
+                            <div class="container">
+                                <h5 class="searchNearby"></h5>
+                                <input type="text" value ='9200 Irvine Center Drive, Irvine California 92618' id="searchBar">
+                                <input type="submit" id="submitButton">
+                            </div> 
+                        </div>
                             <h5 class="mapOfTheaters"></h5>
                             <div id="map"></div>
                             
                     </section>
 
             </div>
-
     </section>
    
     
