@@ -443,9 +443,8 @@ var settings =  {
  * Function runs during failure of Yelp AJAX Call*/
 
 function dynamicYoutubeVideo(movieTrailerID) {
-    addTrailerRow = $('<iframe>');
-    addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
-    $(".movieTrailer").empty();
+    $('.movieTrailer').empty();
+    $('.movieTrailer').append(`<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/${movieTrailerID}?controls=0' frameborder='0' allowfullscreen></iframe></div>`);
 }
 
 
