@@ -3,6 +3,7 @@ $(document).ready(initializeApp)
 function initializeApp(){
     clickHandler(); //runs click handler
     getNowPlayingMovies(); //calls tmdb api for now playing movies
+    populateMovies();
 }
 /****************************************************************************************************
  * clickHandler
@@ -39,20 +40,18 @@ function backButton(){
 }
     
 
-// async function populateMovies(){
-//     await TmdbCall(); //appends movies to the dom
-//     movieListingsOnDOM();
-//     $('.movieRow').on('click', clickHandlerToOpenNewPage)
-//     $(".movieRow").hover(function(){
-//         $(".movieEffects").hover(function(){
-//             $(this).addClass('darkPoster');
-//             $(this).next().removeClass('movieCardHide');
-//             }, function(){
-//                 $(this).removeClass('darkPoster');
-//                 $(this).next().addClass('movieCardHide');
-//         });
-//     });
-// }
+async function populateMovies(){
+    // $('.movieRow').on('click', clickHandlerToOpenNewPage);
+    
+    $(".movie-container").on('click', '.movieCardInfo', (event) => {
+        console.log('MOVIE CLICKED');
+        // find the closest parent id of clicked element in card
+        // let closestParentDiv = $(event.target).closest('.movieRow').attr('id');
+        // movieID = closestParentDiv;
+        // console.log('card ID:', movieID);
+        clickHandlerToOpenNewPage(event);
+    });
+}
 
 //Global Variables
 var movieListings = [];
@@ -153,7 +152,7 @@ function getNowPlayingMovies(){
 
             output += `
             <div class="col">
-                <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
                     <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
                     <div class="card-body movie-content movieCardInfo" id="${movie.id}">
                         <div class="row align-items-start">
@@ -209,7 +208,7 @@ function getMovies(searchText){
 
             output += `
             <div class="col">
-                <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
                     <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
                     <div class="card-body movie-content movieCardInfo" id="${movie.id}">
                         <div class="row align-items-start">
