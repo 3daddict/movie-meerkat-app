@@ -3,7 +3,6 @@ $(document).ready(initializeApp)
 function initializeApp(){
     clickHandler(); //runs click handler
     populateMovies();
-    // addressCoordinates();
 }
 /****************************************************************************************************
  * clickHandler
@@ -20,6 +19,7 @@ function clickHandler(){
         e.preventDefault();
     });
 }
+
 function backButton(){
     $('#searchBarContainer').css('display', 'none');
     $('.poster').removeAttr('src');
@@ -41,17 +41,16 @@ function backButton(){
     
 
 async function populateMovies(){
-    await TmdbCall(); //appends movies to the dom
-    movieListingsOnDOM();
-    $('.movieRow').on('click', clickHandlerToOpenNewPage)
-    $(".movieRow").hover(function(){
-        $(".movieEffects").hover(function(){
-            $(this).addClass('darkPoster');
-            $(this).next().removeClass('movieCardHide');
-            }, function(){
-                $(this).removeClass('darkPoster');
-                $(this).next().addClass('movieCardHide');
-        });
+    getNowPlayingMovies();
+    
+    $(".movie-container").on('click', '.movieCardInfo', (event) => {
+        //find the closest parent id of clicked element in card
+        let movieRow = $(event.target).closest('.movieRow');
+        let movieID = $(event.target).closest('.movieRow').attr('data-id');
+        let movieTitle = $(event.target).closest('.movieRow').attr('data-title');
+        console.log('data-id:', movieID);
+        console.log('data-title:', movieTitle);
+        clickHandlerToOpenNewPage(movieRow, movieID, movieTitle);
     });
 }
 
@@ -101,24 +100,26 @@ function newYorkTimesAjaxError(){
   summary = $('<a>').text('Summary not available for this movie');
 }
 
-async function TmdbCall(response){
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://api.themoviedb.org/3/movie/now_playing?page=" + i + "&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
-        "method": "GET",
-        "headers": {},
-        "data": "{}",
-        "movie_id": "{}",
-        "success": successfulTmdbCall
-    }
-    for(var i = 1; i < moviePagesLoaded+1; i++){
-        await $.ajax(settings)
-    }
-    console.log(movieListings)
-}
-
-  
+/******************************************
+* Function populate movie page elements
+******************************************/
+// async function TmdbCall(response){
+//     var settings = {
+//         "async": true,
+//         "crossDomain": true,
+//         "url": "https://api.themoviedb.org/3/movie/now_playing?page=" + i + "&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+//         "method": "GET",
+//         "headers": {},
+//         "data": "{}",
+//         "movie_id": "{}",
+//         "success": successfulTmdbCall
+//     }
+//     for(var i = 1; i < moviePagesLoaded+1; i++){
+//         await $.ajax(settings)
+//     }
+//     console.log('movieListings: ',movieListings);
+    
+// }
 
     // movieListings.push(response);
 
@@ -126,43 +127,142 @@ async function TmdbCall(response){
 
 // }
  
-/****************************************************************************************************
- * successfulTmdbCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during success of tmdb AJAX Call*/
+/******************************************
+* Function to call tmdb api and populate now playing movies on dom
+******************************************/
 
-function successfulTmdbCall(response){
-    movieListings.push(response);
-    // await movieListingsOnDOM();
+function getNowPlayingMovies(){
+    
+    $('.movie-container').empty();
+    axios.get('https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d')
+    .then((response) => {
+        
+        let movies = response.data.results;
+        let output = '';
+        $.each(movies, (index, movie) => {
+            let movieUrl = "";
+            //If no movie poster image use placeholder image
+            if (movie.poster_path === null) {
+                movieUrl = "./noImage.png"
+            } else {
+                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
+            }
+
+            //format the release date to year
+            let releaseYear = movie.release_date.slice(0, -6);
+
+            output += `
+            <div class="col">
+                <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+                            </div>
+                            <div class="col">
+                                <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <h6 class="movieTitle">${movie.title}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+        });
+        $(".movie-container").append(output);
+        movieListings.push(movies);
+        console.log("movieListings: ", movieListings);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+
 }
+
+/******************************************
+* Function to call tmdb api and populate movie titles with search value
+******************************************/
+
+function getMovies(searchText){
+    // debugger;
+    $('.movie-container').empty();
+    axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
+    .then((response) => {
+        
+        let movies = response.data.results;
+        let output = '';
+        $.each(movies, (index, movie) => {
+            let movieUrl = "";
+            //If no movie poster image use placeholder image
+            if (movie.poster_path === null) {
+                movieUrl = "./noImage.png"
+            } else {
+                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
+            }
+
+            //format the release date to year
+            let releaseYear = movie.release_date.slice(0, -6);
+
+            output += `
+            <div class="col">
+                <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+                            </div>
+                            <div class="col">
+                                <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <h6 class="movieTitle">${movie.title}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+        });
+        $(".movie-container").append(output);
+        movieListings = [];
+        movieListings.push(movies);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+};
 
 // * movieListingsOnDOM Function
 // * @param  {} none 
 // * @returns: {} none 
 // * appends movieListings to the DOM*/
-function movieListingsOnDOM(){
-    for(var j = 0; j < moviePagesLoaded; j++){
-    for(var i = 0; i < movieListings[j].results.length; i++){
-        var movieTitle = movieListings[j].results[i].title;
-        var moviePoster = movieListings[j].results[i].poster_path;
-        var movieRating = movieListings[j].results[i].vote_average;
-        var themoviedb = movieListings[j].results[i].id;
-        var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movieRating': movieRating});
-        var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
-        var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
+// function movieListingsOnDOM(){
+//     for(var j = 0; j < moviePagesLoaded; j++){
+//     for(var i = 0; i < movieListings[j].results.length; i++){
+//         var movieTitle = movieListings[j].results[i].title;
+//         var moviePoster = movieListings[j].results[i].poster_path;
+//         var movieRating = movieListings[j].results[i].vote_average;
+//         var themoviedb = movieListings[j].results[i].id;
+//         var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movieRating': movieRating});
+//         var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
+//         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
 
-        var addMovieTitle = $('<p>').addClass('movieTitle ');
-        addMovieTitle.append(movieTitle);
-        var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
-        var addMovieRating = $('<p>').addClass('movieRating');
-        addMovieRating.append(addReviewStar, " ", movieRating);
-        addMovieContainer.append(addMovieTitle, addMovieRating);
-        $(".movie-container").append(addMovieRow);
-        addMovieRow.append(addMoviePoster, addMovieContainer);
-    }
-}
-}
+//         var addMovieTitle = $('<p>').addClass('movieTitle ');
+//         addMovieTitle.append(movieTitle);
+//         var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
+//         var addMovieRating = $('<p>').addClass('movieRating');
+//         addMovieRating.append(addReviewStar, " ", movieRating);
+//         addMovieContainer.append(addMovieTitle, addMovieRating);
+//         $(".movie-container").append(addMovieRow);
+//         addMovieRow.append(addMoviePoster, addMovieContainer);
+//     }
+// }
+// }
 
 /****************************************************************************************************
  * getYelpData
@@ -307,12 +407,11 @@ function initMap() {
 }}
 
 
-async function clickHandlerToOpenNewPage (){
-  var someOfThis = $(this);
+async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
   $('.movieRow').remove();
-  await findMovieID($(this).attr('data-id'));
-  await newYorkTimesAjax($(this).attr('data-title'))
-  await dynamicallyCreateMovieInfoPage($(this));
+  await findMovieID(movieID);
+  await newYorkTimesAjax(movieTitle)
+  await dynamicallyCreateMovieInfoPage(movieRow);
   await addressCoordinates();
 
 }
@@ -344,78 +443,24 @@ var settings =  {
  * Function runs during failure of Yelp AJAX Call*/
 
 function dynamicYoutubeVideo(movieTrailerID) {
-    addTrailerRow = $('<iframe>');
-    addTrailerRow.addClass('youtubePlayer').attr('src', 'https://www.youtube.com/embed/' + movieTrailerID).attr('frameborder', '0').attr('allow', 'autoplay; encrypted-media').attr('allowfullscreen');
-    $(".movieTrailer").empty();
+    $('.movieTrailer').empty();
+    $('.movieTrailer').append(`<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/${movieTrailerID}?controls=0' frameborder='0' allowfullscreen></iframe></div>`);
 }
+
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
-  $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
-  $('.starIcon').addClass("fas fa-star");
-  $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
-  $('#map').css('display', 'inline-block');
-  $('.searchBarContainer').css('display', 'inline-block');
-  $('.movieTitle').text(someOfThis.attr('data-title'))
-  $('.movieTrailer').append(addTrailerRow);
-  $('.summary').text("Summary")
-  $('.reviewTitle').text("Read the review")
-  $('.searchNearby').text('Search Nearby Theaters');
-  $('.mapOfTheaters').text('Nearby Theaters');
-  $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
-  $('.movieSummary').append(summary);
-  $('.nytReview').append(linkToReview);
-}
-
-/****************************************************************************************************
- * Movie Search
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs when a user searches amovie title*/
-
-function getMovies(searchText){
-    // debugger;
-    $('.movie-container').empty();
-    axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
-    .then((response) => {
-        
-        let movies = response.data.results;
-        let output = '';
-        $.each(movies, (index, movie) => {
-            let movieUrl = "";
-            //If no movie poster image use placeholder image
-            if (movie.poster_path === null) {
-                movieUrl = "./noImage.png"
-            } else {
-                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
-            }
-
-            //format the release date to year
-            let releaseYear = movie.release_date.slice(0, -6);
-
-            output += `
-            <div class="col">
-                <div class="card movie-container movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
-                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
-                            </div>
-                            <div class="col">
-                                <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center mt-5">
-                            <h6 class="movieTitle">${movie.title}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `
-        });
-        $(".movie-container").append(output);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-};
+    $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
+    $('.starIcon').addClass("fas fa-star");
+    $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
+    $('#map').css('display', 'inline-block');
+    $('.searchBarContainer').css('display', 'inline-block');
+    $('.movieTitle').text(someOfThis.attr('data-title'))
+    $('.movieTrailer').append(addTrailerRow);
+    $('.summary').text("Summary")
+    $('.reviewTitle').text("Read the review")
+    $('.searchNearby').text('Search Nearby Theaters');
+    $('.mapOfTheaters').text('Nearby Theaters');
+    $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
+    $('.movieSummary').append(summary);
+    $('.nytReview').append(linkToReview);
+  }

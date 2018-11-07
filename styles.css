@@ -21,19 +21,15 @@ nav {
 }
 #submitButton {
     width: 100%;
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    font-weight: 400;
+    color: #007bff;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid #007bff;
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-    border: 1px solid transparent;
     padding: .375rem .75rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -88,6 +84,7 @@ nav {
     height: 100%;
     width: 100%;
     border-radius: 6px;
+    transform: scale(1.1);
 }
 
 .behind {
@@ -110,7 +107,7 @@ nav {
 
 .poster {
     margin: 35px 10px 5px 10px;
-    cursor: pointer;
+
 }
 .darkPoster{
     background-color:#000;
@@ -160,14 +157,14 @@ nav {
 
 }
 
+
+
 .backButton{
     display: none;
     width: 100%;
     margin-bottom: 30px;
 }
-.searchBarContainer{
-    display: none;
-}
+
 
 .starIcon {
     color: yellow;
@@ -175,6 +172,11 @@ nav {
 .movieSummary{
     margin: 5px 0px 15px 15px;
 }
+
+#map {
+    margin-bottom: 35px;
+}
+
 .col-md-3 {
     padding-left: 30px;
 
@@ -182,4 +184,30 @@ nav {
 .firstHeading{
     color: black;
     font-size: 10pt;
+}
+
+@media all and (min-width: 1024px) and (max-width: 1280px) {
+
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px) {
+    .movieSummary {
+        font-size: 0.9rem;
+    }
+
+    .searchNearby {
+        font-size: 0.9rem;
+    }
+}
+
+@media all and (min-width: 480px) and (max-width: 768px) {
+    h4 {
+        margin-top: 50px;
+    }
+}
+
+@media all and (max-width: 480px) {
+    h4 {
+        margin-top: 50px;
+    }
 }
