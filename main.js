@@ -44,12 +44,13 @@ async function populateMovies(){
     // $('.movieRow').on('click', clickHandlerToOpenNewPage);
     
     $(".movie-container").on('click', '.movieCardInfo', (event) => {
-        console.log('MOVIE CLICKED');
-        // find the closest parent id of clicked element in card
-        // let closestParentDiv = $(event.target).closest('.movieRow').attr('id');
-        // movieID = closestParentDiv;
-        // console.log('card ID:', movieID);
-        clickHandlerToOpenNewPage(event);
+        //find the closest parent id of clicked element in card
+        let movieRow = $(event.target).closest('.movieRow');
+        let movieID = $(event.target).closest('.movieRow').attr('data-id');
+        let movieTitle = $(event.target).closest('.movieRow').attr('data-title');
+        console.log('data-id:', movieID);
+        console.log('data-title:', movieTitle);
+        clickHandlerToOpenNewPage(movieRow, movieID, movieTitle);
     });
 }
 
@@ -406,12 +407,11 @@ function initMap() {
 }}
 
 
-async function clickHandlerToOpenNewPage (){
-  var someOfThis = $(this);
+async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
   $('.movieRow').remove();
-  await findMovieID($(this).attr('data-id'));
-  await newYorkTimesAjax($(this).attr('data-title'))
-  await dynamicallyCreateMovieInfoPage($(this));
+  await findMovieID(movieID);
+  await newYorkTimesAjax(movieTitle)
+  await dynamicallyCreateMovieInfoPage(movieRow);
   await addressCoordinates();
 
 }
@@ -448,19 +448,20 @@ function dynamicYoutubeVideo(movieTrailerID) {
     $(".movieTrailer").empty();
 }
 
+
 function dynamicallyCreateMovieInfoPage(someOfThis){
-  $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
-  $('.starIcon').addClass("fas fa-star");
-  $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
-  $('#map').css('display', 'inline-block');
-  $('.searchBarContainer').css('display', 'inline-block');
-  $('.movieTitle').text(someOfThis.attr('data-title'))
-  $('.movieTrailer').append(addTrailerRow);
-  $('.summary').text("Summary")
-  $('.reviewTitle').text("Read the review")
-  $('.searchNearby').text('Search Nearby Theaters');
-  $('.mapOfTheaters').text('Nearby Theaters');
-  $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
-  $('.movieSummary').append(summary);
-  $('.nytReview').append(linkToReview);
-}
+    $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
+    $('.starIcon').addClass("fas fa-star");
+    $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
+    $('#map').css('display', 'inline-block');
+    $('.searchBarContainer').css('display', 'inline-block');
+    $('.movieTitle').text(someOfThis.attr('data-title'))
+    $('.movieTrailer').append(addTrailerRow);
+    $('.summary').text("Summary")
+    $('.reviewTitle').text("Read the review")
+    $('.searchNearby').text('Search Nearby Theaters');
+    $('.mapOfTheaters').text('Nearby Theaters');
+    $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
+    $('.movieSummary').append(summary);
+    $('.nytReview').append(linkToReview);
+  }
