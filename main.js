@@ -2,7 +2,6 @@ $(document).ready(initializeApp)
 
 function initializeApp(){
     clickHandler(); //runs click handler
-    getNowPlayingMovies(); //calls tmdb api for now playing movies
     populateMovies();
 }
 /****************************************************************************************************
@@ -20,6 +19,7 @@ function clickHandler(){
         e.preventDefault();
     });
 }
+
 function backButton(){
     $('#searchBarContainer').css('display', 'none');
     $('.poster').removeAttr('src');
@@ -41,7 +41,7 @@ function backButton(){
     
 
 async function populateMovies(){
-    // $('.movieRow').on('click', clickHandlerToOpenNewPage);
+    getNowPlayingMovies();
     
     $(".movie-container").on('click', '.movieCardInfo', (event) => {
         //find the closest parent id of clicked element in card
