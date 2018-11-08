@@ -109,27 +109,21 @@ nav {
     margin: 35px 10px 5px 10px;
 
 }
-.darkPoster{
-    background-color:#000;
-    opacity:0.2;
-    transform: scale(1.1);
-    cursor: pointer;
-       
-}
 
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 60%;
-        width: 100%;
-        display: none;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+#map {
+    height: 60%;
+    width: 100%;
+    display: none;
+    margin-bottom: 35px;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
 .movie-map{
     padding-left: 0;
@@ -141,7 +135,8 @@ nav {
 }
 
 .movieTitle {
-    font-size: 1.5em;
+    margin: auto 10px;
+    font-size: 1.0em;
 }
 
 .movieRating {
@@ -157,24 +152,17 @@ nav {
 
 }
 
-
-
 .backButton{
     display: none;
     width: 100%;
     margin-bottom: 30px;
 }
 
-
 .starIcon {
     color: yellow;
 }
 .movieSummary{
     margin: 5px 0px 15px 15px;
-}
-
-#map {
-    margin-bottom: 35px;
 }
 
 .col-md-3 {
