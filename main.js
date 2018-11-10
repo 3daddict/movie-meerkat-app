@@ -3,6 +3,7 @@ $(document).ready(initializeApp)
 function initializeApp(){
     clickHandler(); //runs click handler
     populateMovies();
+    $("#bar").width(0);
 }
 /****************************************************************************************************
  * clickHandler
@@ -38,7 +39,6 @@ function backButton(){
     $('#map').css('display', 'none');
     populateMovies();
 }
-    
 
 async function populateMovies(){
     getNowPlayingMovies();
@@ -101,33 +101,6 @@ function newYorkTimesAjaxError(){
 }
 
 /******************************************
-* Function populate movie page elements
-******************************************/
-// async function TmdbCall(response){
-//     var settings = {
-//         "async": true,
-//         "crossDomain": true,
-//         "url": "https://api.themoviedb.org/3/movie/now_playing?page=" + i + "&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
-//         "method": "GET",
-//         "headers": {},
-//         "data": "{}",
-//         "movie_id": "{}",
-//         "success": successfulTmdbCall
-//     }
-//     for(var i = 1; i < moviePagesLoaded+1; i++){
-//         await $.ajax(settings)
-//     }
-//     console.log('movieListings: ',movieListings);
-    
-// }
-
-    // movieListings.push(response);
-
-    // await $.ajax(settings)
-
-// }
- 
-/******************************************
 * Function to call tmdb api and populate now playing movies on dom
 ******************************************/
 
@@ -175,12 +148,11 @@ function getNowPlayingMovies(){
         $(".movie-container").append(output);
         movieListings.push(movies);
         console.log("movieListings: ", movieListings);
+        progressBarUpdate();
     })
     .catch((err) => {
         console.log(err);
     });
-
-
 }
 
 /******************************************
@@ -236,33 +208,6 @@ function getMovies(searchText){
         console.log(err);
     });
 };
-
-// * movieListingsOnDOM Function
-// * @param  {} none 
-// * @returns: {} none 
-// * appends movieListings to the DOM*/
-// function movieListingsOnDOM(){
-//     for(var j = 0; j < moviePagesLoaded; j++){
-//     for(var i = 0; i < movieListings[j].results.length; i++){
-//         var movieTitle = movieListings[j].results[i].title;
-//         var moviePoster = movieListings[j].results[i].poster_path;
-//         var movieRating = movieListings[j].results[i].vote_average;
-//         var themoviedb = movieListings[j].results[i].id;
-//         var addMovieRow = $('<div>').addClass('movieRow').attr({'data-title': movieTitle,'data-id': themoviedb, 'movieRating': movieRating});
-//         var addMoviePoster = $('<img>').addClass('movieEffects').attr('src', 'http://image.tmdb.org/t/p/w185' + moviePoster);
-//         var addMovieContainer = $('<div>').addClass('movieCardInfo').addClass('movieCardHide');
-
-//         var addMovieTitle = $('<p>').addClass('movieTitle ');
-//         addMovieTitle.append(movieTitle);
-//         var addReviewStar = $('<i>').addClass(' fas fa-star').css('color', 'yellow');
-//         var addMovieRating = $('<p>').addClass('movieRating');
-//         addMovieRating.append(addReviewStar, " ", movieRating);
-//         addMovieContainer.append(addMovieTitle, addMovieRating);
-//         $(".movie-container").append(addMovieRow);
-//         addMovieRow.append(addMoviePoster, addMovieContainer);
-//     }
-// }
-// }
 
 /****************************************************************************************************
  * getYelpData
@@ -449,7 +394,7 @@ function dynamicYoutubeVideo(movieTrailerID) {
 
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
-    $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
+     $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
     $('.starIcon').addClass("fas fa-star");
     $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
     $('#map').css('display', 'inline-block');
@@ -463,4 +408,10 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     $('.movieSummary').append(summary);
     $('.nytReview').append(linkToReview);
+
   }
+
+function progressBarUpdate() {
+    $("#bar").width('100%');
+        setTimeout(() => {$(".progress").css('display', 'none')}, 500);
+}
