@@ -408,10 +408,14 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     $('.movieSummary').append(summary);
     $('.nytReview').append(linkToReview);
-
+    triggerModal();
   }
 
 function progressBarUpdate() {
     $("#bar").width('100%');
         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
+}
+
+function triggerModal(){
+    $("#locationModal").modal();
 }
