@@ -22,7 +22,7 @@ function clickHandler(){
 }
 
 function backButton(){
-    $('#searchBarContainer').css('display', 'none');
+    $('.searchBarContainer').css('visibility', 'hidden');
     $('.poster').removeAttr('src');
     $('.starIcon').removeClass("fas fa-star");
     $('.searchNearby').empty();
@@ -399,7 +399,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.starIcon').addClass("fas fa-star");
     $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
     $('#map').css('display', 'inline-block');
-    $('.searchBarContainer').css('display', 'inline-block');
+    $('.searchBarContainer').css('display', 'inline-block').css('visibility', 'visible');
     $('.movieTitle').text(someOfThis.attr('data-title'))
     $('.movieTrailer').append(addTrailerRow);
     $('.summary').text("Summary")
