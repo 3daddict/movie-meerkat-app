@@ -43,7 +43,7 @@ function backButton(){
 async function populateMovies(){
     getNowPlayingMovies();
     
-    $(".movie-container").on('click', '.movieCardInfo', (event) => {
+    $(".movie-container").unbind().on('click', '.movieCardInfo', (event) => {
         //find the closest parent id of clicked element in card
         let movieRow = $(event.target).closest('.movieRow');
         let movieID = $(event.target).closest('.movieRow').attr('data-id');
@@ -160,53 +160,54 @@ function getNowPlayingMovies(){
 ******************************************/
 
 function getMovies(searchText){
-    // debugger;
-    $('.movie-container').empty();
-    axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
-    .then((response) => {
-        
-        let movies = response.data.results;
-        let output = '';
-        $.each(movies, (index, movie) => {
-            let movieUrl = "";
-            //If no movie poster image use placeholder image
-            if (movie.poster_path === null) {
-                movieUrl = "./noImage.png"
-            } else {
-                movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
-            }
-
-            //format the release date to year
-            let releaseYear = movie.release_date.slice(0, -6);
-
-            output += `
-            <div class="col">
-                <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
-                    <div class="card-body movie-content movieCardInfo" id="${movie.id}">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+    // debugger
+    if(searchText.length > 0){
+        $('.movie-container').empty();
+        axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
+        .then((response) => {
+            let movies = response.data.results;
+            let output = '';
+            $.each(movies, (index, movie) => {
+                let movieUrl = "";
+                //If no movie poster image use placeholder image
+                if (movie.poster_path === null) {
+                    movieUrl = "./noImage.png"
+                } else {
+                    movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
+                }
+    
+                //format the release date to year
+                let releaseYear = movie.release_date.slice(0, -6);
+    
+                output += `
+                <div class="col">
+                    <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
+                        <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                        <div class="card-body movie-content movieCardInfo" id="${movie.id}">
+                            <div class="row align-items-start">
+                                <div class="col">
+                                    <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
+                                </div>
+                                <div class="col">
+                                    <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
+                            <div class="row justify-content-center mt-5">
+                                <h6 class="movieTitle">${movie.title}</h6>
                             </div>
-                        </div>
-                        <div class="row justify-content-center mt-5">
-                            <h6 class="movieTitle">${movie.title}</h6>
                         </div>
                     </div>
                 </div>
-            </div>
-            `
+                `
+            });
+            $(".movie-container").append(output);
+            movieListings = [];
+            movieListings.push(movies);
+        })
+        .catch((err) => {
+            console.log(err);
         });
-        $(".movie-container").append(output);
-        movieListings = [];
-        movieListings.push(movies);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+    }
 };
 
 /****************************************************************************************************
