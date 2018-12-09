@@ -89,7 +89,27 @@
                     </section>
             </div>
     </section>
-    
+
+  <!-- Modal -->
+  <div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark" role="document">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-danger border-0">
+          <h5 class="modal-title" id="locationModalLabel">Welcome to Movie Meerkat!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body bg-dark">
+          This website utilizes geolocation to help you quickly locate your nearest theaters. Please select <b>Enable</b> if you would like to enable this feature. Otherwise, please select <b>Exit</b>.
+        </div>
+        <div class="modal-footer bg-dark border-0">
+          <button type="button" class="btn btn-danger">Enable</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
