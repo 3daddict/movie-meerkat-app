@@ -216,8 +216,11 @@ function getMovies(searchText){
  * @returns: {undefined} none
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
-async function getYelpData() {
-    var location = $('#searchBar').val();
+async function getYelpData(location) {
+    if(!location){
+        location = $('#searchBar').val();
+    }
+
     var yelpAjaxConfig = {
         dataType: 'json',
         url: 'https://yelp.ongandy.com/businesses',
@@ -261,9 +264,23 @@ function createMapMarkers(results){
     for (var i = 0; i < listings.length; i++) {
         var coords = listings[i].coordinates;
         var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);
+        var image = {
+            url: 'http://chittagongit.com//images/movie-icon-vector/movie-icon-vector-9.jpg',
+            size: new google.maps.Size(20, 32),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Pooint(0,32)
+        };
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+          };
+        
         var marker = new google.maps.Marker({
             position: latLng,
-            map: map
+            icon: image,
+            map: map,
+            shape: shape
 });}}
 
 async function addressCoordinates(){
@@ -309,6 +326,7 @@ function initMap() {
     // });
 
     // var marker = new google.maps.Marker({
+    // var marker = new google.maps.Marker({
     //     position: learningFuze,
     //     map: map,
     //     title: 'LearningFuze'
@@ -320,9 +338,15 @@ function initMap() {
     if(yelpResult !== undefined){
         for(var i = 0; i < 10; i++){
             var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
+            var image = {
+                url:'./theater.png'
+            }
+
+
             var newMarker = new google.maps.Marker({
                 position: position,
                 map: map,
+                icon: image,
                 title: yelpResult['name'], 
             });
             var contentString = '<div id="content">' +
@@ -417,6 +441,31 @@ function progressBarUpdate() {
         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
 }
 
-function triggerModal(){
-    $("#locationModal").modal();
+var triggerModal = (function(){
+    var executed = false;
+    return function() {
+        if(!executed){
+            executed = true;
+            $("#locationModal").modal();
+            $("#enableGeolocation").on('click',enableGeolocation);
+        }
+    }
+})();
+
+function enableGeolocation(){
+    $("#locationModal").modal('hide');
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(latLongCoordinates);
+    } else {
+        console.log('This browser does not support Geolocation.');
+    }
 }
+
+function latLongCoordinates(position){
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
+    getYelpData(coordinates);
+    $('#searchBar').val('');
+}
+
