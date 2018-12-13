@@ -308,6 +308,7 @@ function initMap() {
     // });
 
     // var marker = new google.maps.Marker({
+    // var marker = new google.maps.Marker({
     //     position: learningFuze,
     //     map: map,
     //     title: 'LearningFuze'
@@ -418,4 +419,23 @@ function progressBarUpdate() {
 
 function triggerModal(){
     $("#locationModal").modal();
+    $("#enableGeolocation").on('click',enableGeolocation);
 }
+
+function enableGeolocation(){
+    $("#locationModal").modal('hide');
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(latLongCoordinates);
+    } else {
+        console.log('This browser does not support Geolocation.');
+    }
+}
+
+function latLongCoordinates(position){
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
+    $('#searchBar').val(coordinates);
+    getYelpData();
+}
+
