@@ -440,10 +440,16 @@ function progressBarUpdate() {
         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
 }
 
-function triggerModal(){
-    $("#locationModal").modal();
-    $("#enableGeolocation").on('click',enableGeolocation);
-}
+var triggerModal = (function(){
+    var executed = false;
+    return function() {
+        if(!executed){
+            executed = true;
+            $("#locationModal").modal();
+            $("#enableGeolocation").on('click',enableGeolocation);
+        }
+    }
+})();
 
 function enableGeolocation(){
     $("#locationModal").modal('hide');
