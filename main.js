@@ -23,6 +23,7 @@ function clickHandler(){
 
 function backButton(){
     $('.searchBarContainer').css('visibility', 'hidden');
+    $('.search-bar-container').css('visibility', 'hidden');
     $('.poster').removeAttr('src');
     $('.starIcon').removeClass("fas fa-star");
     $('.searchNearby').empty();
@@ -395,11 +396,13 @@ function dynamicYoutubeVideo(movieTrailerID) {
 
 
 function dynamicallyCreateMovieInfoPage(someOfThis){
+    window.scrollTo(0,0)
      $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
     $('.starIcon').addClass("fas fa-star");
     $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
     $('#map').css('display', 'inline-block');
     $('.searchBarContainer').css('display', 'inline-block').css('visibility', 'visible');
+    $('.search-bar-container').css('display', 'inline-block').css('visibility', 'visible');
     $('.movieTitle').text(someOfThis.attr('data-title'))
     $('.movieTrailer').append(addTrailerRow);
     $('.summary').text("Summary")
