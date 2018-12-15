@@ -216,6 +216,7 @@ function getMovies(searchText){
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
 async function getYelpData(location) {
+    console.log('get yelp data running');
     if(!location){
         location = $('#searchBar').val();
     }
@@ -233,9 +234,9 @@ async function getYelpData(location) {
         // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
         // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
         // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
-        location: location,
-        term: 'movie theater',
-        success: successfulYelpCall,
+        // location: location,
+        // term: 'movie theater',
+        success: successfulYelpCall
 
     }
     await $.ajax(yelpAjaxConfig);
@@ -340,7 +341,6 @@ function initMap() {
             var image = {
                 url:'./theater.png'
             }
-
 
             var newMarker = new google.maps.Marker({
                 position: position,
@@ -454,6 +454,7 @@ var triggerModal = (function(){
 function enableGeolocation(){
     $("#locationModal").modal('hide');
     if(navigator.geolocation){
+        console.log('geolocation active')
         navigator.geolocation.getCurrentPosition(latLongCoordinates);
     } else {
         console.log('This browser does not support Geolocation.');
@@ -465,6 +466,7 @@ function latLongCoordinates(position){
     var longitude = position.coords.longitude;
     var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
     getYelpData(coordinates);
+    console.log(coordinates);
     $('#searchBar').val('');
 }
 
