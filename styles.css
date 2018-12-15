@@ -75,6 +75,7 @@ nav {
     opacity: 0;
     transition-property: opacity;
     transition-duration: .2s;
+    cursor: pointer;
 }
 
 .movie-content:hover {
@@ -92,6 +93,7 @@ nav {
 
 #imdbBtn {
   border: none;
+  cursor: default;
 }
 
 .movie-info-container {
@@ -173,9 +175,7 @@ html, body {
     font-size: 10pt;
 }
 
-.searchBarContainer{
-    visibility: hidden;
-}
+
 
 .navbar{
     margin-right: 0;
@@ -206,4 +206,20 @@ html, body {
     h4 {
         margin-top: 50px;
     }
+}
+
+.card {
+    background-color: transparent;
+}
+
+.movieSummary a {
+    word-wrap: break-word;
+}
+
+.searchBarContainer{
+    visibility: hidden;
+}
+
+.search-bar-container{
+    visibility: hidden;
 }
