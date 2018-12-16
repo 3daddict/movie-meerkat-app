@@ -250,7 +250,9 @@ async function getYelpData(location) {
 
 function successfulYelpCall(response){
     yelpResult = response.businesses;
-    initMap();
+    var yelpCoordinates = response.region.center;
+    console.log(yelpCoordinates);
+    initMap(yelpCoordinates);
 }
 
 /****************************************************************************************************
@@ -304,46 +306,22 @@ function successfullAddressCoordinates(responseCoordinates){
 }
 
 var map;
-function initMap() {
-    var learningFuze = {lat: 33.634857, lng: -117.74044};
+function initMap(location) {
+
+    var center = {lat: location.latitude, lng: location.longitude};
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
-        center: learningFuze
+        center: center
     });
-
-    // var contentString = '<div id="content">' +
-    //     '<div id="siteNotice">' +
-    //     '</div>' +
-    //     '<h1 id="firstHeading" class="firstHeading">Theater Name</h1>' +
-    //     '<div id="bodyContent">' +
-    //     '</div>' +
-    //     '</div>';
-
-    // var infowindow = new google.maps.InfoWindow({
-    //     content: contentString,
-    //     maxWidth: 250,
-    //     maxHeight: 100
-    // });
-
-    // var marker = new google.maps.Marker({
-    // var marker = new google.maps.Marker({
-    //     position: learningFuze,
-    //     map: map,
-    //     title: 'LearningFuze'
-    // });
-
-    // marker.addListener('click', function () {
-    //     infowindow.open(map, marker);
-    // });
-    if(yelpResult !== undefined){
+console.log('yelp result::', yelpResult);
+    if(yelpResult){
         for(var i = 0; i < 10; i++){
-            var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
             var image = {
                 url:'./theater.png'
             }
 
             var newMarker = new google.maps.Marker({
-                position: position,
+                position: center,
                 map: map,
                 icon: image,
                 title: yelpResult['name'], 
