@@ -217,8 +217,10 @@ function getMovies(searchText){
 
 async function getYelpData(location) {
     console.log('get yelp data running');
+    console.log('location: ',location);
     if(!location){
         location = $('#searchBar').val();
+        console.log('location2: ',location);
     }
 
     var yelpAjaxConfig = {
@@ -249,6 +251,7 @@ async function getYelpData(location) {
  * Function runs during success of Yelp AJAX Call*/
 
 function successfulYelpCall(response){
+    console.log('successful yelp call');
     yelpResult = response.businesses;
     var yelpCoordinates = response.region.center;
     console.log(yelpCoordinates);
