@@ -218,8 +218,11 @@ function getMovies(searchText){
  * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
 
 async function getYelpData(location) {
+    console.log('get yelp data running');
+    console.log('location: ',location);
     if(!location){
         location = $('#searchBar').val();
+        console.log('location2: ',location);
     }
 
     var yelpAjaxConfig = {
@@ -235,9 +238,9 @@ async function getYelpData(location) {
         // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
         // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
         // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
-        location: location,
-        term: 'movie theater',
-        success: successfulYelpCall,
+        // location: location,
+        // term: 'movie theater',
+        success: successfulYelpCall
 
     }
     await $.ajax(yelpAjaxConfig);
@@ -250,8 +253,11 @@ async function getYelpData(location) {
  * Function runs during success of Yelp AJAX Call*/
 
 function successfulYelpCall(response){
+    console.log('successful yelp call');
     yelpResult = response.businesses;
-    initMap();
+    var yelpCoordinates = response.region.center;
+    console.log(yelpCoordinates);
+    initMap(yelpCoordinates);
 }
 
 /****************************************************************************************************
@@ -305,47 +311,22 @@ function successfullAddressCoordinates(responseCoordinates){
 }
 
 var map;
-function initMap() {
-    var learningFuze = {lat: 33.634857, lng: -117.74044};
+function initMap(location) {
+
+    var center = {lat: location.latitude, lng: location.longitude};
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
-        center: learningFuze
+        center: center
     });
-
-    // var contentString = '<div id="content">' +
-    //     '<div id="siteNotice">' +
-    //     '</div>' +
-    //     '<h1 id="firstHeading" class="firstHeading">Theater Name</h1>' +
-    //     '<div id="bodyContent">' +
-    //     '</div>' +
-    //     '</div>';
-
-    // var infowindow = new google.maps.InfoWindow({
-    //     content: contentString,
-    //     maxWidth: 250,
-    //     maxHeight: 100
-    // });
-
-    // var marker = new google.maps.Marker({
-    // var marker = new google.maps.Marker({
-    //     position: learningFuze,
-    //     map: map,
-    //     title: 'LearningFuze'
-    // });
-
-    // marker.addListener('click', function () {
-    //     infowindow.open(map, marker);
-    // });
-    if(yelpResult !== undefined){
+console.log('yelp result::', yelpResult);
+    if(yelpResult){
         for(var i = 0; i < 10; i++){
-            var position = {lat: yelpResult[i]['coordinates']['latitude'], lng: yelpResult[i]['coordinates']['longitude']};
             var image = {
                 url:'./theater.png'
             }
 
-
             var newMarker = new google.maps.Marker({
-                position: position,
+                position: center,
                 map: map,
                 icon: image,
                 title: yelpResult['name'], 
@@ -458,6 +439,7 @@ var triggerModal = (function(){
 function enableGeolocation(){
     $("#locationModal").modal('hide');
     if(navigator.geolocation){
+        console.log('geolocation active')
         navigator.geolocation.getCurrentPosition(latLongCoordinates);
     } else {
         console.log('This browser does not support Geolocation.');
@@ -469,6 +451,7 @@ function latLongCoordinates(position){
     var longitude = position.coords.longitude;
     var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
     getYelpData(coordinates);
+    console.log(coordinates);
     $('#searchBar').val('');
 }
 
