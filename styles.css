@@ -107,8 +107,7 @@ nav {
 
 
 .poster {
-    margin: 35px 10px 5px 10px;
-
+    margin: 50px 10px 5px 10px;
 }
 
  /* Always set the map height explicitly to define the size of the div
@@ -136,7 +135,7 @@ html, body {
 }
 
 .movieTitle {
-    margin: auto 10px;
+    margin: 10px 10px 20px 0;
     font-size: 1.0em;
 }
 
@@ -164,6 +163,10 @@ html, body {
 }
 .movieSummary{
     margin: 5px 0px 15px 15px;
+}
+
+.nytReviewContainer {
+    margin-top: 25px;
 }
 
 .col-md-3 {
