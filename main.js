@@ -1,17 +1,17 @@
 $(document).ready(initializeApp)
 
 function initializeApp(){
-    clickHandler(); //runs click handler
+    addEventHandlers(); //runs click handler
     populateMovies();
     $("#bar").width(0);
 }
 /****************************************************************************************************
- * clickHandler
+ * addEventHandlers
  * @params {undefined} none
  * @returns: {undefined} none
  * Attaches click handler to run different functions when clicking on their respective buttons*/
 
-function clickHandler(){
+function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
     $('.backButton').on('click', backButton);
     $('#navbarLogo').on('click',backButton);
