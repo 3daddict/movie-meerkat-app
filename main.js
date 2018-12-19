@@ -127,7 +127,7 @@ function getNowPlayingMovies(){
             let movieUrl = "";
             //If no movie poster image use placeholder image
             if (movie.poster_path === null) {
-                movieUrl = "./noImage.png"
+                movieUrl = "./noImage.jpg"
             } else {
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
             }
@@ -188,7 +188,7 @@ function getMovies(searchText){
                 let movieUrl = "";
                 //If no movie poster image use placeholder image
                 if (movie.poster_path === null) {
-                    movieUrl = "./noImage.png"
+                    movieUrl = "./noImage.jpg"
                 } else {
                     movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
                 }
