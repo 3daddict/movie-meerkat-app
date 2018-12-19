@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MovieMeerKat</title>
+    <title>MovieMeerkat</title>
     <link rel=icon href=/movie-meerkat.png>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
@@ -18,7 +18,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0B0aIkj-pe1nbofWBBTXGswH4dBA-ck">
         </script>
     <script src="main.js"></script>
 
@@ -29,7 +29,7 @@
         <div class='progress-bar progress-bar-striped bg-info' id='bar' role='progressbar' style='width: 0%;'></div>
     </div>
     <nav class="navbar justify-content-start navbar-dark row">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" id="navbarLogo">
             <img src="movie-meerkat.png" alt="movie logo" class="logo">
             <a class="navbar-brand">Movie<span style="color: red;">Meerkat</span></a>
           </a>
@@ -78,13 +78,13 @@
                                 <h4 class="reviewTitle"></h4> 
                                 <p class="nytReview"></p> 
                             </div>
-                            <div class="row justify-content-center m-5 d-none d-sm-block d-md-none">
+                            <!-- <div class="row justify-content-center m-5 d-none d-sm-block d-md-none">
                             <div class="container search-bar-container">
                                 <h5 class="searchNearby"></h5>
                                 <input type="text" value ='9200 Irvine Center Drive, Irvine California 92618' id="searchBar">
                                 <input type="submit" id="submitButton">
                             </div> 
-                        </div>
+                        </div> -->
                             <h5 class="mapOfTheaters"></h5>
                             <div id="map"></div> 
                     </section>

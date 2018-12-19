@@ -12,14 +12,24 @@ function initializeApp(){
  * Attaches click handler to run different functions when clicking on their respective buttons*/
 
 function clickHandler(){
-    $('#submitButton').on('click', getYelpData);
+    $('#submitButton').on('click', searchByLocation);
     $('.backButton').on('click', backButton);
+    $('#navbarLogo').on('click',backButton);
     $('#searchForm').on('submit', (e) => {
         let searchText = $('#searchText').val();
         getMovies(searchText);
         e.preventDefault();
     });
 }
+
+function searchByLocation(){
+    if($('#searchBar').val()){
+        var location = $('#searchBar').val();
+        getYelpData(location);
+    } else {
+        console.log('Please enter a location to search');
+}}
+
 
 function backButton(){
     $('.searchBarContainer').css('visibility', 'hidden');
@@ -220,10 +230,6 @@ function getMovies(searchText){
 async function getYelpData(location) {
     console.log('get yelp data running');
     console.log('location: ',location);
-    if(!location){
-        location = $('#searchBar').val();
-        console.log('location2: ',location);
-    }
 
     var yelpAjaxConfig = {
         dataType: 'json',
@@ -266,54 +272,57 @@ function successfulYelpCall(response){
  * @returns: {undefined} none
  * Function runs during success of Yelp AJAX Call to pass Yelp object into function to create map markers*/
 
-function createMapMarkers(results){
-    var listings = results.businesses;
-    for (var i = 0; i < listings.length; i++) {
-        var coords = listings[i].coordinates;
-        var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);
-        var image = {
-            url: 'http://chittagongit.com//images/movie-icon-vector/movie-icon-vector-9.jpg',
-            size: new google.maps.Size(20, 32),
-            origin: new google.maps.Point(0,0),
-            anchor: new google.maps.Pooint(0,32)
-        };
+// function createMapMarkers(results){
+//     var listings = results.businesses;
+//     for (var i = 0; i < listings.length; i++) {
+//         var coords = listings[i].coordinates;
+//         var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);
+//         var image = {
+//             url: 'http://chittagongit.com//images/movie-icon-vector/movie-icon-vector-9.jpg',
+//             size: new google.maps.Size(20, 32),
+//             origin: new google.maps.Point(0,0),
+//             anchor: new google.maps.Pooint(0,32)
+//         };
 
-        var shape = {
-            coords: [1, 1, 1, 20, 18, 20, 18, 1],
-            type: 'poly'
-          };
+//         var shape = {
+//             coords: [1, 1, 1, 20, 18, 20, 18, 1],
+//             type: 'poly'
+//           };
         
-        var marker = new google.maps.Marker({
-            position: latLng,
-            icon: image,
-            map: map,
-            shape: shape
-});}}
+//         var marker = new google.maps.Marker({
+//             position: latLng,
+//             icon: image,
+//             map: map,
+//             shape: shape
+// });}}
 
-async function addressCoordinates(){
-    var ajaxParams = {
-        url: "https://api.opencagedata.com/geocode/v1/json",
-        data: {
-            key: "52645efc693e4815825c94314f6d5f77",
-            q: $('.searchBar').val()
-            // q: 'Columbus, Ohio'
-        },
-        success: successfullAddressCoordinates
-    }  
-    await $.ajax(ajaxParams)
-}
-function successfullAddressCoordinates(responseCoordinates){
-    if(responseCoordinates.resluts !== undefined){
-        lat = responseCoordinates.results[0].geometry.lat;
-        lng = responseCoordinates.results[0].geometry.lng;
-        initMap(lat,lng);
-    }
-}
+// async function addressCoordinates(){
+//     var ajaxParams = {
+//         url: "https://api.opencagedata.com/geocode/v1/json",
+//         data: {
+//             key: "52645efc693e4815825c94314f6d5f77",
+//             q: $('.searchBar').val()
+//             // q: 'Columbus, Ohio'
+//         },
+//         success: successfullAddressCoordinates
+//     }  
+//     await $.ajax(ajaxParams)
+// }
+// function successfullAddressCoordinates(responseCoordinates){
+//     if(responseCoordinates.resluts !== undefined){
+//         lat = responseCoordinates.results[0].geometry.lat;
+//         lng = responseCoordinates.results[0].geometry.lng;
+//         initMap(lat,lng);
+//     }
+// }
 
-var map;
+// var map;
+
 function initMap(location) {
-
-    var center = {lat: location.latitude, lng: location.longitude};
+    console.log('initMap ran');
+    var latitude = location.latitude;
+    var longitude = location.longitude;
+    var center = {lat: latitude, lng: longitude};
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
         center: center
@@ -324,9 +333,11 @@ console.log('yelp result::', yelpResult);
             var image = {
                 url:'./theater.png'
             }
+            var coords = yelpResult[i].coordinates;
+            var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);	         
 
             var newMarker = new google.maps.Marker({
-                position: center,
+                position: latLng,
                 map: map,
                 icon: image,
                 title: yelpResult['name'], 
@@ -364,7 +375,7 @@ async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
   await findMovieID(movieID);
   await newYorkTimesAjax(movieTitle)
   await dynamicallyCreateMovieInfoPage(movieRow);
-  await addressCoordinates();
+//   await addressCoordinates();
 
 }
 
@@ -451,7 +462,7 @@ function latLongCoordinates(position){
     var longitude = position.coords.longitude;
     var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
     getYelpData(coordinates);
-    console.log(coordinates);
-    $('#searchBar').val('');
+    console.log('coordinates:', coordinates);
+    // $('#searchBar').val('');
 }
 
