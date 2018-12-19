@@ -131,6 +131,12 @@ function getNowPlayingMovies(){
             } else {
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
             }
+            
+            if (movie.vote_average === 0) {
+                movie.vote_average = "N/A"
+            } else {
+                movie.vote_average
+            }
 
             //format the release date to year
             let releaseYear = movie.release_date.slice(0, -6);
@@ -186,7 +192,13 @@ function getMovies(searchText){
                 } else {
                     movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
                 }
-    
+
+                if (movie.vote_average === 0) {
+                    movie.vote_average = "N/A"
+                } else {
+                    movie.vote_average
+                }
+
                 //format the release date to year
                 let releaseYear = movie.release_date.slice(0, -6);
     
