@@ -316,3 +316,7 @@ html, body {
 .rating-5{
     background-position: 0 14px; 
   }
+
+.bodyContent{
+    margin-left: 5px;
+}
