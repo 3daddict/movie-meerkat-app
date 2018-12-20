@@ -230,7 +230,7 @@ html, body {
 
 .infoImage{
     height: 90px;
-    weight: 90px;
+    width: 90px;
     border: lightgray solid 1px;
 }
 
@@ -268,9 +268,16 @@ html, body {
     margin-top: 8px;
 }
 
-.firstHeading,
+.firstHeading{
+    height: 16px;
+    overflow: hidden;
+}
+
 .yelpAddress,
-.yelpAddress2{text-overflow:ellipsis;
+.yelpAddress2{
+    width: 135px;
+    height: 16px;
+    overflow: hidden;
 }
 
 .headerLink{

@@ -314,10 +314,6 @@ console.log('yelp result::', yelpResult);
             
             var ratingClass = reviewStars(yelpResult[i]['rating']);
 
-            if(yelpResult[i]['location']['address1'].length > 33){
-                yelpResult[i]['location']['address1'] = yelpResult[i]['location']['address1'].substring(0, 30) + '...';
-            }
-
             if(yelpResult[i]['name'].length > 33){
                 yelpResult[i]['name'] = yelpResult[i]['name'].substring(0, 30) + '...';
             }
