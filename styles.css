@@ -227,3 +227,85 @@ html, body {
 #navbarLogo{
     cursor: pointer;
 }
+
+.infoImage{
+    height: 90px;
+    weight: 90px;
+    border: lightgray solid 1px;
+}
+
+.infoWindow{
+    color: black;
+    vertical-align: top;
+}
+
+.infoWindow,
+.bodyContentImage,
+.bodyContent{
+    display: inline-block;
+}
+
+.bodyContent{
+    vertical-align: top;
+}
+
+.infoRating,
+.infoYelpLink{
+    margin-top: 5px;
+}
+
+.starRating{
+    background-image: url("./stars.jpg");
+    height: 14px;
+    width: 82px;
+  }
+
+.reviewCount{
+    color: gray;
+}
+
+.yelpAddress{
+    margin-top: 8px;
+}
+
+.firstHeading,
+.yelpAddress,
+.yelpAddress2{text-overflow:ellipsis;
+}
+
+.headerLink{
+    text-decoration: none;
+}
+
+.rating-0{
+    background-position: 0 140px; 
+  }
+.rating-1{
+    background-position: 0 126px; 
+  }
+.rating-1-5{
+    background-position: 0 112px; 
+  }
+.rating-2{
+    background-position: 0 98px; 
+  }
+.rating-2-5{
+    background-position: 0 84px; 
+  }
+.rating-3{
+    background-position: 0 70px; 
+  }
+
+.rating-3-5{
+    background-position: 0 56px; 
+  }
+
+.rating-4{
+    background-position: 0 42px; 
+  }
+.rating-4-5{
+    background-position: 0 28px; 
+  }
+.rating-5{
+    background-position: 0 14px; 
+  }
