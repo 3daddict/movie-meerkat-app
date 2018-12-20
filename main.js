@@ -253,11 +253,6 @@ async function getYelpData(location) {
             term: 'movie theater',
             sort_by: 'distance'
         },
-        // api_key: 'vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx',
-        // // latitude: 33.6846, //This section needs to be updated with the latitude based on user input coming from MapBox
-        // // longitude: -117.8265, //This section needs to be updated with the longitude based on user input coming from MapBox
-        // location: location,
-        // term: 'movie theater',
         success: successfulYelpCall
 
     }
@@ -278,58 +273,6 @@ function successfulYelpCall(response){
     initMap(yelpCoordinates);
 }
 
-/****************************************************************************************************
- * createMapMarkers
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during success of Yelp AJAX Call to pass Yelp object into function to create map markers*/
-
-// function createMapMarkers(results){
-//     var listings = results.businesses;
-//     for (var i = 0; i < listings.length; i++) {
-//         var coords = listings[i].coordinates;
-//         var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);
-//         var image = {
-//             url: 'http://chittagongit.com//images/movie-icon-vector/movie-icon-vector-9.jpg',
-//             size: new google.maps.Size(20, 32),
-//             origin: new google.maps.Point(0,0),
-//             anchor: new google.maps.Pooint(0,32)
-//         };
-
-//         var shape = {
-//             coords: [1, 1, 1, 20, 18, 20, 18, 1],
-//             type: 'poly'
-//           };
-        
-//         var marker = new google.maps.Marker({
-//             position: latLng,
-//             icon: image,
-//             map: map,
-//             shape: shape
-// });}}
-
-// async function addressCoordinates(){
-//     var ajaxParams = {
-//         url: "https://api.opencagedata.com/geocode/v1/json",
-//         data: {
-//             key: "52645efc693e4815825c94314f6d5f77",
-//             q: $('.searchBar').val()
-//             // q: 'Columbus, Ohio'
-//         },
-//         success: successfullAddressCoordinates
-//     }  
-//     await $.ajax(ajaxParams)
-// }
-// function successfullAddressCoordinates(responseCoordinates){
-//     if(responseCoordinates.resluts !== undefined){
-//         lat = responseCoordinates.results[0].geometry.lat;
-//         lng = responseCoordinates.results[0].geometry.lng;
-//         initMap(lat,lng);
-//     }
-// }
-
-// var map;
-
 function initMap(location) {
     console.log('initMap ran');
     var latitude = location.latitude;
@@ -346,31 +289,89 @@ console.log('yelp result::', yelpResult);
                 url:'./theater.png'
             }
             var coords = yelpResult[i].coordinates;
-            var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);	         
+            var latLng = new google.maps.LatLng(coords['latitude'],coords['longitude']);	    
 
             var newMarker = new google.maps.Marker({
                 position: latLng,
                 map: map,
                 icon: image,
-                title: yelpResult['name'], 
+                title: yelpResult['name']
             });
-            var contentString = '<div id="content">' +
-            '<div id="siteNotice">' +
-            '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">' + yelpResult[i]['name'] + '</h1>' +
-            '<div id="bodyContent">' +
-            '</div>' +
-            '</div>';
+
+            function reviewStars(rating){
+                rating = parseFloat(rating);
+                var ratingClass = null;
+                console.log(yelpResult[i]['name'], yelpResult[i]['rating']);
+                if(rating < 1){
+                    ratingClass = 0;
+                } else if( rating <= 1.5){
+                    ratingClass = "rating-1-5";
+                } else if( rating <= 2){
+                    ratingClass = "rating-2";
+                } else if( rating <= 2.5){
+                    ratingClass = "rating-2-5";
+                } else if( rating <= 3){
+                    ratingClass = "rating-3";
+                } else if( rating <= 3.5){
+                    ratingClass = "rating-3-5";
+                } else if( rating <= 4){
+                    ratingClass = "rating-4";
+                } else if( rating <= 4.5){
+                    ratingClass = "rating-4-5";
+                } else {
+                    ratingClass = "rating-5";
+                }
+                return ratingClass
+            }
+            
+            var ratingClass = reviewStars(yelpResult[i]['rating']);
+
+            if(yelpResult[i]['name'].length > 33){
+                yelpResult[i]['name'] = yelpResult[i]['name'].substring(0, 30) + '...';
+            }
+
+            var contentString = 
+            `<div class="infoWindow">
+                <a class="headerLink" href="${yelpResult[i]['url']}" target="_blank">
+                <h1 class="firstHeading" class="firstHeading">${yelpResult[i]['name']}</h1>
+                </a>
+
+                <div class="bodyContentImage">
+                    <a class="headerLink" href="${yelpResult[i]['url']}" target="_blank">
+                        <img class="infoImage" src="${yelpResult[i]['image_url']}" alt="Yelp Image">
+                    </a>
+                </div>
+
+                <div class="bodyContent">
+                    
+                    <div class="starRating ${ratingClass}"></div>
+
+                    <div class="reviewCount">
+                        ${yelpResult[i]['review_count']} Reviews
+                    </div>
+                   
+                    <div class="yelpAddress">
+                        ${yelpResult[i]['location']['address1']}
+                    </div>
+
+                    <div class="yelpAddress2">
+                        ${yelpResult[i]['location']['city']} ${yelpResult[i]['location']['state']}, ${yelpResult[i]['location']['zip_code']}
+                    </div>
+                    <div class="infoYelpLink">
+                        <a href="${yelpResult[i]['url']}" target="_blank">View Yelp Page</a> 
+                    </div>
+                </div>
+
+                </div>
+
+
+            `;
+
             var infowindow = new google.maps.InfoWindow({
                 content: contentString,
                 maxWidth: 250,
                 maxHeight: 100
             });
-            // var marker = new google.maps.Marker({
-            //     position: learningFuze,
-            //     map: map,
-            //     title: yelpResult['name']
-            // });
     
             (function(marker, infowindow) {
                 marker.addListener('click', function () {
