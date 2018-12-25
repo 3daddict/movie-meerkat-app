@@ -334,10 +334,24 @@ html, body {
     height: 150px;
 }
 
-.actorName {
+.characterContainer{
+    display: table;
+}
+
+.actorName,
+.characterName {
     margin-bottom: 5px;
     font-size: .8rem;
     text-align: center;
+    width: 99px;
+    height:38px;
+    overflow: hidden;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.characterName{
+    color: red;
 }
 
 .castMember{
