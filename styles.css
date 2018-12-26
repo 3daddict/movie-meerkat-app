@@ -50,7 +50,6 @@ nav {
 }
 .logo {
     max-width: 35px;
-    margin-left: 20px;
     margin-top: 0;
     padding-bottom: 6px;
 }
@@ -186,6 +185,7 @@ html, body {
 .navbar{
     margin-right: 0;
     margin-left: 0;
+    padding-left: 0;
 }
 
 @media all and (min-width: 1024px) and (max-width: 1280px) {
