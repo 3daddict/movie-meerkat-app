@@ -334,37 +334,18 @@ html, body {
     margin-left: 5px;
 }
 
-.castMember{
-    display: inline-block;
-}
-.actorImage img{
+.castImg {
     height: 150px;
+    max-width: 100px;
 }
 
-.characterContainer{
-    display: table;
+.actorName {
+    color: #eee;
 }
 
-.actorName,
 .characterName {
-    margin-bottom: 5px;
-    font-size: .8rem;
-    text-align: center;
-    width: 99px;
-    height:38px;
-    overflow: hidden;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.characterName{
+    display: block;
     color: red;
-}
-
-.castMember{
-    margin: 0 5px;
-}
-
-.castTitle{
-    margin-top: 8px;
+    width: 99px;
+    font-style: italic;
 }
