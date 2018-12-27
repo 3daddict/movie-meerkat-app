@@ -497,66 +497,18 @@ function getActors(movieID){
                 let actorImage = response.data.cast[i]['profile_path'];
                 let output = `
                 <div class="castMember">
-                    <div class="actorName">${actor}</div>
+                    <div class="characterContainer">
+                        <div class="characterName">${character}</div>
+                    </div>
                     <div class="actorImage">
                         <img src="https://image.tmdb.org/t/p/original/${actorImage}" alt="${actor}">
                     </div>
+                    <div class="actorName">${actor}</div>
                 </div>
                 `;
 
                 $('.castContainer').append(output);
-                // console.log('actor: ',actor);
-                // console.log('character: ',character);
-                // console.log('actorImage: ','https://image.tmdb.org/t/p/original' + actorImage);
+
             }
-            
-
-    //         let output = '';
-    //         $.each(movies, (index, movie) => {
-    //             let movieUrl = "";
-    //             //If no movie poster image use placeholder image
-    //             if (movie.poster_path === null) {
-    //                 movieUrl = "./noImage.jpg"
-    //             } else {
-    //                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
-    //             }
-
-    //             if (movie.vote_average === 0) {
-    //                 movie.vote_average = "N/A"
-    //             } else {
-    //                 movie.vote_average
-    //             }
-
-    //             //format the release date to year
-    //             let releaseYear = movie.release_date.slice(0, -6);
-    
-    //             output += `
-    //             <div class="col">
-    //                 <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-    //                     <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
-    //                     <div class="card-body movie-content movieCardInfo" id="${movie.id}">
-    //                         <div class="row align-items-start">
-    //                             <div class="col">
-    //                                 <button class="btn btn-outline-warning btn-sm movieRating" id="imdbBtn">IMDb ${movie.vote_average}</button>
-    //                             </div>
-    //                             <div class="col">
-    //                                 <div class="realease-date pull-right text-right"><span>${releaseYear}</span></div>
-    //                             </div>
-    //                         </div>
-    //                         <div class="row justify-content-center mt-5">
-    //                             <h6 class="movieTitle">${movie.title}</h6>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //             `
-    //         });
-    //         $(".movie-container").append(output);
-    //         movieListings = [];
-    //         movieListings.push(movies);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
-    // }
+        
 })}};
