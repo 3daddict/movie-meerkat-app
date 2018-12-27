@@ -155,7 +155,7 @@ function getNowPlayingMovies(){
                             </div>
                         </div>
                         <div class="row justify-content-center mt-5">
-                            <h6 class="movieTitle">${movie.title}</h6>
+                            <h6 class="movieTitleCard">${movie.title}</h6>
                         </div>
                     </div>
                 </div>
