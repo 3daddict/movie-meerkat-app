@@ -326,3 +326,20 @@ html, body {
 .bodyContent{
     margin-left: 5px;
 }
+
+.castMember{
+    display: inline-block;
+}
+.actorImage img{
+    height: 150px;
+}
+
+.actorName {
+    margin-bottom: 5px;
+    font-size: .8rem;
+    text-align: center;
+}
+
+.castMember{
+    margin: 0 5px;
+}
