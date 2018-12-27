@@ -496,15 +496,12 @@ function getActors(movieID){
                 let character = response.data.cast[i]['character'];
                 let actorImage = response.data.cast[i]['profile_path'];
                 let output = `
-                <div class="castMember">
-                    <div class="characterContainer">
-                        <div class="characterName">${character}</div>
-                    </div>
-                    <div class="actorImage">
-                        <img src="https://image.tmdb.org/t/p/original/${actorImage}" alt="${actor}">
-                    </div>
-                    <div class="actorName">${actor}</div>
-                </div>
+                <div class="col">
+			        <figure class="figure castMember text-center">
+				        <img src="https://image.tmdb.org/t/p/original/${actorImage}" class="figure-img img-fluid rounded castImg" alt="${actor}">
+				        <figcaption class="figure-caption actorName">${actor}<span class="characterName">${character}</span></figcaption>
+			        </figure>
+		        </div>
                 `;
 
                 $('.castContainer').append(output);
