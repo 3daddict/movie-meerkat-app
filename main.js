@@ -1,16 +1,28 @@
-$(document).ready(initializeApp)
+$(document).ready(initializeApp);
 
+//Global Variables
+var movieListings = [];
+var summary;
+var linkToReview;
+var addTrailerRow;
+var lat;
+var lng;
+var yelpResult;
+var moviePagesLoaded = 4;
+var titleOfMovie = null;
+
+/** 
+ * function that runs on document ready
+ */
 function initializeApp(){
     addEventHandlers(); //runs click handler
     populateMovies();
     $("#bar").width(0);
 }
-/****************************************************************************************************
- * addEventHandlers
- * @params {undefined} none
- * @returns: {undefined} none
- * Attaches click handler to run different functions when clicking on their respective buttons*/
 
+/**
+ * function that handles events
+ */
 function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
     $('.backButton').on('click', backButton);
@@ -22,6 +34,9 @@ function addEventHandlers(){
     });
 }
 
+/**
+ * function that takes value of input for getYelpData function
+ */
 function searchByLocation(){
     if($('#searchBar').val()){
         var location = $('#searchBar').val();
@@ -30,7 +45,9 @@ function searchByLocation(){
         console.log('Please enter a location to search');
 }}
 
-
+/**
+ * function that runs once back button is pressed
+ */
 function backButton(){
     $('.searchBarContainer').css('visibility', 'hidden');
     $('.search-bar-container').css('visibility', 'hidden');
@@ -51,6 +68,9 @@ function backButton(){
     populateMovies();
 }
 
+/**
+ * function handle movie title clicks and call clickHandlerToOpenNewPage function on that id
+ */
 async function populateMovies(){
     getNowPlayingMovies();
     
@@ -65,20 +85,10 @@ async function populateMovies(){
     });
 }
 
-//Global Variables
-var movieListings = [];
-var summary;
-var linkToReview;
-var addTrailerRow;
-var lat;
-var lng;
-var yelpResult;
-var moviePagesLoaded = 4;
-
-//has ajax paramaters
-//@calls ajax new york times
-//@params called query value is movie title
-var titleOfMovie = null;
+/**
+ * function that calls newYorkTimesAjax
+ * @param {*} movieTitle
+ */
 async function newYorkTimesAjax (movieTitle){
     titleOfMovie = movieTitle;
     var newYorkTimesParams = {
@@ -94,29 +104,31 @@ async function newYorkTimesAjax (movieTitle){
     await $.ajax( newYorkTimesParams );
 }
 
-// * @params responseData
-// * returns link and summary for movie
+/**
+ * function that calls new york times review on success
+ * @param {*} responseData
+ */
 function newYorkTimesAjaxSuccessful(responseData){
     if(responseData.results[0] === undefined || titleOfMovie !== responseData.results[0].display_title){
         newYorkTimesAjaxError()
-    }else{
+    } else {
         summary = $('<div>').text(responseData.results[0].summary_short);
         linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
     }
 }
 
-// * @returns appends text that says they are unavailable at this time
+/**
+ * function that handles errors for newYorkTimesAjaxSuccessful
+ */
 function newYorkTimesAjaxError(){
   linkToReview = $('<div>').text('Link not available for this movie');
   summary = $('<a>').text('Summary not available for this movie');
 }
 
-/******************************************
-* Function to call tmdb api and populate now playing movies on dom
-******************************************/
-
+/**
+ * function to call tmdb api and populate now playing movies on dom
+ */
 function getNowPlayingMovies(){
-    
     $('.movie-container').empty();
     axios.get('https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d')
     .then((response) => {
@@ -172,10 +184,10 @@ function getNowPlayingMovies(){
     });
 }
 
-/******************************************
-* Function to call tmdb api and populate movie titles with search value
-******************************************/
-
+/**
+ * function to call tmdb api and populate movie titles with search value
+ * @param {*} searchText
+ */
 function getMovies(searchText){
     // debugger
     if(searchText.length > 0){
@@ -233,12 +245,10 @@ function getMovies(searchText){
     }
 };
 
-/****************************************************************************************************
- * getYelpData
- * @params {undefined} none
- * @returns: {undefined} none
- * Runs the Yelp AJAX call to a proxy server that will communicate with Yelp*/
-
+/**
+ * function that runs the Yelp AJAX call to a proxy server that will communicate with Yelp
+ * @param {*} location
+ */
 async function getYelpData(location) {
     console.log('get yelp data running');
     console.log('location: ',location);
@@ -259,12 +269,10 @@ async function getYelpData(location) {
     await $.ajax(yelpAjaxConfig);
 }
 
-/****************************************************************************************************
- * successfulYelpCall
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during success of Yelp AJAX Call*/
-
+/**
+ * function runs during success of Yelp AJAX Call
+ * @param {*} response
+ */
 function successfulYelpCall(response){
     console.log('successful yelp call');
     yelpResult = response.businesses;
@@ -273,6 +281,10 @@ function successfulYelpCall(response){
     initMap(yelpCoordinates);
 }
 
+/**
+ * function to initiate google maps and populate data
+ * @param {*} location
+ */
 function initMap(location) {
     console.log('initMap ran');
     var latitude = location.latitude;
@@ -383,6 +395,12 @@ console.log('yelp result::', yelpResult);
 }}
 
 
+/**
+ * function to open an new page with the movie clicked and populate data
+ * @param {*} movieRow
+ * @param {*} movieID
+ * @param {*} movieTitle
+ */
 async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
   $('.movieRow').remove();
   await findMovieID(movieID);
@@ -393,38 +411,39 @@ async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
 
 }
 
-/****************************************************************************************************
- * YouTubeApi
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during failure of Yelp AJAX Call*/
+/**
+ * function to find the clicked movies tmdb ID and run dynamicYoutubeVideo with ID
+ * @param {*} tmdbID
+ */
 function findMovieID(tmdbID){
-var settings =  {
-    "async": true,
-    "crossDomain": true,
-    "url": "https://api.themoviedb.org/3/movie/" + tmdbID + "/videos?language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
-    "method": "GET",
-    "headers": {},
-    "data": "{}"
-  }
+    var settings =  {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://api.themoviedb.org/3/movie/" + tmdbID + "/videos?language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
+        "method": "GET",
+        "headers": {},
+        "data": "{}"
+    }
   
   $.ajax(settings).done(function (response) {
     dynamicYoutubeVideo(response.results[0].key);
   });
 }
 
-/****************************************************************************************************
- * 
- * @params {undefined} none
- * @returns: {undefined} none
- * Function runs during failure of Yelp AJAX Call*/
-
+/**
+ * function that creates the youtibe movie trailer and inserts on the dom
+ * @param {*} movieTrailerID
+ */
 function dynamicYoutubeVideo(movieTrailerID) {
     $('.movieTrailer').empty();
     $('.movieTrailer').append(`<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/${movieTrailerID}?controls=0' frameborder='0' allowfullscreen></iframe></div>`);
 }
 
 
+/**
+ * function that creates movie page elements for dom
+ * @param {*} someOfThis
+ */
 function dynamicallyCreateMovieInfoPage(someOfThis){
     window.scrollTo(0,0)
      $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
@@ -444,13 +463,20 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.movieSummary').append(summary);
     $('.nytReview').append(linkToReview);
     triggerModal();
-  }
+}
 
+/**
+ * function to create and run the bootstrap progress bar
+ */
 function progressBarUpdate() {
     $("#bar").width('100%');
         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
 }
 
+/**
+ * function to trigger modal
+ * @returns modal
+ */
 var triggerModal = (function(){
     var executed = false;
     return function() {
@@ -462,6 +488,9 @@ var triggerModal = (function(){
     }
 })();
 
+/**
+ * function to hide modal and use geolocation or send error
+ */
 function enableGeolocation(){
     $("#locationModal").modal('hide');
     if(navigator.geolocation){
@@ -472,6 +501,10 @@ function enableGeolocation(){
     }
 }
 
+/**
+ * function that takes coordinates and runs the getYelpData function to generate map
+ * @param {*} position
+ */
 function latLongCoordinates(position){
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
@@ -481,7 +514,10 @@ function latLongCoordinates(position){
     // $('#searchBar').val('');
 }
 
-//Get Actors
+/**
+ * function to call tmdb and find actors of movie id
+ * @param {*} movieID
+ */
 function getActors(movieID){
     console.log('getActors Ran.');
     console.log('movieID: ',movieID);
