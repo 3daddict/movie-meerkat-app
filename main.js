@@ -62,6 +62,7 @@ function backButton(){
     $('.reviewTitle').empty();
     $('.movieSummary').empty();
     $('.nytReview').empty();
+    $('.castContainer').empty();
     $('.searchBarContainer').css('display', 'none');
     $('.backButton').css('display','none');
     $('#map').css('display', 'none');
