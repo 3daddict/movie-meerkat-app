@@ -172,6 +172,7 @@ html, body {
 }
 .movieSummary{
     margin: 5px 0px 15px 15px;
+    font-size: 1rem;
 }
 
 .nytReviewContainer {
@@ -348,4 +349,18 @@ html, body {
     color: red;
     width: 99px;
     font-style: italic;
+}
+
+.movieDetailsContainer{
+    display: block;
+    text-align: left;
+}
+
+.runtime,
+.genre,
+.budget,
+.overview{
+    text-align: left;
+    color: darkgray;
+    margin-bottom: 5px;
 }

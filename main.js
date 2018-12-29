@@ -63,6 +63,8 @@ function backButton(){
     $('.movieSummary').empty();
     $('.nytReview').empty();
     $('.castContainer').empty();
+    $('.castTitle').empty();
+    $('.movieDetails').empty();
     $('.searchBarContainer').css('display', 'none');
     $('.backButton').css('display','none');
     $('#map').css('display', 'none');
@@ -113,7 +115,7 @@ function newYorkTimesAjaxSuccessful(responseData){
     if(responseData.results[0] === undefined || titleOfMovie !== responseData.results[0].display_title){
         newYorkTimesAjaxError()
     } else {
-        summary = $('<div>').text(responseData.results[0].summary_short);
+        // summary = $('<div>').text(responseData.results[0].summary_short);
         linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
     }
 }
@@ -123,7 +125,7 @@ function newYorkTimesAjaxSuccessful(responseData){
  */
 function newYorkTimesAjaxError(){
   linkToReview = $('<div>').text('Link not available for this movie');
-  summary = $('<a>').text('Summary not available for this movie');
+//   summary = $('<a>').text('Summary not available for this movie');
 }
 
 /**
@@ -405,6 +407,7 @@ console.log('yelp result::', yelpResult);
 async function clickHandlerToOpenNewPage(movieRow, movieID, movieTitle){
   $('.movieRow').remove();
   await findMovieID(movieID);
+  await getDetails(movieID);
   await newYorkTimesAjax(movieTitle)
   await dynamicallyCreateMovieInfoPage(movieRow);
   await getActors(movieID);
@@ -455,13 +458,13 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.search-bar-container').css('display', 'inline-block').css('visibility', 'visible');
     $('.movieTitle').text(someOfThis.attr('data-title'))
     $('.movieTrailer').append(addTrailerRow);
-    $('.summary').text("Summary")
+    // $('.summary').text("Summary")
     $('.castTitle').text('Cast');
     $('.reviewTitle').text("Read the review")
     $('.searchNearby').text('Search Nearby Theaters');
     $('.mapOfTheaters').text('Nearby Theaters');
     $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
-    $('.movieSummary').append(summary);
+    // $('.movieSummary').append(summary);
     $('.nytReview').append(linkToReview);
     triggerModal();
 }
@@ -546,3 +549,56 @@ function getActors(movieID){
             }
         
 })}};
+/**
+ * function to call tmdb and find actors of movie id
+ * @param {*} movieID
+ */
+function getDetails(movieID){
+    console.log('getDetailss Ran.');
+    console.log('movieID: ',movieID);
+    if(movieID){
+        console.log('movieID: ',movieID);
+        axios.get('https://api.themoviedb.org/3/movie/' + movieID + '?api_key=487eb0704123bb2cd56c706660e4bb4d')
+        .then((response) => {
+            summary = $('<div>').text(response.data.overview);
+            let overview = response.data.overview;
+
+            
+            let budget = response.data.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if(budget < 1){
+                budget = 'Not Available';
+            } else {
+                budget = '$' + budget;
+            }
+            const genre = [];
+            for(let i = 0; i < response.data.genres.length; i++){
+                genre.push(response.data.genres[i].name);
+            }
+
+            let genreList = genre.join(', ');
+            let runtimeHrs = Math.floor(response.data.runtime / 60);
+            let runtimeMin = response.data.runtime % 60;
+            let runtime = `${runtimeHrs}h ${runtimeMin}min`;
+
+            let output = `
+                <div class="col">
+                    <div class="movieDetailsContainer">
+                        <div>Overview</div>
+                        <div class="overview">${overview}</div>
+                    </div>
+                    <div class="movieDetailsContainer">
+                        <div>Genre</div>
+                        <div class="genre">${genreList}</div>
+                    </div>    
+                    <div class="movieDetailsContainer">
+                        <div>Runtime</div>
+                        <div class="runtime">${runtime}</div>
+                    </div>
+                    <div class="movieDetailsContainer">
+                        <div>Budget</div>
+                        <div class="budget">${budget}</div>
+                    </div>
+		        </div>
+                `;
+                $('.movieDetails').append(output);
+            })}}
