@@ -531,7 +531,7 @@ function getActors(movieID){
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/movie/' + movieID + '/credits?api_key=487eb0704123bb2cd56c706660e4bb4d')
         .then((response) => {
-            for(let i = 0; i < 6; i++){
+            for(let i = 0; i < 5; i++){
                 let actor = response.data.cast[i]['name'];
                 let character = response.data.cast[i]['character'];
                 let actorImage = response.data.cast[i]['profile_path'];
