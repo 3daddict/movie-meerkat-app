@@ -50,10 +50,12 @@ nav {
 }
 .logo {
     max-width: 35px;
-    margin-left: 20px;
     margin-top: 0;
     padding-bottom: 6px;
+}
 
+.logo-red {
+    color: red;
 }
 
 .movieRow {
@@ -75,6 +77,7 @@ nav {
     opacity: 0;
     transition-property: opacity;
     transition-duration: .2s;
+    cursor: pointer;
 }
 
 .movie-content:hover {
@@ -92,6 +95,7 @@ nav {
 
 #imdbBtn {
   border: none;
+  cursor: default;
 }
 
 .movie-info-container {
@@ -105,8 +109,7 @@ nav {
 
 
 .poster {
-    margin: 35px 10px 5px 10px;
-
+    margin: 10px;
 }
 
  /* Always set the map height explicitly to define the size of the div
@@ -134,8 +137,15 @@ html, body {
 }
 
 .movieTitle {
-    margin: auto 10px;
-    font-size: 1.0em;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    margin-right: 0px;
+    font-size: 1.5rem;
+}
+
+.movieTitleCard{
+    font-size: 1rem;
 }
 
 .movieRating {
@@ -162,6 +172,11 @@ html, body {
 }
 .movieSummary{
     margin: 5px 0px 15px 15px;
+    font-size: 1rem;
+}
+
+.nytReviewContainer {
+    margin-top: 25px;
 }
 
 .col-md-3 {
@@ -173,13 +188,12 @@ html, body {
     font-size: 10pt;
 }
 
-.searchBarContainer{
-    visibility: hidden;
-}
+
 
 .navbar{
     margin-right: 0;
     margin-left: 0;
+    padding-left: 0;
 }
 
 @media all and (min-width: 1024px) and (max-width: 1280px) {
@@ -206,4 +220,147 @@ html, body {
     h4 {
         margin-top: 50px;
     }
+}
+
+.card {
+    background-color: transparent;
+}
+
+.movieSummary a {
+    word-wrap: break-word;
+}
+
+.searchBarContainer{
+    visibility: hidden;
+}
+
+.search-bar-container{
+    visibility: hidden;
+}
+
+#navbarLogo{
+    cursor: pointer;
+}
+
+.infoImage{
+    height: 90px;
+    width: 90px;
+    border: lightgray solid 1px;
+}
+
+.infoWindow{
+    color: black;
+    vertical-align: top;
+}
+
+.infoWindow,
+.bodyContentImage,
+.bodyContent{
+    display: inline-block;
+}
+
+.bodyContent{
+    vertical-align: top;
+}
+
+.infoRating,
+.infoYelpLink{
+    margin-top: 5px;
+}
+
+.starRating{
+    background-image: url("./stars.jpg");
+    height: 14px;
+    width: 82px;
+  }
+
+.reviewCount{
+    color: gray;
+}
+
+.yelpAddress{
+    margin-top: 8px;
+}
+
+.firstHeading{
+    height: 16px;
+    overflow: hidden;
+}
+
+.yelpAddress,
+.yelpAddress2{
+    width: 135px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.headerLink{
+    text-decoration: none;
+}
+
+.rating-0{
+    background-position: 0 140px; 
+  }
+.rating-1{
+    background-position: 0 126px; 
+  }
+.rating-1-5{
+    background-position: 0 112px; 
+  }
+.rating-2{
+    background-position: 0 98px; 
+  }
+.rating-2-5{
+    background-position: 0 84px; 
+  }
+.rating-3{
+    background-position: 0 70px; 
+  }
+
+.rating-3-5{
+    background-position: 0 56px; 
+  }
+
+.rating-4{
+    background-position: 0 42px; 
+  }
+.rating-4-5{
+    background-position: 0 28px; 
+  }
+.rating-5{
+    background-position: 0 14px; 
+  }
+
+.bodyContent{
+    margin-left: 5px;
+}
+
+.castImg {
+    height: 150px;
+    max-width: 100px;
+}
+
+.actorName {
+    color: #eee;
+}
+
+.characterName {
+    display: block;
+    color: red;
+    width: 99px;
+    font-style: italic;
+}
+
+.movieDetailsContainer{
+    display: block;
+    text-align: left;
+}
+
+.runtime,
+.genre,
+.budget,
+.overview{
+    text-align: left;
+    color: darkgray;
+    margin-bottom: 5px;
 }
