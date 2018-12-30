@@ -18,4 +18,4 @@ Start by forking or cloning the repo to your local machine.
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
-* The awesome instructors at LearningFuze Academy
+* A Big **Thank You** to the awesome instructors at LearningFuze Academy
