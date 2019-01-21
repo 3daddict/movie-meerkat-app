@@ -16,7 +16,7 @@ Start by forking or cloning the repo to your local machine.
 * **Jaytrin Apinchapong** - [Jaytrin](https://github.com/Jaytrin)
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/3daddict/movie-meerkat-app/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 * A Big **Thank You** to the awesome instructors at LearningFuze Academy
