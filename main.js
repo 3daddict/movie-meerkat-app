@@ -96,7 +96,7 @@ async function newYorkTimesAjax (movieTitle){
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
       method: 'GET',
       data: {
-        'api-key': "8f55164da30c48c9ba4dc79d9fce1827",
+        'api-key': "EAJZJKpUWUaaG7GFAfAd00tnyinAFTIl",
           "query": movieTitle,
       },
       success: newYorkTimesAjaxSuccessful,
