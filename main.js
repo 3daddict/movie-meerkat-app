@@ -15,6 +15,7 @@ var titleOfMovie = null;
  * function that runs on document ready
  */
 function initializeApp(){
+    console.log('app initialied');
     addEventHandlers(); //runs click handler
     populateMovies();
     $("#bar").width(0);
@@ -27,10 +28,20 @@ function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
     $('.backButton').on('click', backButton);
     $('#navbarLogo').on('click',backButton);
-    $('#searchForm').on('submit', (e) => {
+    $('#searchButton').on('click', () => {
         let searchText = $('#searchText').val();
         getMovies(searchText);
-        e.preventDefault();
+        $('#searchMovieModal').modal('hide');
+        backButton();
+        $('#searchText').val('');
+    });
+
+    $('#magnifyButton').on('click',()=>{
+        $('#searchMovieModal').modal();
+    });
+
+    $('#closeSearchButton').on('click',()=>{
+        $('#searchMovieModal').modal('hide');
     });
 }
 
@@ -82,8 +93,6 @@ async function populateMovies(){
         let movieRow = $(event.target).closest('.movieRow');
         let movieID = $(event.target).closest('.movieRow').attr('data-id');
         let movieTitle = $(event.target).closest('.movieRow').attr('data-title');
-        console.log('data-id:', movieID);
-        console.log('data-title:', movieTitle);
         clickHandlerToOpenNewPage(movieRow, movieID, movieTitle);
     });
 }
@@ -98,7 +107,7 @@ async function newYorkTimesAjax (movieTitle){
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
       method: 'GET',
       data: {
-        'api-key': "8f55164da30c48c9ba4dc79d9fce1827",
+        'api-key': "EAJZJKpUWUaaG7GFAfAd00tnyinAFTIl",
           "query": movieTitle,
       },
       success: newYorkTimesAjaxSuccessful,
@@ -179,7 +188,6 @@ function getNowPlayingMovies(){
         });
         $(".movie-container").append(output);
         movieListings.push(movies);
-        console.log("movieListings: ", movieListings);
         progressBarUpdate();
     })
     .catch((err) => {
@@ -253,9 +261,6 @@ function getMovies(searchText){
  * @param {*} location
  */
 async function getYelpData(location) {
-    console.log('get yelp data running');
-    console.log('location: ',location);
-
     var yelpAjaxConfig = {
         dataType: 'json',
         url: 'https://yelp.ongandy.com/businesses',
@@ -277,10 +282,8 @@ async function getYelpData(location) {
  * @param {*} response
  */
 function successfulYelpCall(response){
-    console.log('successful yelp call');
     yelpResult = response.businesses;
     var yelpCoordinates = response.region.center;
-    console.log(yelpCoordinates);
     initMap(yelpCoordinates);
 }
 
@@ -289,7 +292,6 @@ function successfulYelpCall(response){
  * @param {*} location
  */
 function initMap(location) {
-    console.log('initMap ran');
     var latitude = location.latitude;
     var longitude = location.longitude;
     var center = {lat: latitude, lng: longitude};
@@ -297,7 +299,6 @@ function initMap(location) {
         zoom: 11,
         center: center
     });
-console.log('yelp result::', yelpResult);
     if(yelpResult){
         for(var i = 0; i < 10; i++){
             var image = {
@@ -316,7 +317,6 @@ console.log('yelp result::', yelpResult);
             function reviewStars(rating){
                 rating = parseFloat(rating);
                 var ratingClass = null;
-                console.log(yelpResult[i]['name'], yelpResult[i]['rating']);
                 if(rating < 1){
                     ratingClass = 0;
                 } else if( rating <= 1.5){
@@ -465,7 +465,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.mapOfTheaters').text('Nearby Theaters');
     $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     // $('.movieSummary').append(summary);
-    $('.nytReview').append(linkToReview);
+    //Breaking navbar $('.nytReview').append(linkToReview);
     triggerModal();
 }
 
@@ -498,7 +498,6 @@ var triggerModal = (function(){
 function enableGeolocation(){
     $("#locationModal").modal('hide');
     if(navigator.geolocation){
-        console.log('geolocation active')
         navigator.geolocation.getCurrentPosition(latLongCoordinates);
     } else {
         console.log('This browser does not support Geolocation.');
@@ -514,8 +513,6 @@ function latLongCoordinates(position){
     var longitude = position.coords.longitude;
     var coordinates = position.coords.latitude + ', ' + position.coords.longitude;
     getYelpData(coordinates);
-    console.log('coordinates:', coordinates);
-    // $('#searchBar').val('');
 }
 
 /**
@@ -523,10 +520,7 @@ function latLongCoordinates(position){
  * @param {*} movieID
  */
 function getActors(movieID){
-    console.log('getActors Ran.');
-    console.log('movieID: ',movieID);
     if(movieID){
-        console.log('movieID: ',movieID);
         //marker
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/movie/' + movieID + '/credits?api_key=487eb0704123bb2cd56c706660e4bb4d')
@@ -554,10 +548,7 @@ function getActors(movieID){
  * @param {*} movieID
  */
 function getDetails(movieID){
-    console.log('getDetailss Ran.');
-    console.log('movieID: ',movieID);
     if(movieID){
-        console.log('movieID: ',movieID);
         axios.get('https://api.themoviedb.org/3/movie/' + movieID + '?api_key=487eb0704123bb2cd56c706660e4bb4d')
         .then((response) => {
             summary = $('<div>').text(response.data.overview);
@@ -602,3 +593,10 @@ function getDetails(movieID){
                 `;
                 $('.movieDetails').append(output);
             })}}
+
+/**
+ * function that opens search modal
+ */
+function openSearchModal(){
+    $('#searchMovieModal').modal();
+}
