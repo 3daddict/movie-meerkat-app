@@ -15,6 +15,7 @@ var titleOfMovie = null;
  * function that runs on document ready
  */
 function initializeApp(){
+    console.log('app initialied');
     addEventHandlers(); //runs click handler
     populateMovies();
     $("#bar").width(0);
@@ -27,10 +28,20 @@ function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
     $('.backButton').on('click', backButton);
     $('#navbarLogo').on('click',backButton);
-    $('#searchForm').on('submit', (e) => {
+    $('#searchButton').on('click', () => {
         let searchText = $('#searchText').val();
         getMovies(searchText);
-        e.preventDefault();
+        $('#searchMovieModal').modal('hide');
+        backButton();
+        $('#searchText').val('');
+    });
+
+    $('#magnifyButton').on('click',()=>{
+        $('#searchMovieModal').modal();
+    });
+
+    $('#closeSearchButton').on('click',()=>{
+        $('#searchMovieModal').modal('hide');
     });
 }
 
@@ -454,7 +465,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.mapOfTheaters').text('Nearby Theaters');
     $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     // $('.movieSummary').append(summary);
-    $('.nytReview').append(linkToReview);
+    //Breaking navbar $('.nytReview').append(linkToReview);
     triggerModal();
 }
 
@@ -582,3 +593,10 @@ function getDetails(movieID){
                 `;
                 $('.movieDetails').append(output);
             })}}
+
+/**
+ * function that opens search modal
+ */
+function openSearchModal(){
+    $('#searchMovieModal').modal();
+}

@@ -3,9 +3,7 @@ body {
     color: white;
     font-family: 'Open Sans', sans-serif;
 }
-nav {
-    margin-top: 20px;
-}
+
 #searchBar {
     width: 100%;
     margin-bottom: 15px;
@@ -16,7 +14,7 @@ nav {
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-    border-radius: .25rem;
+    border-radius: .35rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 #submitButton {
@@ -42,16 +40,18 @@ nav {
     border-color: #0062cc;
     text-decoration: none;
 }
-.navbar-brand {
-    font-size: 2.5em;
+/* .navbar-brand {
+    font-size: 2rem;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     margin-right: 6px;
-}
+} */
 .logo {
-    max-width: 35px;
-    margin-top: 0;
-    padding-bottom: 6px;
+    object-fit: contain;
+}
+
+nav a img{
+    width: 100%;
 }
 
 .logo-red {
@@ -190,37 +190,11 @@ html, body {
 
 
 
-.navbar{
+/* .navbar{
     margin-right: 0;
     margin-left: 0;
     padding-left: 0;
-}
-
-@media all and (min-width: 1024px) and (max-width: 1280px) {
-
-}
-
-@media all and (min-width: 768px) and (max-width: 1024px) {
-    .movieSummary {
-        font-size: 0.9rem;
-    }
-
-    .searchNearby {
-        font-size: 0.9rem;
-    }
-}
-
-@media all and (min-width: 480px) and (max-width: 768px) {
-    h4 {
-        margin-top: 50px;
-    }
-}
-
-@media all and (max-width: 480px) {
-    h4 {
-        margin-top: 50px;
-    }
-}
+} */
 
 .card {
     background-color: transparent;
@@ -363,4 +337,63 @@ html, body {
     text-align: left;
     color: darkgray;
     margin-bottom: 5px;
+}
+
+@media screen and (min-width: 320px) {
+    .navbar{
+        justify-content: center;
+    }
+    #searchText{
+        border-radius: 1rem;
+        height: 1.75em;
+        text-align: center;
+    }
+    .form-section{
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .modal-text{
+        font-size: 1rem;
+    }
+
+}
+
+
+.logoTitle{
+    font-size: 2rem;
+}
+
+.bg-black{
+    background-color: #0b0b0b;
+    color: white;
+}
+
+.bg-full-black{
+    background-color:black;
+    color: white;
+}
+
+.progress{
+    box-shadow: none;
+    border-radius: 0;
+    border: 0;
+}
+
+.icon_svg{
+    fill: white;
+}
+
+.searchMovieModal{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10040;
+    overflow: auto;
+    overflow-y: auto;
+}
+
+body{
+    padding-top: 55px;
 }
