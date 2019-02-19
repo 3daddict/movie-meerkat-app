@@ -26,7 +26,7 @@ function initializeApp(){
  */
 function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
-    $('.backButton').on('click', backButton);
+    $('#backButton').on('click', backButton);
     $('#navbarLogo').on('click',backButton);
     $('#searchButton').on('click', () => {
         let searchText = $('#searchText').val();
@@ -60,6 +60,7 @@ function searchByLocation(){
  * function that runs once back button is pressed
  */
 function backButton(){
+    $('#backButton').addClass('d-none');
     $('.searchBarContainer').css('visibility', 'hidden');
     $('.search-bar-container').css('visibility', 'hidden');
     $('.poster').removeAttr('src');
@@ -77,7 +78,7 @@ function backButton(){
     $('.castTitle').empty();
     $('.movieDetails').empty();
     $('.searchBarContainer').css('display', 'none');
-    $('.backButton').css('display','none');
+    // $('.backButton').css('display','none');
     $('#map').css('display', 'none');
     populateMovies();
 }
@@ -450,6 +451,7 @@ function dynamicYoutubeVideo(movieTrailerID) {
  */
 function dynamicallyCreateMovieInfoPage(someOfThis){
     window.scrollTo(0,0)
+    $('#backButton').removeClass('d-none');
      $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
     $('.starIcon').addClass("fas fa-star");
     $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
@@ -463,7 +465,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.reviewTitle').text("Read the review")
     $('.searchNearby').text('Search Nearby Theaters');
     $('.mapOfTheaters').text('Nearby Theaters');
-    $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
+    // $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     // $('.movieSummary').append(summary);
     //Breaking navbar $('.nytReview').append(linkToReview);
     triggerModal();
@@ -525,7 +527,7 @@ function getActors(movieID){
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/movie/' + movieID + '/credits?api_key=487eb0704123bb2cd56c706660e4bb4d')
         .then((response) => {
-            for(let i = 0; i < 5; i++){
+            for(let i = 0; i < 6; i++){
                 let actor = response.data.cast[i]['name'];
                 let character = response.data.cast[i]['character'];
                 let actorImage = response.data.cast[i]['profile_path'];

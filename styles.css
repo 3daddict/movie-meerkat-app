@@ -163,8 +163,6 @@ html, body {
 
 .backButton{
     display: none;
-    width: 100%;
-    margin-bottom: 30px;
 }
 
 .starIcon {
@@ -396,4 +394,10 @@ html, body {
 
 body{
     padding-top: 55px;
+}
+
+#backButton{
+    height: 85%;
+    transform: rotate(90deg);
+    fill: white;
 }
