@@ -32,19 +32,41 @@
         <div class='progress-bar progress-bar-striped bg-info' id='bar' role='progressbar' style='width: 0%;'></div>
     </div>
     
-    <nav class="navbar fixed-top bg-black p-1">
+    <nav class="navbar fixed-top bg-black p-1" id='mobile-nav'>
         <div class="container">
             <div class="row">
-                <div class="col-2 offset-1 pl-0 pt-1 text-white" id="backChevron">
-                    <svg class="d-none" id="backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
+                <div class="col-2 pl-0 pt-1 text-white" id="backChevron">
+                    <svg class="d-none backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
                 </div>
-                <div class="col-6">
-                    <a class="navbar-brand mr-0 pt-0" href="#" class="logo">
+                <div class="col-6 offset-1">
+                    <a class="navbar-brand mr-0 p-0" href="#" class="logo" id="navbarLogo">
                         <img src="movie-meerkat-title.png" alt="movie logo">
                     </a>
                 </div>
                 <div class="col-2 offset-1 pl-0 pt-1 text-white" id="magnifyButton">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="icon_svg"><path d="M20.753 19.34l-4.295-4.297A7.46 7.46 0 0 0 18 10.5a7.5 7.5 0 1 0-7.5 7.5 7.46 7.46 0 0 0 4.543-1.542l4.296 4.295a1 1 0 1 0 1.412-1.414zM10.5 16A5.506 5.506 0 0 1 5 10.5C5 7.467 7.467 5 10.5 5S16 7.467 16 10.5 13.533 16 10.5 16z"></path></svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar fixed-top bg-black p-2" id='desktop-nav'>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-lg-5">
+                    <a class="navbar-brand mr-0 p-0" href="#" class="logo" id="navbarLogo">
+                        <img src="movie-meerkat-title.png" alt="movie logo">
+                    </a>
+                </div>
+                <div class="offset-1 col-5 col-lg-4 offset-lg-3 col-xl-3 offset-xl-4 pt-1 pr-3 pl-0">
+                    <form id="searchForm">
+                        <div class="form-section input-group">
+                            <input type="text" class="form-control rounded-left" placeholder="Search for a movie title" id="desktopSearchText" autocomplete="off" />
+                            <div class="input-group-append">
+                                <button class="btn bg-custom-red text-white desktopSearchBtn" type="button" id="desktopSearchButton">Search</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -65,13 +87,26 @@
         </form>
     </div> -->
 
-    <section class="container">
+    <section class="container mx-auto pt-2 p-0">
         <div class="row movie-container text-center"></div>
     </section>
+<!-- 
+    <section class="container m-0 p-0" id="backButtonSection">
+        <div class="col-2 pl-0 pt-0" id="backChevron">
+            <svg class="d-none backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
+        </div>
+    </section> -->
+    
+    <section class="container pt-1">
+            <section class="container m-0 p-0" id="backButtonSection">
+                    <div class="col-2 p-0" id="desktopBackButton">
+                        <i class="far fa-arrow-alt-circle-left backButton d-none"></i>
+                    </div>
+            </section>
 
-    <section class="container">
             <div class="movie-wrapper row text-left">
                     <section class="movie-stats col-md-4 text-center mb-3">
+                        
                         <h1 class="movieTitle"></h1>
                         <img class="img-fluid poster">
                         <div class="movieReviews">
@@ -93,32 +128,41 @@
                         </div>  -->
                     </section>
 
-                    <section>
-                        <div class="back-container container">
-                                <button class="backButton btn btn-outline-danger text-center"></button>
-                            </div>
-                            <div class="searchBarContainer container d-sm-none d-md-block">
-                                <h5 class="searchNearby"></h5>
-                                <input type="text" placeholder ='Search for theater...' id="searchBar">
-                                <input type="submit" id="submitButton">
-                            </div> 
-                    </section>
-
                     <section class="movie-trailer-container col-md-8">
                             <div class="movieTrailer"></div>
                             <div class="castSection">
-                                <h4 class="castTitle mt-5 mb-4"></h4>
+                                <h5 class="castTitle mt-4 mb-4"></h5>
                                 <div class="container">
                                     <div class="row text-center castContainer"></div>
                                 </div>
                             </div>
                             <div class="nytReviewContainer">
-                                <h4 class="reviewTitle"></h4> 
+                                <h5 class="reviewTitle"></h5> 
                                 <p class="nytReview"></p> 
                             </div>
                             <h5 class="mapOfTheaters"></h5>
                             <div id="map"></div> 
                     </section>
+
+                    <section class="d-none col-10 mx-auto" id="searchTheater">
+                        <!-- <div class="back-container container">
+                            <div class="searchBarContainer input-group container d-sm-none d-md-block row">
+                                <!-- <h5 class="searchNearby"></h5> -->
+                                <!-- <input class="col-8"type="text" placeholder ='Find a theater' id="">
+                                <button class="col-2 offset-2 input-group-append" type="submit" id=""></button>
+                            </div> 
+                        </div> -->
+                 
+
+                        <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
+                                <div class="input-group-append">
+                                  <button class="btn bg-danger text-white" type="button" id="submitButton">Find</button>
+                                </div>
+                              </div>
+
+                    </section>
+
             </div>
     </section>
 
@@ -159,13 +203,13 @@
                                     <img src="movie-meerkat-title.png" alt="movie logo">
                                 </a>
                             </div>
-                            <div class="col-2 p-2 text-white modal-text" id="searchButton">
+                            <div class="col-2 p-2 text-white modal-text" id="mobileSearchButton">
                                 Search
                             </div>
                             <div class="offset-1 col-10 pt-1 mb-2">
                                 <form id="searchForm">
                                     <div class="form-section">
-                                        <input type="text" class="form-control" placeholder="Search for a movie title" id="searchText" autocomplete="off" />
+                                        <input type="text" class="form-control" placeholder="Search for a movie title" id="mobileSearchText" autocomplete="off" />
                                     </div>
                                 </form>
                             </div>

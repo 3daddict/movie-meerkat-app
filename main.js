@@ -19,6 +19,7 @@ function initializeApp(){
     addEventHandlers(); //runs click handler
     populateMovies();
     $("#bar").width(0);
+    $('[data-toggle="tooltip"]').tooltip();   
 }
 
 /**
@@ -26,14 +27,29 @@ function initializeApp(){
  */
 function addEventHandlers(){
     $('#submitButton').on('click', searchByLocation);
-    $('#backButton').on('click', backButton);
-    $('#navbarLogo').on('click',backButton);
-    $('#searchButton').on('click', () => {
-        let searchText = $('#searchText').val();
+    $('.backButton').on('click', ()=>{
+        backButton();
+        populateMovies();
+    });
+
+    $('#navbarLogo').on('click', ()=>{
+        backButton();
+        populateMovies();
+    });
+
+    $('#mobileSearchButton').on('click', () => {
+        let searchText = $('#mobileSearchText').val();
+        backButton();
         getMovies(searchText);
         $('#searchMovieModal').modal('hide');
+        $('#mobileSearchText').val('');
+    });
+
+    $('#desktopSearchButton').on('click', () => {
+        let searchText = $('#desktopSearchText').val();
         backButton();
-        $('#searchText').val('');
+        getMovies(searchText);
+        $('#desktopSearchText').val('');
     });
 
     $('#magnifyButton').on('click',()=>{
@@ -60,7 +76,8 @@ function searchByLocation(){
  * function that runs once back button is pressed
  */
 function backButton(){
-    $('#backButton').addClass('d-none');
+    $('.backButton').addClass('d-none');
+    $('#searchTheater').addClass('d-none');
     $('.searchBarContainer').css('visibility', 'hidden');
     $('.search-bar-container').css('visibility', 'hidden');
     $('.poster').removeAttr('src');
@@ -80,7 +97,6 @@ function backButton(){
     $('.searchBarContainer').css('display', 'none');
     // $('.backButton').css('display','none');
     $('#map').css('display', 'none');
-    populateMovies();
 }
 
 /**
@@ -169,7 +185,8 @@ function getNowPlayingMovies(){
             output += `
             <div class="col">
                 <div class="card movieRow" data-title="${movie.title}" data-id="${movie.id}" movierating="${movie.vote_average}">
-                    <img class="card-img-top movie-image movieEffects" src="${movieUrl}">
+                
+                    <div class="card-img-top movie-image movieEffects" src="${movieUrl}" style="background-image: url(${movieUrl})"></div>
                     <div class="card-body movie-content movieCardInfo" id="${movie.id}">
                         <div class="row align-items-start">
                             <div class="col">
@@ -201,7 +218,6 @@ function getNowPlayingMovies(){
  * @param {*} searchText
  */
 function getMovies(searchText){
-    // debugger
     if(searchText.length > 0){
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
@@ -451,8 +467,9 @@ function dynamicYoutubeVideo(movieTrailerID) {
  */
 function dynamicallyCreateMovieInfoPage(someOfThis){
     window.scrollTo(0,0)
-    $('#backButton').removeClass('d-none');
-     $('.poster').attr('src', someOfThis[0].firstElementChild.currentSrc)
+    $('.backButton').removeClass('d-none');
+    $('#searchTheater').removeClass('d-none');
+     $('.poster').attr('src', someOfThis[0].firstElementChild.attributes.src.value);
     $('.starIcon').addClass("fas fa-star");
     $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
     $('#map').css('display', 'inline-block');
@@ -527,7 +544,15 @@ function getActors(movieID){
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/movie/' + movieID + '/credits?api_key=487eb0704123bb2cd56c706660e4bb4d')
         .then((response) => {
-            for(let i = 0; i < 6; i++){
+            const limit = {actors: 6};
+
+            if($(window).width() > 1199){
+                limit['actors'] = 10;
+            } else if($(window).width() > 991){
+                limit['actors'] = 8;
+            }
+
+            for(let i = 0; i < limit['actors']; i++){
                 let actor = response.data.cast[i]['name'];
                 let character = response.data.cast[i]['character'];
                 let actorImage = response.data.cast[i]['profile_path'];
@@ -535,7 +560,12 @@ function getActors(movieID){
                 <div class="col">
 			        <figure class="figure castMember text-center">
 				        <img src="https://image.tmdb.org/t/p/original/${actorImage}" class="figure-img img-fluid rounded castImg" alt="${actor}">
-				        <figcaption class="figure-caption actorName">${actor}<span class="characterName">${character}</span></figcaption>
+                        <figcaption class="figure-caption actorName">
+                            <a data-toggle="tooltip" data-placement="top" title="${actor}">${actor}</a>
+                            <span class="characterName">
+                                <a data-toggle="tooltip" data-placement="top" title="${character}">${character}</a>
+                            </span>
+                        </figcaption>
 			        </figure>
 		        </div>
                 `;
