@@ -35,7 +35,10 @@
     <nav class="navbar fixed-top bg-black p-1">
         <div class="container">
             <div class="row">
-                <div class="col-6 offset-3">
+                <div class="col-2 offset-1 pl-0 pt-1 text-white" id="backChevron">
+                    <svg class="d-none" id="backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
+                </div>
+                <div class="col-6">
                     <a class="navbar-brand mr-0 pt-0" href="#" class="logo">
                         <img src="movie-meerkat-title.png" alt="movie logo">
                     </a>
@@ -68,7 +71,7 @@
 
     <section class="container">
             <div class="movie-wrapper row text-left">
-                    <section class="movie-stats col-md-4 text-center">
+                    <section class="movie-stats col-md-4 text-center mb-3">
                         <h1 class="movieTitle"></h1>
                         <img class="img-fluid poster">
                         <div class="movieReviews">
@@ -80,15 +83,27 @@
                         <p class="movieSummary"></p>
                         <div class="movieDetails">
                         </div>
-                        <div class="back-container container">
+                        <!-- <div class="back-container container">
                             <button class="backButton btn btn-outline-danger text-center"></button>
                         </div>
                         <div class="searchBarContainer container d-sm-none d-md-block">
                             <h5 class="searchNearby"></h5>
                             <input type="text" placeholder ='Search for theater...' id="searchBar">
                             <input type="submit" id="submitButton">
-                        </div> 
+                        </div>  -->
                     </section>
+
+                    <section>
+                        <div class="back-container container">
+                                <button class="backButton btn btn-outline-danger text-center"></button>
+                            </div>
+                            <div class="searchBarContainer container d-sm-none d-md-block">
+                                <h5 class="searchNearby"></h5>
+                                <input type="text" placeholder ='Search for theater...' id="searchBar">
+                                <input type="submit" id="submitButton">
+                            </div> 
+                    </section>
+
                     <section class="movie-trailer-container col-md-8">
                             <div class="movieTrailer"></div>
                             <div class="castSection">
