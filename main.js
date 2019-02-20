@@ -10,6 +10,8 @@ var lng;
 var yelpResult;
 var moviePagesLoaded = 4;
 var titleOfMovie = null;
+var reviewHeadline;
+var reviewShort;
 
 /** 
  * function that runs on document ready
@@ -105,7 +107,7 @@ function backButton(){
 async function populateMovies(){
     getNowPlayingMovies();
     
-    $(".movie-container").unbind().on('click', '.movieCardInfo', (event) => {
+    $(".movie-container").off().on('click', '.movieCardInfo', (event) => {
         //find the closest parent id of clicked element in card
         let movieRow = $(event.target).closest('.movieRow');
         let movieID = $(event.target).closest('.movieRow').attr('data-id');
@@ -127,10 +129,10 @@ async function newYorkTimesAjax (movieTitle){
         'api-key': "EAJZJKpUWUaaG7GFAfAd00tnyinAFTIl",
           "query": movieTitle,
       },
-      success: newYorkTimesAjaxSuccessful,
+    //   success: newYorkTimesAjaxSuccessful,
       error: newYorkTimesAjaxError,
     }
-    await $.ajax( newYorkTimesParams );
+    await $.ajax( newYorkTimesParams ).then(newYorkTimesAjaxSuccessful);
 }
 
 /**
@@ -142,7 +144,9 @@ function newYorkTimesAjaxSuccessful(responseData){
         newYorkTimesAjaxError()
     } else {
         // summary = $('<div>').text(responseData.results[0].summary_short);
-        linkToReview = $('<a>').text(responseData.results[0].link.url).attr('href', responseData.results[0].link.url).attr('target', "_blank");
+        linkToReview = responseData.results[0].link.url;
+        reviewHeadline = responseData.results[0]['headline'].replace(/[‘’]+/g, '');
+        reviewShort = responseData.results[0]['summary_short'];
     }
 }
 
@@ -150,7 +154,9 @@ function newYorkTimesAjaxSuccessful(responseData){
  * function that handles errors for newYorkTimesAjaxSuccessful
  */
 function newYorkTimesAjaxError(){
-  linkToReview = $('<div>').text('Link not available for this movie');
+  linkToReview = $('<div>').text('');
+  summaryHeadline = $('<div>').text('Review unavailable');
+  summaryShort = $('<div>').text('');
 //   summary = $('<a>').text('Summary not available for this movie');
 }
 
@@ -479,12 +485,20 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.movieTrailer').append(addTrailerRow);
     // $('.summary').text("Summary")
     $('.castTitle').text('Cast');
-    $('.reviewTitle').text("Read the review")
     $('.searchNearby').text('Search Nearby Theaters');
     $('.mapOfTheaters').text('Nearby Theaters');
     // $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
     // $('.movieSummary').append(summary);
-    //Breaking navbar $('.nytReview').append(linkToReview);
+   
+    $('.nytReview').text(reviewShort);
+
+    if(!linkToReview){
+        $('.reviewTitle').text('Review Unavailable');
+    } else{
+        $('.reviewTitle').text(reviewHeadline);
+    }
+
+    $('.reviewTitle').attr('href', linkToReview).attr('target', "_blank");
     triggerModal();
 }
 
@@ -621,6 +635,12 @@ function getDetails(movieID){
                         <div>Budget</div>
                         <div class="budget">${budget}</div>
                     </div>
+                    <div class="movieDetailsContainer">
+                        <div>New York Times Review</div>
+                        <a class="reviewTitle"></a>
+                        <div class="nytReview"></div>
+                    </div>
+
 		        </div>
                 `;
                 $('.movieDetails').append(output);

@@ -334,10 +334,19 @@ html, body {
 .runtime,
 .genre,
 .budget,
-.overview{
+.overview,
+.nytReview{
     text-align: left;
     color: darkgray;
     margin-bottom: 5px;
+}
+
+.reviewTitle{
+    text-align: left;
+    color: rgb(0, 225, 255);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: inherit;
 }
 
 @media screen and (max-width:1023px) {
