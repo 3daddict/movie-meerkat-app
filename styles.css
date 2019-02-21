@@ -121,12 +121,12 @@ nav a img{
 
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-#map {
+/* #map {
     height: 60%;
     width: 100%;
     display: none;
     margin-bottom: 35px;
-}
+} */
 /* Optional: Makes the sample page fill the window. */
 html, body {
     height: 100%;
@@ -134,14 +134,14 @@ html, body {
     padding: 0;
 }
 
-.movie-map{
+/* .movie-map{
     padding-left: 0;
     
 }
 .map-section img{
     width: 100%;
     padding: 10px;
-}
+} */
 
 .movieTitle {
     text-align: center;
@@ -335,18 +335,19 @@ html, body {
 .genre,
 .budget,
 .overview,
+.releaseDate,
 .nytReview{
     text-align: left;
     color: darkgray;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .reviewTitle{
     text-align: left;
     color: rgb(0, 225, 255);
-    margin-top: 10px;
-    margin-bottom: 10px;
     text-decoration: inherit;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 @media screen and (max-width:1023px) {
@@ -505,4 +506,8 @@ a{
 
 .bg-custom-red{
     background-color: #dc4133;
+}
+
+i, button{
+    cursor: pointer;
 }

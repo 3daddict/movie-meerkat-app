@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>MovieMeerkat</title>
-    <link rel=icon href=/movie-meerkat.png>
+    <link rel=icon href=/movie-meerkat.jpg>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
@@ -21,7 +21,6 @@
     <script src="main.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -71,31 +70,10 @@
             </div>
         </div>
     </nav>
-         
-   
-
-    <!-- <div class="container">
-        <form id="searchForm">
-            <div class="input-group m-0 row form-section">
-                <div class="col-12">
-                    <input type="text" class="form-control col-12 m-0" placeholder="Search for a movie title" id="searchText" autocomplete="off" />
-                </div>
-                <div class="col-12">
-                    <button class="btn btn-outline-info" type="submit" id="searchButton">Find Movie</button>
-                </div>
-            </div>
-        </form>
-    </div> -->
 
     <section class="container mx-auto pt-2 p-0">
         <div class="row movie-container text-center"></div>
     </section>
-<!-- 
-    <section class="container m-0 p-0" id="backButtonSection">
-        <div class="col-2 pl-0 pt-0" id="backChevron">
-            <svg class="d-none backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
-        </div>
-    </section> -->
     
     <section class="container pt-1">
             <section class="container m-0 p-0" id="backButtonSection">
@@ -119,14 +97,6 @@
                         <div class="movieDetails">
                         </div>
                         
-                        <!-- <div class="back-container container">
-                            <button class="backButton btn btn-outline-danger text-center"></button>
-                        </div>
-                        <div class="searchBarContainer container d-sm-none d-md-block">
-                            <h5 class="searchNearby"></h5>
-                            <input type="text" placeholder ='Search for theater...' id="searchBar">
-                            <input type="submit" id="submitButton">
-                        </div>  -->
                     </section>
 
                     <section class="movie-trailer-container col-md-8">
@@ -137,19 +107,25 @@
                                     <div class="row text-center castContainer"></div>
                                 </div>
                             </div>
+                            <!-- <div class="castSection">
+                                <h5 class="castTitle mt-4 mb-4"></h5>
+                                <div class="container">
+                                    <div class="row text-center castContainer"></div>
+                                </div>
+                            </div> -->
                             
                             <h5 class="mapOfTheaters"></h5>
                             <div id="map"></div> 
                     </section>
 
                     <section class="d-none col-10 mx-auto" id="searchTheater">
-                        <!-- <div class="back-container container">
+                        <div class="back-container container">
                             <div class="searchBarContainer input-group container d-sm-none d-md-block row">
-                                <!-- <h5 class="searchNearby"></h5> -->
-                                <!-- <input class="col-8"type="text" placeholder ='Find a theater' id="">
-                                <button class="col-2 offset-2 input-group-append" type="submit" id=""></button>
+                                <!-- <h5 class="searchNearby"></h5>
+                                <input class="col-8"type="text" placeholder ='Find a theater' id="">
+                                <button class="col-2 offset-2 input-group-append" type="submit" id=""></button> -->
                             </div> 
-                        </div> -->
+                        </div>
                  
 
                         <div class="input-group">
@@ -175,7 +151,7 @@
           </button>
         </div>
         <div class="modal-body bg-dark">
-          This website utilizes geolocation to help you quickly locate your nearest theaters. Please select <b>Enable</b> if you would like to use this feature. Otherwise, please select <b>Exit</b>.
+          This application use geolocation to help you locate your nearest theaters. Please select <b>Enable</b> if you would like to use this feature. Otherwise, please select <b>Exit</b>.
         </div>
         <div class="modal-footer bg-dark border-0">
           <button type="button" class="btn btn-danger" id="enableGeolocation">Enable</button>
@@ -185,6 +161,27 @@
     </div>
   </div>
   <!-- End of modal-->
+
+  <!-- Start of modal -->
+  <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel" aria-hidden="true">
+        <div class="modal-dialog bg-dark" role="document">
+          <div class="modal-content bg-dark">
+            <div class="modal-header bg-danger border-0">
+              <h5 class="modal-title" id="locationModalLabel">Search Invalid!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body bg-dark">
+              Please correct your search input using only alphanumeric characters, spaces ( ), hyphens (-) and/or apostrophes ('). No trailing or double spaces, hyphens nor apostrophes are allowed.
+            </div>
+            <div class="modal-footer bg-dark border-0">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of modal-->
 
     <!-- Start of Search Movie modal -->
     <div class="modal fade" id="searchMovieModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
