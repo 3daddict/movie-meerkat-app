@@ -122,7 +122,7 @@ nav a img{
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 #map {
-    height: 60%;
+    height: 40%;
     width: 100%;
     display: none;
     margin-bottom: 35px;
@@ -218,8 +218,8 @@ html, body {
 }
 
 .infoImage{
-    height: 90px;
-    width: 90px;
+    height: 60px;
+    width: 60px;
     border: lightgray solid 1px;
 }
 
@@ -335,18 +335,29 @@ html, body {
 .genre,
 .budget,
 .overview,
+.releaseDate,
 .nytReview{
     text-align: left;
     color: darkgray;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .reviewTitle{
     text-align: left;
     color: rgb(0, 225, 255);
-    margin-top: 10px;
-    margin-bottom: 10px;
     text-decoration: inherit;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+@media screen and (max-width:390px){
+    .gm-style-iw-c .gm-style-iw-d{
+        width: 210px !important;
+        overflow: initial !important;
+    }
+    .infoImage{
+        display: none;
+    }
 }
 
 @media screen and (max-width:1023px) {
@@ -435,7 +446,7 @@ html, body {
 
     #desktopSearchButton{
         height: 36px;
-        padding: 0 6px
+        padding: 0 6px;
     }
     
     #desktopSearchText{
@@ -505,4 +516,24 @@ a{
 
 .bg-custom-red{
     background-color: #dc4133;
+}
+
+i, button{
+    cursor: pointer;
+}
+
+.loadingImage{
+    height: 25px;
+}
+
+.loadingPage{
+    height: 40px;
+}
+
+.loadingTitle{
+    height: 50px;
+}
+
+.loadScreen{
+    margin-top: 50%;
 }
