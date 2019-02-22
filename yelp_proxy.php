@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Methods: GET, POST');
@@ -27,7 +26,7 @@ $API_HOST = "https://api.yelp.com";
 $SEARCH_PATH = "/v3/businesses/search";
 $BUSINESS_PATH = "/v3/businesses/";  // Business ID will come after slash.
 // Defaults for our simple example.
-$DEFAULT_TERM = "theater";
+$DEFAULT_TERM = "movie theater";
 $DEFAULT_LOCATION =$_POST['location'];
 $SEARCH_LIMIT = 10;
 /** 
@@ -57,6 +56,9 @@ function request($host, $path, $url_params = array()) {
                 "authorization: Bearer " . $GLOBALS['API_KEY'],
                 "cache-control: no-cache",
             ),
+            //Only use locally , makes server insecure
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0
         ));
         $response = curl_exec($curl);
         if (FALSE === $response)
@@ -108,18 +110,18 @@ function get_business($business_id) {
  */
 function query_api($term, $location) {     
     $response = json_decode(search($term, $location));
-    $business_id = $response->businesses[0]->id;
+    // $business_id = $response->businesses[0]->id;
     
-    print sprintf(
-        "%d businesses found, querying business info for the top result \"%s\"\n\n",         
-        count($response->businesses),
-        $business_id
-    );
+    // print sprintf(
+    //     "%d businesses found, querying business info for the top result \"%s\"\n\n",         
+    //     count($response->businesses),
+    //     $business_id
+    // );
     
-    $response = get_business($business_id);
+    // $response = get_business($business_id);
     
-    print sprintf("Result for business \"%s\" found:\n", $business_id);
-    $pretty_response = json_encode(json_decode($response), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    // print sprintf("Result for business \"%s\" found:\n", $business_id);
+    $pretty_response = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     print "$pretty_response\n";
 }
 /**

@@ -13,6 +13,7 @@ var titleOfMovie;
 var reviewHeadline;
 var reviewShort;
 var releaseDate;
+var infoWindowArray = [];
 
 /** 
  * function that runs on document ready
@@ -44,15 +45,21 @@ function initializeApp(){
  * function that handles events
  */
 function addEventHandlers(){
-    $('#submitButton').on('click', searchByLocation);
+    $('#submitButton').on('click', ()=>{
+        searchByLocation();
+        $('.loadingImage').removeClass('d-none');
+    });
+
     $('.backButton').on('click', ()=>{
         window.history.back();
         backButton();
     });
 
     $('#navbarLogo').on('click', ()=>{
+        debugger;
         backButton();
-        populateMovies();
+        $('.loadScreen').addClass('d-none');
+        $('.mainPage').removeClass('d-none');
     });
 
     $('#mobileSearchButton').on('click', () => {
@@ -94,6 +101,7 @@ function searchByLocation(){
 function backButton(){
     $('.backButton').addClass('d-none');
     $('#searchTheater').addClass('d-none');
+    $('#searchBarGroup').addClass('d-none');
     $('.searchBarContainer').css('visibility', 'hidden');
     $('.search-bar-container').css('visibility', 'hidden');
     $('.poster').removeAttr('src');
@@ -120,6 +128,8 @@ function backButton(){
  */
 async function populateMovies(){
     getNowPlayingMovies();
+    
+    $('#searchBarGroup').addClass('d-none');
     $(".movie-container").off().on('click', '.movieCardInfo', (event) => {
         //find the closest parent id of clicked element in card
         // let movieRow = $(event.target).closest('.movieRow');
@@ -178,6 +188,7 @@ function newYorkTimesAjaxSuccessful(responseData){
  */
 function newYorkTimesAjaxError(){
   linkToReview = $('<div>').text('Unavailable');
+  console.log('Error with newYorkTimes API');
 //   summaryHeadline = $('<div>').text('Review unavailable');
 //   summaryShort = $('<div>').text('');
 //   summary = $('<a>').text('Summary not available for this movie');
@@ -235,7 +246,9 @@ function getNowPlayingMovies(){
         });
         $(".movie-container").append(output);
         movieListings.push(movies);
-        progressBarUpdate();
+        // progressBarUpdate();
+        $('.loadScreen').addClass('d-none');
+        $('.mainPage').removeClass('d-none');
     })
     .catch((err) => {
         console.log(err);
@@ -247,6 +260,9 @@ function getNowPlayingMovies(){
  * @param {*} searchText
  */
 function getMovies(searchText){
+    $('#searchBarGroup').addClass('d-none');
+    $('.loadScreen').removeClass('d-none');
+    $('.mainPage').addClass('d-none');
     var textRegex = /^(?![ -'])(?!.*[ -']$)(?!.*[ -']{2})[a-zA-Z\d \-\'']{1,30}$/;
     var result = textRegex.test(searchText)
 
@@ -300,11 +316,15 @@ function getMovies(searchText){
             $(".movie-container").append(output);
             movieListings = [];
             movieListings.push(movies);
+            $('.loadScreen').addClass('d-none');
+            $('.mainPage').removeClass('d-none');
         })
         .catch((err) => {
             console.log(err);
         });
     } else{
+        $('.loadScreen').addClass('d-none');
+        $('.mainPage').removeClass('d-none');
         $('#validationModal').modal();
     }
 };
@@ -314,24 +334,28 @@ function getMovies(searchText){
  * @param {*} location
  */
 async function getYelpData(location) {
-    console.log('location',location);
-    var yelpURL= "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location="+location+",%20ca&term=movie%20theater&sort_by=distance";
+    // var yelpURL= "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location="+location+",%20ca&term=movie%20theater&sort_by=distance";
+    var yelpURL = "yelp_proxy.php";
     var settings = {
         "async": true,
         "crossDomain": true,
         "url": yelpURL,
-        "method": "GET",
-        "headers": {
-          "Authorization": "Bearer vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx",
-          "X-Requested-With": "XMLHttpRequest"
+        "method": "POST",
+        // "headers": {
+        //   "Authorization": "Bearer vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx",
+        //   "X-Requested-With": "XMLHttpRequest"
+        // },
+        "data": {
+            location: location,
+            api_key: "vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx"
         },
-        "data": {},
-        success: successfulYelpCall
+        success: successfulYelpCall,
+        error: ()=>{
+            console.log('yelp call failed');
+        }
       }
       
-      await $.ajax(settings).done(function (response) {
-        console.log(response);
-      });
+      await $.ajax(settings);
 }
 
 /**
@@ -339,9 +363,10 @@ async function getYelpData(location) {
  * @param {*} response
  */
 function successfulYelpCall(response){
-    console.log('yelp success');
+    response = JSON.parse(response);
     yelpResult = response.businesses;
     var yelpCoordinates = response.region.center;
+    
     initMap(yelpCoordinates);
 }
 
@@ -403,6 +428,14 @@ function initMap(location) {
                 yelpResult[i]['name'] = yelpResult[i]['name'].substring(0, 30) + '...';
             }
 
+            if(!yelpResult[i]['name']){
+                yelpResult[i]['name'] = "Unavailable";
+            }
+
+            if(!yelpResult[i]['location']['address1']){
+                yelpResult[i]['location']['address1'] = 'Unavailable';
+            }
+
             var contentString = 
             `<div class="infoWindow">
                 <a class="headerLink" href="${yelpResult[i]['url']}" target="_blank">
@@ -442,17 +475,23 @@ function initMap(location) {
 
             var infowindow = new google.maps.InfoWindow({
                 content: contentString,
-                maxWidth: 250,
+                maxWidth: 300,
                 maxHeight: 100
             });
-    
+            infoWindowArray.push(infowindow);
+
             (function(marker, infowindow) {
                 marker.addListener('click', function () {
+                    clearInfoWindows();
                     infowindow.open(map, marker);
                 });
             })(newMarker, infowindow);
     }
     
+    google.maps.event.addListener(map, 'click', function(){
+        clearInfoWindows();
+    });
+    $('.loadingImage').addClass('d-none');
 }}
 
 
@@ -463,6 +502,8 @@ function initMap(location) {
  * @param {*} movieTitle
  */
 async function clickHandlerToOpenNewPage(movieID){
+    $('.loadScreen').removeClass('d-none');
+    $('.mainPage').addClass('d-none');
     var movieRow = $("div[data-id='"+movieID+"']");
     var movieTitle = $("div[data-id='"+movieID+"']").attr('data-title');
 
@@ -487,7 +528,10 @@ function findMovieID(tmdbID){
         "url": "https://api.themoviedb.org/3/movie/" + tmdbID + "/videos?language=en-US&api_key=487eb0704123bb2cd56c706660e4bb4d",
         "method": "GET",
         "headers": {},
-        "data": "{}"
+        "data": "{}",
+        "error": ()=>{
+            console.log('error with themoviedb API');
+        }
     }
   
   $.ajax(settings).done(function (response) {
@@ -518,7 +562,9 @@ function dynamicYoutubeVideo(movieTrailerID) {
  * @param {*} someOfThis
  */
 function dynamicallyCreateMovieInfoPage(someOfThis){
+    
     window.scrollTo(0,0)
+    $('#searchBarGroup').removeClass('d-none');
     $('.backButton').removeClass('d-none');
     $('#searchTheater').removeClass('d-none');
      $('.poster').attr('src', someOfThis[0].firstElementChild.attributes.src.value);
@@ -561,16 +607,18 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     }
 
     $('.reviewTitle').attr('href', linkToReview).attr('target', "_blank");
+    $('.loadScreen').addClass('d-none');
+    $('.mainPage').removeClass('d-none');
     triggerModal();
 }
 
 /**
  * function to create and run the bootstrap progress bar
  */
-function progressBarUpdate() {
-    $("#bar").width('100%');
-        setTimeout(() => {$(".progress").css('display', 'none')}, 500);
-}
+// function progressBarUpdate() {
+//     $("#bar").width('100%');
+//         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
+// }
 
 /**
  * function to trigger modal
@@ -592,10 +640,12 @@ var triggerModal = (function(){
  */
 function enableGeolocation(){
     $("#locationModal").modal('hide');
+    $('.loadingImage').removeClass('d-none');
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(latLongCoordinates);
     } else {
         console.log('This browser does not support Geolocation.');
+        $('.loadingImage').addClass('d-none');
     }
 }
 
@@ -655,7 +705,9 @@ function getActors(movieID){
                 $('.castContainer').append(output);
 
             }
-        
+            
+            $('.loadScreen').addClass('d-none');
+            $('.mainPage').removeClass('d-none');
 })}};
 
 /**
@@ -726,7 +778,6 @@ function openSearchModal(){
     $('#searchMovieModal').modal();
 }
 
-
 /**
  * function that gets the zipcode of user if geolocation was enabled by user
  */
@@ -737,9 +788,21 @@ function coordinatesToZipcode(location){
         data: {
             key: "52645efc693e4815825c94314f6d5f77",
             q: location
+        },
+        error: ()=>{
+            console.log('Error with Opencagedata API');
         }
     }  
     $.ajax(ajaxParams).then((response)=>{
         getYelpData(response.results[0].components.postcode);
     });
+}
+
+/**
+ * function that clears all open info windows
+ */
+function clearInfoWindows(){
+    for(var i = 0; i < infoWindowArray.length; i++){
+        infoWindowArray[i].close();
+    }
 }

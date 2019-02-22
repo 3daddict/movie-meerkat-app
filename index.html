@@ -27,9 +27,19 @@
 </head>
 
 <body>
-    <div class='progress progress-striped active'>
-        <div class='progress-bar progress-bar-striped bg-info' id='bar' role='progressbar' style='width: 0%;'></div>
+    <div class="loadScreen text-center">
+        <div>
+            <img class="loadingTitle" src="movie-meerkat-title.png" alt="movie logo">
+        </div>
+        <div class="mt-2">
+            <img class="loadingPage bg-light rounded-circle" src="loadingTitle.gif" alt="loadingImage">
+        </div>
+       
     </div>
+    <div class="mainPage d-none">
+    <!-- <div class='progress progress-striped active'>
+        <div class='progress-bar progress-bar-striped bg-info' id='bar' role='progressbar' style='width: 0%;'></div>
+    </div> -->
     
     <nav class="navbar fixed-top bg-black p-1" id='mobile-nav'>
         <div class="container">
@@ -38,7 +48,7 @@
                     <svg class="d-none backButton" height="100%" viewBox="0 0 24 24" width="100%"><path d="M18.364 9.525L16.95 8.11 12 13.06 7.05 8.11 5.636 9.526 12 15.89l6.364-6.365z"></path></svg>
                 </div>
                 <div class="col-6 offset-1">
-                    <a class="navbar-brand mr-0 p-0" href="#" class="logo" id="navbarLogo">
+                    <a class="navbar-brand mr-0 p-0" class="logo" id="navbarLogo">
                         <img src="movie-meerkat-title.png" alt="movie logo">
                     </a>
                 </div>
@@ -52,12 +62,12 @@
     <nav class="navbar fixed-top bg-black p-2" id='desktop-nav'>
         <div class="container">
             <div class="row">
-                <div class="col-6 col-lg-5">
-                    <a class="navbar-brand mr-0 p-0" href="#" class="logo" id="navbarLogo">
+                <div class="col-6 col-lg-5 pl-xl-1">
+                    <a class="navbar-brand mr-0 p-0" class="logo" id="navbarLogo">
                         <img src="movie-meerkat-title.png" alt="movie logo">
                     </a>
                 </div>
-                <div class="offset-1 col-5 col-lg-4 offset-lg-3 col-xl-3 offset-xl-4 pt-1 pr-3 pl-0">
+                <div class="offset-1 col-5 col-lg-4 offset-lg-3 col-xl-3 offset-xl-4 pt-1 pr-3 pl-0 pr-xl-1">
                     <form id="searchForm">
                         <div class="form-section input-group">
                             <input type="text" class="form-control rounded-left" placeholder="Search for a movie title" id="desktopSearchText" autocomplete="off" />
@@ -113,18 +123,37 @@
                                     <div class="row text-center castContainer"></div>
                                 </div>
                             </div> -->
+                                <h5 class="mapOfTheaters mb-4 d-inline-block"></h5>
+                                <img class="d-none pb-1 d-noned-none loadingImage" src="loading.gif" alt="loadingImage">
                             
-                            <h5 class="mapOfTheaters"></h5>
-                            <div id="map"></div> 
-                    </section>
 
-                    <section class="d-none col-10 mx-auto" id="searchTheater">
+                            
+                            <div class="back-container container">
+                                <div class="searchBarContainer input-group container d-sm-none d-md-block row">
+                                    <!-- <h5 class="searchNearby"></h5>
+                                    <input class="col-8"type="text" placeholder ='Find a theater' id="">
+                                    <button class="col-2 offset-2 input-group-append" type="submit" id=""></button> -->
+                                </div> 
+                            </div>
+                     
+    
+                            <div class="input-group d-none" id="searchBarGroup">
+                                    <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
+                                    <div class="input-group-append">
+                                      <button class="btn bg-danger text-white" type="button" id="submitButton">Find</button>
+                                    </div>
+                                  </div>
+
+                            <div id="map" class="mt-3"></div> 
+                    </section>
+<!-- 
+                    <section class="col-10 mx-auto pt-2 pb-3" id="searchTheater">
                         <div class="back-container container">
-                            <div class="searchBarContainer input-group container d-sm-none d-md-block row">
+                            <div class="searchBarContainer input-group container d-sm-none d-md-block row"> -->
                                 <!-- <h5 class="searchNearby"></h5>
                                 <input class="col-8"type="text" placeholder ='Find a theater' id="">
                                 <button class="col-2 offset-2 input-group-append" type="submit" id=""></button> -->
-                            </div> 
+                            <!-- </div> 
                         </div>
                  
 
@@ -135,7 +164,7 @@
                                 </div>
                               </div>
 
-                    </section>
+                    </section> -->
 
             </div>
     </section>
@@ -167,7 +196,7 @@
         <div class="modal-dialog bg-dark" role="document">
           <div class="modal-content bg-dark">
             <div class="modal-header bg-danger border-0">
-              <h5 class="modal-title" id="locationModalLabel">Search Invalid!</h5>
+              <h5 class="modal-title font-weight-bold" id="locationModalLabel">Search Invalid!</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -194,7 +223,7 @@
                                 Close
                             </div>
                             <div class="col-6">
-                                <a class="navbar-brand mr-0 pt-0" href="#">
+                                <a class="navbar-brand mr-0 pt-0" id="navbarLogo">
                                     <img src="movie-meerkat-title.png" alt="movie logo">
                                 </a>
                             </div>
@@ -216,6 +245,7 @@
         </div>
     </div>
           <!-- End of modal-->
+        </div>
 </body>
 
 </html>

@@ -121,12 +121,12 @@ nav a img{
 
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-/* #map {
-    height: 60%;
+#map {
+    height: 40%;
     width: 100%;
     display: none;
     margin-bottom: 35px;
-} */
+}
 /* Optional: Makes the sample page fill the window. */
 html, body {
     height: 100%;
@@ -134,14 +134,14 @@ html, body {
     padding: 0;
 }
 
-/* .movie-map{
+.movie-map{
     padding-left: 0;
     
 }
 .map-section img{
     width: 100%;
     padding: 10px;
-} */
+}
 
 .movieTitle {
     text-align: center;
@@ -218,8 +218,8 @@ html, body {
 }
 
 .infoImage{
-    height: 90px;
-    width: 90px;
+    height: 60px;
+    width: 60px;
     border: lightgray solid 1px;
 }
 
@@ -350,6 +350,16 @@ html, body {
     margin-top: 10px;
 }
 
+@media screen and (max-width:390px){
+    .gm-style-iw-c .gm-style-iw-d{
+        width: 210px !important;
+        overflow: initial !important;
+    }
+    .infoImage{
+        display: none;
+    }
+}
+
 @media screen and (max-width:1023px) {
     .navbar{
         justify-content: center;
@@ -436,7 +446,7 @@ html, body {
 
     #desktopSearchButton{
         height: 36px;
-        padding: 0 6px
+        padding: 0 6px;
     }
     
     #desktopSearchText{
@@ -510,4 +520,20 @@ a{
 
 i, button{
     cursor: pointer;
+}
+
+.loadingImage{
+    height: 25px;
+}
+
+.loadingPage{
+    height: 40px;
+}
+
+.loadingTitle{
+    height: 50px;
+}
+
+.loadScreen{
+    margin-top: 50%;
 }
