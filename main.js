@@ -359,6 +359,7 @@ function getMovies(searchText){
 function getYelpData(location) {
     $('.yelpError').addClass('d-none');
     var yelpURL = "yelp_proxy.php";
+    //var yelpURL = "https:\/\/api.yelp.com/v3/businesses/search?term=movie theater&location="+location;
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -366,7 +367,7 @@ function getYelpData(location) {
         "method": "POST",
         "dataType": "json",
         "data": {
-            location: location,
+           location: location,
             api_key: "vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx"
         },
         success: successfulYelpCall,
@@ -886,6 +887,3 @@ function getMovieURLID(){
         return movieID;
     }
 }
-
-
-
