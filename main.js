@@ -336,17 +336,17 @@ function getMovies(searchText){
 async function getYelpData(location) {
     // var yelpURL= "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location="+location+",%20ca&term=movie%20theater&sort_by=distance";
     var yelpURL = "yelp_proxy.php";
+    //var yelpURL = "https:\/\/api.yelp.com/v3/businesses/search?term=movie theater&location="+location;
     var settings = {
         "async": true,
         "crossDomain": true,
         "url": yelpURL,
         "method": "POST",
-        // "headers": {
-        //   "Authorization": "Bearer vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx",
-        //   "X-Requested-With": "XMLHttpRequest"
-        // },
+         "headers": {
+    "Authorization": "Bearer vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx",
+    "cache-control": "no-cache"},
         "data": {
-            location: location,
+           location: location,
             api_key: "vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx"
         },
         success: successfulYelpCall,
@@ -593,7 +593,7 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
 
     var release = new Date(releaseDate + ' 00:00');
     var longDate = monthNames[release.getMonth()] + ' ' + release.getDate() + ', ' + release.getFullYear();
-    if(!releaseDate){
+    if(!monthNames[release.getMonth()]){
         longDate = 'Unavailable';
     }
 
