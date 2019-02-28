@@ -336,7 +336,8 @@ html, body {
 .budget,
 .overview,
 .releaseDate,
-.nytReview{
+.nytReview,
+.castError{
     text-align: left;
     color: darkgray;
     margin-bottom: 10px;
@@ -535,5 +536,12 @@ i, button{
 }
 
 .loadScreen{
-    margin-top: 50%;
+    top: 30%;
+    position: relative;
+}
+
+.yelpError, 
+.getMoviesError,
+.geolocationError{
+    color: red;
 }

@@ -34,6 +34,7 @@
         <div class="mt-2">
             <img class="loadingPage bg-light rounded-circle" src="loadingTitle.gif" alt="loadingImage">
         </div>
+        <div class="getMoviesError d-none mt-2"><i class="fas fa-exclamation-circle"></i> This application utilizes the Movie DB, but it is currently unavailable. Please try again later.</div>
        
     </div>
     <div class="mainPage d-none">
@@ -112,7 +113,8 @@
                     <section class="movie-trailer-container col-md-8">
                             <div class="movieTrailer"></div>
                             <div class="castSection">
-                                <h5 class="castTitle mt-4 mb-4"></h5>
+                                <h5 class="castTitle mt-4 mb-2"></h5>
+                                <div class="castError d-none">Unavailable</div>
                                 <div class="container">
                                     <div class="row text-center castContainer"></div>
                                 </div>
@@ -124,7 +126,7 @@
                                 </div>
                             </div> -->
                                 <h5 class="mapOfTheaters mb-4 d-inline-block"></h5>
-                                <img class="d-none pb-1 d-noned-none loadingImage" src="loading.gif" alt="loadingImage">
+                                <img class="d-none pb-1 d-none loadingImage" src="loading.gif" alt="loadingImage">
                             
 
                             
@@ -138,11 +140,13 @@
                      
     
                             <div class="input-group d-none" id="searchBarGroup">
-                                    <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
-                                    <div class="input-group-append">
-                                      <button class="btn bg-danger text-white" type="button" id="submitButton">Find</button>
-                                    </div>
-                                  </div>
+                                <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
+                                <div class="input-group-append">
+                                    <button class="btn bg-danger text-white" type="button" id="submitButton">Find</button>
+                                </div>
+                            </div>
+                            <div class="yelpError d-none"><i class="fas fa-exclamation-circle"></i> Yelp Call Failed: Please edit your input or try again later</div>
+                            <div class="geolocationError d-none"><i class="fas fa-exclamation-circle"></i> Geolocation failed: Please enter an address</div>
 
                             <div id="map" class="mt-3"></div> 
                     </section>
