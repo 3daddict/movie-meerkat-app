@@ -21,27 +21,34 @@ var movieTitle;
  * function that runs on document ready
  */
 function initializeApp(){
-    
-    window.history.pushState({'type': 'home', 'value': 'home'},'Home','');
-    addEventHandlers(); //runs click handler
-    populateMovies();
-    $("#bar").width(0);
-    $('[data-toggle="tooltip"]').tooltip(); 
-    window.addEventListener('popstate', e=> {
-        backButton();
-        switch(e.state.type){
-            case 'home':
-            populateMovies();
-            break;
-            case 'search':
-            getMovies(e.state.value);
-            break;
-            case 'movie':
-            clickHandlerToOpenNewPage(e.state.movieID);
-            break;
-        }
-    })
+    var movieID;
+    movieID = getMovieURLID();
+    if(movieID){
+        window.history.pushState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
+        clickHandlerToOpenNewPage(movieID);
+    }else{
+        window.history.pushState({'type': 'home', 'value': 'home'},'Home','');
+        addEventHandlers(); //runs click handler
+        populateMovies();
+        $("#bar").width(0);
+        $('[data-toggle="tooltip"]').tooltip(); 
+        window.addEventListener('popstate', e=> {
+            backButton();
+            switch(e.state.type){
+                case 'home':
+                populateMovies();
+                break;
+                case 'search':
+                getMovies(e.state.value);
+                break;
+                case 'movie':
+                clickHandlerToOpenNewPage(e.state.movieID);
+                break;
+            }
+        })
+    }
 }
+
 
 /**
  * function that handles events
@@ -101,6 +108,8 @@ function searchByLocation(){
  * function that runs once back button is pressed
  */
 function backButton(){
+    $('#searchMovieModal').modal('hide');
+    $("#locationModal").modal('hide');
     $('.castError').addClass('d-none');
     $('.geolocationError').addClass('d-none');
     $('.yelpError').addClass('d-none');
@@ -141,7 +150,7 @@ async function populateMovies(){
         let movieID = $(event.target).closest('.movieRow').attr('data-id');
         // let movieTitle = $(event.target).closest('.movieRow').attr('data-title');
         // let movieRow = $("div[data-title='"+movieTitle+"']");
-        window.history.pushState({'type': 'movie', 'movieID':movieID},movieID, '');
+        window.history.pushState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
         clickHandlerToOpenNewPage(movieID);
     });
 }
@@ -866,3 +875,17 @@ function clearInfoWindows(){
         infoWindowArray[i].close();
     }
 }
+
+/**
+ * function to check if movieID exists in url and returns movieID
+ */
+function getMovieURLID(){
+    var url = window.location.href;
+    if(url.search('movieid=') > 0){
+        var movieID = url.substr(url.search('movieid=')+8);
+        return movieID;
+    }
+}
+
+
+
