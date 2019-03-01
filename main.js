@@ -16,6 +16,8 @@ var releaseDate;
 var infoWindowArray = [];
 var movieRow;
 var movieTitle;
+var movieImageURL;
+var voteAverage;
 
 /** 
  * function that runs on document ready
@@ -155,7 +157,11 @@ async function populateMovies(){
  * @param {*} movieTitle
  */
 function newYorkTimesAjax (movieTitle){
-    titleOfMovie = movieTitle.replace(/[‘’]+/g, '');
+
+    if(movieTitle){
+        titleOfMovie = movieTitle.replace(/[‘’]+/g, '');
+    }
+    
     var newYorkTimesParams = {
       url: "https://api.nytimes.com/svc/movies/v2/reviews/search.json",
       method: 'GET',
@@ -218,6 +224,7 @@ function getNowPlayingMovies(){
         let output = '';
         $.each(movies, (index, movie) => {
             let movieUrl = "";
+            //If no movie poster image use placeholder image
             if (movie.poster_path === null || movie.poster_path === undefined) {
                 movieUrl = "./noImage.jpg"
             } else {
@@ -286,7 +293,7 @@ function getMovies(searchText){
             $.each(movies, (index, movie) => {
                 let movieUrl = "";
                 //If no movie poster image use placeholder image
-                if (movie.poster_path === null || movie.poster.path === undefined) {
+                if (movie.poster_path === null || movie.poster_path === undefined) {
                     movieUrl = "./noImage.jpg"
                 } else {
                     movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
@@ -346,6 +353,7 @@ function getMovies(searchText){
 function getYelpData(location) {
     $('.yelpError').addClass('d-none');
     var yelpURL = "yelp_proxy.php";
+    //var yelpURL = "https:\/\/api.yelp.com/v3/businesses/search?term=movie theater&location="+location;
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -353,7 +361,7 @@ function getYelpData(location) {
         "method": "POST",
         "dataType": "json",
         "data": {
-            location: location,
+           location: location,
             api_key: "vLTZK9vBCWnWpR8vfCy5vw5ETsP2DPvVCwLlY2ClGyuVTnPiARAr8FNjqp65605CkAJvbLV-ggaSDVqRkAvB_srvLDlpCLspzizXD368OWFdrXjUrMi55_I5yQ6QW3Yx"
         },
         success: successfulYelpCall,
@@ -529,12 +537,12 @@ async function clickHandlerToOpenNewPage(movieID){
     $('.mainPage').addClass('d-none');
 
     var movieRowCheck = $("div[data-id='"+movieID+"']");
-
     if(movieRowCheck !== undefined && movieRowCheck.length){
         movieRow = $("div[data-id='"+movieID+"']");
         movieTitle = $("div[data-id='"+movieID+"']").attr('data-title');
     }
     
+
 
   $('.movieRow').remove();
   await findMovieID(movieID);
@@ -593,13 +601,26 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('#searchBarGroup').removeClass('d-none');
     $('.backButton').removeClass('d-none');
     $('#searchTheater').removeClass('d-none');
-     $('.poster').attr('src', someOfThis[0].firstElementChild.attributes.src.value);
+    if(!someOfThis && movieImageURL && movieTitle && voteAverage){
+        $('.poster').attr('src',"http://image.tmdb.org/t/p/w185/" + movieImageURL)
+        $('.movieTitle').text(movieTitle);
+        $(".movieRatingData").text(' ' + voteAverage+ ' / 10');
+    } else if(someOfThis){
+        $('.poster').attr('src', someOfThis[0].firstElementChild.attributes.src.value);
+        $('.movieTitle').text(someOfThis.attr('data-title'))
+        $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
+    } else{
+        $('.poster').attr('src',"./noImage.jpg");
+        $('.movieTitle').text('Currently Unavailable');
+        $(".movieRatingData").text('Currently Unavailable');
+    }
+    
     $('.starIcon').addClass("fas fa-star");
-    $(".movieRatingData").text(' ' + someOfThis.attr('movieRating')+ ' / 10');
+    
     $('#map').css('display', 'inline-block');
     $('.searchBarContainer').css('display', 'inline-block').css('visibility', 'visible');
     $('.search-bar-container').css('display', 'inline-block').css('visibility', 'visible');
-    $('.movieTitle').text(someOfThis.attr('data-title'))
+    
     $('.movieTrailer').append(addTrailerRow);
     $('.castTitle').text('Cast');
     $('.searchNearby').text('Search Nearby Theaters');
@@ -749,8 +770,9 @@ function getDetails(movieID){
             if(!response.statusText && !(response.statusText === "error")){
                 summary = $('<div>').text(response.overview);
                 var overview = response.overview;
-    
-                
+                movieTitle = response.title;
+                movieImageURL = response.poster_path;
+                voteAverage = response.vote_average;
                 var budget = response.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 if(budget < 1){
                     budget = 'Unavailable';
@@ -860,6 +882,3 @@ function getMovieURLID(){
         return movieID;
     }
 }
-
-
-
