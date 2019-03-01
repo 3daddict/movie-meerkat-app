@@ -133,7 +133,6 @@ function backButton(){
     $('.castTitle').empty();
     $('.movieDetails').empty();
     $('.searchBarContainer').css('display', 'none');
-    // $('.backButton').css('display','none');
     $('#map').css('display', 'none');
 }
 
@@ -145,11 +144,7 @@ async function populateMovies(){
     
     $('#searchBarGroup').addClass('d-none');
     $(".movie-container").off().on('click', '.movieCardInfo', (event) => {
-        //find the closest parent id of clicked element in card
-        // let movieRow = $(event.target).closest('.movieRow');
         let movieID = $(event.target).closest('.movieRow').attr('data-id');
-        // let movieTitle = $(event.target).closest('.movieRow').attr('data-title');
-        // let movieRow = $("div[data-title='"+movieTitle+"']");
         window.history.pushState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
         clickHandlerToOpenNewPage(movieID);
     });
@@ -195,7 +190,6 @@ function newYorkTimesAjaxSuccessful(responseData){
     if(responseData.results[0] === undefined || titleOfMovie !== responseData.results[0].display_title){
         newYorkTimesAjaxError()
     } else {
-        // summary = $('<div>').text(responseData.results[0].summary_short);
         linkToReview = responseData.results[0].link.url;
         reviewHeadline = responseData.results[0]['headline'].replace(/[‘’]+/g, '');
         reviewShort = responseData.results[0]['summary_short'];
@@ -210,10 +204,6 @@ function newYorkTimesAjaxError(){
     $('a.reviewTitle').text('');
     reviewHeadline = 'Unavailable';
   console.log('Error with newYorkTimes API');
-
-//   summaryHeadline = $('<div>').text('Review unavailable');
-//   summaryShort = $('<div>').text('');
-//   summary = $('<a>').text('Summary not available for this movie');
 }
 
 /**
@@ -228,8 +218,7 @@ function getNowPlayingMovies(){
         let output = '';
         $.each(movies, (index, movie) => {
             let movieUrl = "";
-            //If no movie poster image use placeholder image
-            if (movie.poster_path === null) {
+            if (movie.poster_path === null || movie.poster_path === undefined) {
                 movieUrl = "./noImage.jpg"
             } else {
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
@@ -241,7 +230,6 @@ function getNowPlayingMovies(){
                 movie.vote_average
             }
 
-            //format the release date to year
             let releaseYear = movie.release_date.slice(0, -6);
 
             output += `
@@ -268,7 +256,6 @@ function getNowPlayingMovies(){
         });
         $(".movie-container").append(output);
         movieListings.push(movies);
-        // progressBarUpdate();
         $('.loadScreen').addClass('d-none');
         $('.mainPage').removeClass('d-none');
     })
@@ -299,7 +286,7 @@ function getMovies(searchText){
             $.each(movies, (index, movie) => {
                 let movieUrl = "";
                 //If no movie poster image use placeholder image
-                if (movie.poster_path === null) {
+                if (movie.poster_path === null || movie.poster.path === undefined) {
                     movieUrl = "./noImage.jpg"
                 } else {
                     movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
@@ -553,7 +540,6 @@ async function clickHandlerToOpenNewPage(movieID){
   await findMovieID(movieID);
   await getDetails(movieID);
   await getActors(movieID);
-//   await addressCoordinates();
 
 }
 
@@ -615,12 +601,9 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.search-bar-container').css('display', 'inline-block').css('visibility', 'visible');
     $('.movieTitle').text(someOfThis.attr('data-title'))
     $('.movieTrailer').append(addTrailerRow);
-    // $('.summary').text("Summary")
     $('.castTitle').text('Cast');
     $('.searchNearby').text('Search Nearby Theaters');
     $('.mapOfTheaters').text('Nearby Theaters');
-    // $('.backButton').css('display', 'inline-block').text('Back').addClass('btn btn-danger');
-    // $('.movieSummary').append(summary);
    
     if(reviewShort){
         $('.nytReview').text(reviewShort);
@@ -650,14 +633,6 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('.mainPage').removeClass('d-none');
     triggerModal();
 }
-
-/**
- * function to create and run the bootstrap progress bar
- */
-// function progressBarUpdate() {
-//     $("#bar").width('100%');
-//         setTimeout(() => {$(".progress").css('display', 'none')}, 500);
-// }
 
 /**
  * function to trigger modal
@@ -706,7 +681,6 @@ function latLongCoordinates(position){
 function getActors(movieID){
     $('.castError').addClass('d-none');
     if(movieID){
-        //marker
         $('.movie-container').empty();
         $.ajax(
             {
