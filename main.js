@@ -24,18 +24,13 @@ var voteAverage;
  */
 function initializeApp(){
     var movieID;
+    var searchText;
     movieID = getMovieURLID();
-    if(movieID){
-        window.history.pushState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
-        clickHandlerToOpenNewPage(movieID);
-    }else{
-        window.history.pushState({'type': 'home', 'value': 'home'},'Home','');
-        addEventHandlers(); //runs click handler
-        populateMovies();
-        $("#bar").width(0);
-        $('[data-toggle="tooltip"]').tooltip(); 
-        window.addEventListener('popstate', e=> {
-            backButton();
+    searchText = getSearchText();
+    addEventHandlers();
+    window.addEventListener('popstate', e=> {
+        backButton();
+        if(e.state){
             switch(e.state.type){
                 case 'home':
                 populateMovies();
@@ -47,7 +42,32 @@ function initializeApp(){
                 clickHandlerToOpenNewPage(e.state.movieID);
                 break;
             }
-        })
+        }else {
+            window.history.back();
+        }   
+
+    })
+
+    if(movieID){
+        clickHandlerToOpenNewPage(movieID);
+
+        window.history.replaceState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
+
+        $('.backButton').off().on('click', ()=>{
+            movieID = '';
+            window.location.href = 'http://localhost:8888/home';
+            window.history.back();
+        });
+        
+    }else if (searchText){
+        getMovies(searchText);
+        window.history.replaceState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+
+    }else{
+        window.history.replaceState({'type': 'home', 'value': 'home'},'Home','home');
+        populateMovies();
+        $("#bar").width(0);
+        $('[data-toggle="tooltip"]').tooltip(); 
     }
 }
 
@@ -60,10 +80,8 @@ function addEventHandlers(){
         searchByLocation();
         $('.loadingImage').removeClass('d-none');
     });
-
     $('.backButton').on('click', ()=>{
         window.history.back();
-        backButton();
     });
 
     $('#navbarLogo').on('click', ()=>{
@@ -74,6 +92,9 @@ function addEventHandlers(){
 
     $('#mobileSearchButton').on('click', () => {
         let searchText = $('#mobileSearchText').val();
+        if(searchText){
+            window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+        }
         getMovies(searchText);
         $('#searchMovieModal').modal('hide');
         $('#mobileSearchText').val('');
@@ -81,6 +102,9 @@ function addEventHandlers(){
 
     $('#desktopSearchButton').on('click', () => {
         let searchText = $('#desktopSearchText').val();
+        if(searchText){
+            window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+        }
         getMovies(searchText);
         $('#desktopSearchText').val('');
     });
@@ -93,6 +117,9 @@ function addEventHandlers(){
         $('#searchMovieModal').modal('hide');
     });
 }
+
+
+
 
 /**
  * function that takes value of input for getYelpData function
@@ -279,11 +306,16 @@ function getMovies(searchText){
     $('#searchBarGroup').addClass('d-none');
     $('.loadScreen').removeClass('d-none');
     $('.mainPage').addClass('d-none');
+    $(".movie-container").off().on('click', '.movieCardInfo', (event) => {
+        let movieID = $(event.target).closest('.movieRow').attr('data-id');
+        window.history.pushState({'type': 'movie', 'movieID':movieID},movieID,'movieid='+movieID);
+        clickHandlerToOpenNewPage(movieID);
+    });
     var textRegex = /^(?![ -'])(?!.*[ -']$)(?!.*[ -']{2})[a-zA-Z\d \-\'']{1,30}$/;
     var result = textRegex.test(searchText)
 
     if(result){
-        window.history.pushState({'type': 'search', 'value': searchText},'search-'+ searchText,'');
+        
         backButton();
         $('.movie-container').empty();
         axios.get('https://api.themoviedb.org/3/search/movie?api_key=487eb0704123bb2cd56c706660e4bb4d&language=en-US&query=' + searchText + '&page=1&include_adult=false')
@@ -880,5 +912,16 @@ function getMovieURLID(){
     if(url.search('movieid=') > 0){
         var movieID = url.substr(url.search('movieid=')+8);
         return movieID;
+    }
+}
+
+/**
+ * function to check if searchText exists in url and returns searchText
+ */
+function getSearchText(){
+    var url = window.location.href;
+    if(url.search('search=') > 0){
+        var searchText = url.substr(url.search('search=')+7);
+        return searchText;
     }
 }

@@ -488,8 +488,6 @@ html, body {
     bottom: 0;
     left: 0;
     z-index: 10040;
-    overflow: auto;
-    overflow-y: auto;
 }
 
 figcaption{
@@ -544,4 +542,12 @@ i, button{
 .getMoviesError,
 .geolocationError{
     color: red;
+}
+
+.modal {
+    overflow-y: auto;
+   }
+   
+.modal-open {
+    overflow: auto; padding-right: 0px !important; 
 }
