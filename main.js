@@ -229,7 +229,7 @@ function getNowPlayingMovies(){
         $.each(movies, (index, movie) => {
             let movieUrl = "";
             //If no movie poster image use placeholder image
-            if (movie.poster_path === null) {
+            if (movie.poster_path === null || movie_poster_path === undefined) {
                 movieUrl = "./noImage.jpg"
             } else {
                 movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
@@ -299,7 +299,7 @@ function getMovies(searchText){
             $.each(movies, (index, movie) => {
                 let movieUrl = "";
                 //If no movie poster image use placeholder image
-                if (movie.poster_path === null) {
+                if (movie.poster_path === null || movie.poster_path === undefined) {
                     movieUrl = "./noImage.jpg"
                 } else {
                     movieUrl = "http://image.tmdb.org/t/p/w185/" + movie.poster_path;
