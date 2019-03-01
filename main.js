@@ -633,8 +633,16 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('#searchBarGroup').removeClass('d-none');
     $('.backButton').removeClass('d-none');
     $('#searchTheater').removeClass('d-none');
-    if(!someOfThis && movieImageURL && movieTitle && voteAverage){
-        $('.poster').attr('src',"http://image.tmdb.org/t/p/w185/" + movieImageURL)
+    debugger;
+    var checker;
+    if(!someOfThis){
+        checker = true
+    } else if(someOfThis[0]['dataset']['title'] !== movieTitle){
+        checker = true
+    }
+
+    if(checker && movieImageURL && movieTitle && voteAverage){
+        $('.poster').attr('src',"http://image.tmdb.org/t/p/w185" + movieImageURL)
         $('.movieTitle').text(movieTitle);
         $(".movieRatingData").text(' ' + voteAverage+ ' / 10');
     } else if(someOfThis){
@@ -802,6 +810,7 @@ function getDetails(movieID){
             if(!response.statusText && !(response.statusText === "error")){
                 summary = $('<div>').text(response.overview);
                 var overview = response.overview;
+                debugger;
                 movieTitle = response.title;
                 movieImageURL = response.poster_path;
                 voteAverage = response.vote_average;
