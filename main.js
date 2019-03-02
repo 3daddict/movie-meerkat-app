@@ -55,7 +55,7 @@ function initializeApp(){
 
         $('.backButton').off().on('click', ()=>{
             movieID = '';
-            window.location.href = 'http://localhost:8888/home';
+            window.location.href = 'http://moviemeerkat.jaytrin.com/home';
             window.history.back();
         });
         
@@ -71,15 +71,38 @@ function initializeApp(){
     }
 }
 
-
 /**
  * function that handles events
  */
 function addEventHandlers(){
-    $('#submitButton').on('click', ()=>{
+
+    $("#desktopSearchForm").on("submit",(e)=>{ 
+    e.preventDefault();
+    let searchText = $('#desktopSearchText').val();
+    if(searchText){
+        window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+    }
+    getMovies(searchText);
+    $('#desktopSearchText').val('');
+});
+
+    $("#mobileSearchForm").on("submit",(e)=>{ 
+        e.preventDefault();
+        let searchText = $('#mobileSearchText').val();
+        if(searchText){
+            window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+        }
+        getMovies(searchText);
+        $('#searchMovieModal').modal('hide');
+        $('#mobileSearchText').val('');
+    });
+
+    $('#yelpSearchForm').on('submit', (e)=>{
+        e.preventDefault();
         searchByLocation();
         $('.loadingImage').removeClass('d-none');
     });
+
     $('.backButton').on('click', ()=>{
         window.history.back();
     });
@@ -90,24 +113,16 @@ function addEventHandlers(){
         $('.mainPage').removeClass('d-none');
     });
 
-    $('#mobileSearchButton').on('click', () => {
-        let searchText = $('#mobileSearchText').val();
-        if(searchText){
-            window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
-        }
-        getMovies(searchText);
-        $('#searchMovieModal').modal('hide');
-        $('#mobileSearchText').val('');
-    });
+    // $('#mobileSearchButton').on('click', () => {
+    //     let searchText = $('#mobileSearchText').val();
+    //     if(searchText){
+    //         window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
+    //     }
+    //     getMovies(searchText);
+    //     $('#searchMovieModal').modal('hide');
+    //     $('#mobileSearchText').val('');
+    // });
 
-    $('#desktopSearchButton').on('click', () => {
-        let searchText = $('#desktopSearchText').val();
-        if(searchText){
-            window.history.pushState({'type': 'search', 'value': searchText},'search='+ searchText,'search='+ searchText);
-        }
-        getMovies(searchText);
-        $('#desktopSearchText').val('');
-    });
 
     $('#magnifyButton').on('click',()=>{
         $('#searchMovieModal').modal();
@@ -633,7 +648,6 @@ function dynamicallyCreateMovieInfoPage(someOfThis){
     $('#searchBarGroup').removeClass('d-none');
     $('.backButton').removeClass('d-none');
     $('#searchTheater').removeClass('d-none');
-    debugger;
     var checker;
     if(!someOfThis){
         checker = true
@@ -810,7 +824,6 @@ function getDetails(movieID){
             if(!response.statusText && !(response.statusText === "error")){
                 summary = $('<div>').text(response.overview);
                 var overview = response.overview;
-                debugger;
                 movieTitle = response.title;
                 movieImageURL = response.poster_path;
                 voteAverage = response.vote_average;
@@ -934,3 +947,9 @@ function getSearchText(){
         return searchText;
     }
 }
+/**
+ * function to prevent form from reloading page
+ */
+$("input[type=submit]").click(function(event){
+    event.preventDefault();
+  });
