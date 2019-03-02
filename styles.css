@@ -551,3 +551,8 @@ i, button{
 .modal-open {
     overflow: auto; padding-right: 0px !important; 
 }
+
+#mobileSearchButton{
+    background-color: black;
+    border: 0;
+}
