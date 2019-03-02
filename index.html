@@ -69,11 +69,11 @@
                     </a>
                 </div>
                 <div class="offset-1 col-5 col-lg-4 offset-lg-3 col-xl-3 offset-xl-4 pt-1 pr-3 pl-0 pr-xl-1">
-                    <form id="searchForm">
+                    <form id="desktopSearchForm">
                         <div class="form-section input-group">
-                            <input type="text" class="form-control rounded-left" placeholder="Search for a movie title" id="desktopSearchText" autocomplete="off" />
+                            <input type="text" class="form-control rounded-left" placeholder="Search for a movie title" id="desktopSearchText" autocomplete="off">
                             <div class="input-group-append">
-                                <button class="btn bg-custom-red text-white desktopSearchBtn" type="button" id="desktopSearchButton">Search</button>
+                                <input type="submit" class="btn bg-custom-red text-white desktopSearchBtn" id="desktopSearchButton" value="Search">
                             </div>
                         </div>
                     </form>
@@ -138,13 +138,16 @@
                                 </div> 
                             </div>
                      
-    
-                            <div class="input-group d-none" id="searchBarGroup">
-                                <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
-                                <div class="input-group-append">
-                                    <button class="btn bg-danger text-white" type="button" id="submitButton">Find</button>
+                            <form id="yelpSearchForm">
+                                <div class="input-group d-none" id="searchBarGroup">
+                                    
+                                    <input type="text" class="form-control" placeholder="Find a theater" id="searchBar">
+                                    <div class="input-group-append">
+                                        <input class="btn bg-danger text-white" type="submit" id="submitButton" value="Find">
+                                    </div>
+                                    
                                 </div>
-                            </div>
+                            </form>
                             <div class="yelpError d-none"><i class="fas fa-exclamation-circle"></i> Yelp Call Failed: Please edit your input or try again later</div>
                             <div class="geolocationError d-none"><i class="fas fa-exclamation-circle"></i> Geolocation failed: Please enter an address</div>
 
@@ -221,29 +224,34 @@
         <div class="modal-dialog m-0 mx-auto" role="document">
             <div class="modal-content bg-full-black">
                 <nav class="navbar fixed-top bg-full-black p-1">
+                        <form id="mobileSearchForm">
                     <div class="container">
-                        <div class="row">
-                            <div class="offset-1 col-2 pt-2 pl-1 modal-text" id="closeSearchButton">
-                                Close
-                            </div>
-                            <div class="col-6">
-                                <a class="navbar-brand mr-0 pt-0" id="navbarLogo">
-                                    <img src="movie-meerkat-title.png" alt="movie logo">
-                                </a>
-                            </div>
-                            <div class="col-2 p-2 text-white modal-text" id="mobileSearchButton">
-                                Search
-                            </div>
-                            <div class="offset-1 col-10 pt-1 mb-2">
-                                <form id="searchForm">
-                                    <div class="form-section">
-                                        <input type="text" class="form-control" placeholder="Search for a movie title" id="mobileSearchText" autocomplete="off" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        
+                            <div class="row">
                                 
+                                <div class="offset-1 col-2 pt-2 pl-1 modal-text" id="closeSearchButton">
+                                    Close
+                                </div>
+                                
+                                <div class="col-6">
+                                    <a class="navbar-brand mr-0 pt-0" id="navbarLogo">
+                                        <img src="movie-meerkat-title.png" alt="movie logo">
+                                    </a>
+                                </div>
+                                    <div class="col-2 p-2 modal-text" id="mobileSearchButton">
+                                        <input type="submit" class="text-white" id="mobileSearchButton" value="Search">
+                                    </div>
+                                <div class="offset-1 col-10 pt-0 mb-2">
+                                        <div class="offset-1 col-10 pt-0 mb-2">
+                                            <div class="form-section">
+                                                <input type="text" class="form-control" placeholder="Search for a movie title" id="mobileSearchText" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                          
                     </div>
+                </form> 
                 </nav>
             </div>
         </div>
