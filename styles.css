@@ -3,10 +3,8 @@ body {
     color: white;
     font-family: 'Open Sans', sans-serif;
 }
-nav {
-    margin-top: 20px;
-}
-#searchBar {
+
+/* #searchBar {
     width: 100%;
     margin-bottom: 15px;
     padding: .375rem .75rem;
@@ -16,10 +14,10 @@ nav {
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-    border-radius: .25rem;
+    border-radius: .35rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-#submitButton {
+} */
+/* #submitButton {
     width: 100%;
     color: #007bff;
     background-color: transparent;
@@ -35,23 +33,25 @@ nav {
     line-height: 1.5;
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-#submitButton:hover {
+} */
+/* #submitButton:hover {
     color: #fff;
     background-color: #0069d9;
     border-color: #0062cc;
     text-decoration: none;
-}
-.navbar-brand {
-    font-size: 2.5em;
+} */
+/* .navbar-brand {
+    font-size: 2rem;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     margin-right: 6px;
-}
+} */
 .logo {
-    max-width: 35px;
-    margin-top: 0;
-    padding-bottom: 6px;
+    object-fit: contain;
+}
+
+nav a img{
+    width: 100%;
 }
 
 .logo-red {
@@ -68,6 +68,13 @@ nav {
 .movie-image {
     position: relative;
     border-radius: 6px;
+
+    display: inline-block;
+    height: 285.513px;
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 .movie-content {
@@ -115,7 +122,7 @@ nav {
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 #map {
-    height: 60%;
+    height: 40%;
     width: 100%;
     display: none;
     margin-bottom: 35px;
@@ -161,12 +168,6 @@ html, body {
 
 }
 
-.backButton{
-    display: none;
-    width: 100%;
-    margin-bottom: 30px;
-}
-
 .starIcon {
     color: yellow;
 }
@@ -190,37 +191,11 @@ html, body {
 
 
 
-.navbar{
+/* .navbar{
     margin-right: 0;
     margin-left: 0;
     padding-left: 0;
-}
-
-@media all and (min-width: 1024px) and (max-width: 1280px) {
-
-}
-
-@media all and (min-width: 768px) and (max-width: 1024px) {
-    .movieSummary {
-        font-size: 0.9rem;
-    }
-
-    .searchNearby {
-        font-size: 0.9rem;
-    }
-}
-
-@media all and (min-width: 480px) and (max-width: 768px) {
-    h4 {
-        margin-top: 50px;
-    }
-}
-
-@media all and (max-width: 480px) {
-    h4 {
-        margin-top: 50px;
-    }
-}
+} */
 
 .card {
     background-color: transparent;
@@ -230,9 +205,9 @@ html, body {
     word-wrap: break-word;
 }
 
-.searchBarContainer{
+/* .searchBarContainer{
     visibility: hidden;
-}
+} */
 
 .search-bar-container{
     visibility: hidden;
@@ -243,8 +218,8 @@ html, body {
 }
 
 .infoImage{
-    height: 90px;
-    width: 90px;
+    height: 60px;
+    width: 60px;
     border: lightgray solid 1px;
 }
 
@@ -359,8 +334,225 @@ html, body {
 .runtime,
 .genre,
 .budget,
-.overview{
+.overview,
+.releaseDate,
+.nytReview,
+.castError{
     text-align: left;
     color: darkgray;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.reviewTitle{
+    text-align: left;
+    color: rgb(0, 225, 255);
+    text-decoration: inherit;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+@media screen and (max-width:390px){
+    .gm-style-iw-c .gm-style-iw-d{
+        width: 210px !important;
+        overflow: initial !important;
+    }
+    .infoImage{
+        display: none;
+    }
+}
+
+@media screen and (max-width:1023px) {
+    .navbar{
+        justify-content: center;
+    }
+    .form-section{
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .modal-text{
+        font-size: 1rem;
+    }
+
+}
+
+@media screen and (max-width:767.999px) {
+
+    body{
+        padding-top: 33px;
+    }
+
+    #mobile-nav{
+        display: initial;
+    }
+    #desktop-nav{
+        display: none;
+    }
+    .backButton{
+        height: 33px;
+        transform: rotate(90deg);
+        fill: white;
+    }
+    #mobileSearchText{
+        border-radius: 1rem;
+        height: 1.75em;
+        text-align: center;
+    }
+    #desktopBackButton{
+        display: none;
+    }
+}
+
+@media screen and (min-width:768px) {
+
+    body{
+        padding-top: 55px;
+    }
+
+    nav a img{
+        width: 60%;
+    }
+
+    #mobile-nav{
+        display: none;
+    }
+    #desktop-nav{
+        height: 50px;
+        display: initial;
+    }
+
+    .backButton{
+        display: initial;
+    }
+
+    .fa-arrow-alt-circle-left{
+        font-size:1.25rem;
+    }
+
+    #desktopSearchButton{
+        height: 26px;
+        padding: 0 6px
+    }
+    
+    #desktopSearchText{
+        text-align: left;
+        height: 26px
+    }
+}
+
+@media screen and (min-width:1199px){
+    #desktop-nav{
+        height: 60px;
+        display: initial;
+    }
+
+    #desktopSearchButton{
+        height: 36px;
+        padding: 0 6px;
+    }
+    
+    #desktopSearchText{
+        text-align: left;
+        height: 36px
+    }
+}
+
+
+.logoTitle{
+    font-size: 2rem;
+}
+
+.bg-black{
+    background-color:rgba(11, 11, 11, 0.89);
+    color: white;
+}
+
+.bg-full-black{
+    background-color:black;
+    color: white;
+}
+
+.progress{
+    box-shadow: none;
+    border-radius: 0;
+    border: 0;
+}
+
+.icon_svg{
+    fill: white;
+}
+
+.searchMovieModal{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10040;
+}
+
+figcaption{
+    width: 101px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+figcaption span{
+    width: 101px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a{
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.desktopSearchBtn{
+    border: 1px solid #dc4133;
+}
+
+.bg-custom-red{
+    background-color: #dc4133;
+}
+
+i, button{
+    cursor: pointer;
+}
+
+.loadingImage{
+    height: 25px;
+}
+
+.loadingPage{
+    height: 40px;
+}
+
+.loadingTitle{
+    height: 50px;
+}
+
+.loadScreen{
+    top: 30%;
+    position: relative;
+}
+
+.yelpError, 
+.getMoviesError,
+.geolocationError{
+    color: red;
+}
+
+.modal {
+    overflow-y: auto;
+   }
+   
+.modal-open {
+    overflow: auto; padding-right: 0px !important; 
+}
+
+#mobileSearchButton{
+    background-color: black;
+    border: 0;
 }
